@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zyncro — CRM com IA para Atendimento e Vendas</title>
+<meta name="description" content="Centralize conversas, leads e vendas em um CRM com IA que organiza atendimentos, qualifica oportunidades e conecta sua equipe ao cliente certo, no momento certo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* =============================================
+   TOKENS & RESET
+============================================= */
+:root {
+  --bg:        #F5F7FA;
+  --dark:      #0F172A;
+  --purple:    #6C5CE7;
+  --blue:      #2980F9;
+  --teal:      #00C9A7;
+  --muted:     #64748B;
+  --glass-bg:  rgba(245,247,250,0.80);
+  --glass-bdr: rgba(108,92,231,0.12);
+  --font:      'Sora', sans-serif;
+  --ease-out:  cubic-bezier(0.16,1,0.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:auto}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--dark);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+a{text-decoration:none;color:inherit}
+
+/* =============================================
+   HEADER
+============================================= */
+.header{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:200;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 3rem;
+  height:68px;
+  background:var(--glass-bg);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--glass-bdr);
+  transition:height .3s var(--ease-out), background .3s;
+}
+.header.scrolled{
+  height:58px;
+  background:rgba(245,247,250,0.95);
+}
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.logo img{
+  height:32px;
+  width:auto;
+}
+.logo-word{
+  font-size:1.2rem;
+  font-weight:700;
+  letter-spacing:-0.03em;
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+nav{
+  display:flex;
+  gap:2rem;
+}
+nav a{
+  font-size:.875rem;
+  font-weight:500;
+  color:var(--muted);
+  transition:color .2s;
+}
+nav a:hover{color:var(--dark)}
+.header-cta{
+  display:flex;
+  align-items:center;
+  gap:1rem;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.5rem;
+  border-radius:100px;
+  font-family:var(--font);
+  font-size:.875rem;
+  font-weight:600;
+  cursor:pointer;
+  border:none;
+  transition:all .3s var(--ease-out);
+}
+.btn-ghost{
+  padding:.5rem 1.25rem;
+  background:transparent;
+  color:var(--muted);
+}
+.btn-ghost:hover{color:var(--dark)}
+.btn-primary{
+  padding:.6rem 1.4rem;
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  color:#fff;
+  box-shadow:0 4px 16px rgba(108,92,231,.3);
+}
+.btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(108,92,231,.4);
+}
+
+/* =============================================
+   HERO SCROLL SECTION
+============================================= */
+.hero-section{
+  height:400vh;
+  position:relative;
+}
+.hero-sticky{
+  position:sticky;
+  top:0;
+  height:100vh;
+  width:100%;
+  overflow:hidden;
+}
+
+/* Canvas — full-screen background */
+#hero-canvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+/* Fallback quando canvas falha */
+.hero-fallback{
+  display:none;
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.canvas-failed #hero-canvas{display:none}
+.canvas-failed .hero-fallback{display:block}
+
+/* Overlay sutil para garantir legibilidade do texto */
+.hero-overlay{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(
+      to right,
+      rgba(245,247,250,.88) 0%,
+      rgba(245,247,250,.65) 50%,
+      rgba(245,247,250,.1) 100%
+    );
+  pointer-events:none;
+  z-index:1;
+}
+
+/* Conteúdo da hero */
+.hero-content{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:0 3rem 0 5rem;
+  max-width:700px;
+}
+
+/* Badge */
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+  padding:.35rem .9rem;
+  border-radius:100px;
+  font-size:.75rem;
+  font-weight:600;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  background:rgba(255,255,255,.7);
+  border:1px solid var(--glass-bdr);
+  backdrop-filter:blur(8px);
+  color:var(--purple);
+  margin-bottom:1.75rem;
+  width:fit-content;
+  opacity:0;
+  transform:translateY(20px);
+}
+.badge-dot{
+  width:6px;height:6px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--purple),var(--teal));
+  flex-shrink:0;
+  animation:pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot{
+  0%,100%{box-shadow:0 0 0 0 rgba(108,92,231,.5)}
+  50%{box-shadow:0 0 0 5px rgba(108,92,231,0)}
+}
+
+/* Headline */
+.headline{
+  font-size:clamp(2.6rem,4.5vw,4rem);
+  font-weight:800;
+  line-height:1.05;
+  letter-spacing:-0.04em;
+  color:var(--dark);
+  margin-bottom:1.5rem;
+  opacity:0;
+  transform:translateY(30px);
+}
+.headline span{
+  background:linear-gradient(135deg,var(--purple) 0%,var(--blue) 50%,var(--teal) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+/* Subheadline */
+.subheadline{
+  font-size:1.1rem;
+  line-height:1.65;
+  color:var(--muted);
+  max-width:520px;
+  margin-bottom:2.5rem;
+  font-weight:400;
+  opacity:0;
+  transform:translateY(30px);
+}
+
+/* CTAs */
+.cta-group{
+  display:flex;
+  gap:1rem;
+  flex-wrap:wrap;
+  margin-bottom:3rem;
+  opacity:0;
+  transform:translateY(30px);
+}
+.btn-cta-primary{
+  padding:.85rem 2rem;
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  color:#fff;
+  border-radius:100px;
+  font-family:var(--font);
+  font-size:.95rem;
+  font-weight:600;
+  border:none;
+  cursor:pointer;
+  box-shadow:0 6px 24px rgba(108,92,231,.35);
+  transition:all .3s var(--ease-out);
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+}
+.btn-cta-primary:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 32px rgba(108,92,231,.45);
+}
+.btn-cta-secondary{
+  padding:.85rem 2rem;
+  background:rgba(255,255,255,.6);
+  color:var(--dark);
+  border-radius:100px;
+  font-family:var(--font);
+  font-size:.95rem;
+  font-weight:600;
+  border:1px solid rgba(15,23,42,.1);
+  cursor:pointer;
+  backdrop-filter:blur(8px);
+  transition:all .3s var(--ease-out);
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+}
+.btn-cta-secondary:hover{
+  background:rgba(255,255,255,.9);
+  border-color:rgba(108,92,231,.25);
+  transform:translateY(-2px);
+}
+.arrow-icon{
+  width:16px;height:16px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.play-icon{
+  width:16px;height:16px;
+  fill:currentColor;
+}
+
+/* Benefícios */
+.benefits{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.65rem;
+  opacity:0;
+  transform:translateY(20px);
+}
+.benefit{
+  display:inline-flex;
+  align-items:center;
+  gap:.45rem;
+  padding:.45rem 1rem;
+  border-radius:100px;
+  font-size:.8rem;
+  font-weight:500;
+  color:var(--dark);
+  background:rgba(255,255,255,.55);
+  border:1px solid rgba(255,255,255,.8);
+  backdrop-filter:blur(6px);
+  transition:all .25s;
+}
+.benefit:hover{
+  background:rgba(255,255,255,.85);
+  transform:translateY(-2px);
+}
+.benefit-icon{
+  width:14px;height:14px;
+  flex-shrink:0;
+}
+
+/* Scroll indicator */
+.scroll-indicator{
+  position:absolute;
+  bottom:2rem;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:3;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:.5rem;
+  opacity:0;
+  animation:fade-in-up 1s 1.8s var(--ease-out) forwards;
+}
+.scroll-indicator span{
+  font-size:.7rem;
+  font-weight:500;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.scroll-mouse{
+  width:22px;height:34px;
+  border:2px solid rgba(100,116,139,.4);
+  border-radius:12px;
+  position:relative;
+}
+.scroll-mouse::before{
+  content:'';
+  position:absolute;
+  top:5px;left:50%;
+  transform:translateX(-50%);
+  width:3px;height:7px;
+  background:var(--purple);
+  border-radius:2px;
+  animation:scroll-wheel 1.5s ease-in-out infinite;
+}
+@keyframes scroll-wheel{
+  0%{opacity:1;transform:translateX(-50%) translateY(0)}
+  100%{opacity:0;transform:translateX(-50%) translateY(10px)}
+}
+
+/* =============================================
+   ANIMAÇÕES DE ENTRADA
+============================================= */
+@keyframes fade-in-up{
+  to{opacity:1;transform:translateY(0)}
+}
+.anim-badge   { animation: fade-in-up .8s .3s var(--ease-out) forwards }
+.anim-h1      { animation: fade-in-up .9s .5s var(--ease-out) forwards }
+.anim-sub     { animation: fade-in-up .9s .65s var(--ease-out) forwards }
+.anim-ctas    { animation: fade-in-up .9s .8s var(--ease-out) forwards }
+.anim-benefits{ animation: fade-in-up .9s .95s var(--ease-out) forwards }
+
+/* =============================================
+   RESPONSIVO
+============================================= */
+@media(max-width:1024px){
+  .header{padding:0 2rem}
+  .hero-content{padding:0 2rem;max-width:600px}
+}
+@media(max-width:768px){
+  nav{display:none}
+  .header{padding:0 1.25rem}
+  .header-cta .btn-ghost{display:none}
+  .btn-primary{padding:.5rem 1.1rem;font-size:.8rem}
+  .hero-section{height:300vh}
+  .hero-content{
+    padding:0 1.5rem;
+    max-width:100%;
+    padding-top:68px;
+    justify-content:center;
+    text-align:center;
+    align-items:center;
+  }
+  .subheadline{text-align:center}
+  .cta-group{justify-content:center}
+  .benefits{justify-content:center}
+  .hero-overlay{
+    background:rgba(245,247,250,.82);
+  }
+}
+@media(max-width:480px){
+  .headline{font-size:2.2rem}
+  .btn-cta-primary,.btn-cta-secondary{width:100%;justify-content:center}
+  .cta-group{flex-direction:column}
+}
+
+/* prefers-reduced-motion */
+@media(prefers-reduced-motion:reduce){
+  .hero-section{height:100vh}
+  .hero-sticky{position:relative}
+  .badge,.headline,.subheadline,.cta-group,.benefits,.scroll-indicator{
+    opacity:1;transform:none;animation:none
+  }
+  .badge-dot{animation:none}
+  .scroll-mouse::before{animation:none}
+}
+
+/* =============================================
+   SEÇÕES — BASE
+============================================= */
+.section{
+  padding:7rem 5rem;
+  position:relative;
+}
+.section-inner{
+  max-width:1100px;
+  margin:0 auto;
+}
+.section-label{
+  font-size:.75rem;
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--purple);
+  margin-bottom:1rem;
+  display:block;
+}
+.section-title{
+  font-size:clamp(2rem,3.5vw,2.8rem);
+  font-weight:800;
+  letter-spacing:-0.03em;
+  line-height:1.1;
+  color:var(--dark);
+  margin-bottom:1.25rem;
+}
+.section-sub{
+  font-size:1.05rem;
+  line-height:1.65;
+  color:var(--muted);
+  max-width:580px;
+}
+
+/* Reveal on scroll */
+.reveal{
+  opacity:0;
+  transform:translateY(32px);
+  transition:opacity .8s var(--ease-out), transform .8s var(--ease-out);
+}
+.reveal.in-view{
+  opacity:1;
+  transform:translateY(0);
+}
+.reveal-delay-1{ transition-delay:.1s }
+.reveal-delay-2{ transition-delay:.2s }
+.reveal-delay-3{ transition-delay:.3s }
+.reveal-delay-4{ transition-delay:.4s }
+
+/* =============================================
+   PROBLEMA
+============================================= */
+#problema{
+  background:var(--bg);
+  border-top:1px solid rgba(108,92,231,.08);
+}
+.problema-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:3rem;
+  margin-top:4rem;
+  align-items:start;
+}
+.problema-card{
+  background:rgba(255,255,255,.55);
+  border:1px solid rgba(108,92,231,.1);
+  border-radius:20px;
+  padding:2rem;
+  backdrop-filter:blur(8px);
+  transition:transform .3s var(--ease-out), box-shadow .3s;
+}
+.problema-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 16px 40px rgba(108,92,231,.08);
+}
+.problema-icon{
+  width:44px;height:44px;
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:1.25rem;
+  flex-shrink:0;
+}
+.icon-red{background:rgba(239,68,68,.1)}
+.icon-orange{background:rgba(249,115,22,.1)}
+.icon-amber{background:rgba(245,158,11,.1)}
+.icon-slate{background:rgba(100,116,139,.1)}
+.problema-card h3{
+  font-size:1rem;
+  font-weight:700;
+  color:var(--dark);
+  margin-bottom:.5rem;
+}
+.problema-card p{
+  font-size:.9rem;
+  color:var(--muted);
+  line-height:1.6;
+}
+@media(max-width:768px){
+  .problema-grid{grid-template-columns:1fr}
+}
+
+/* =============================================
+   SOLUÇÃO
+============================================= */
+#solucao{
+  background:#fff;
+}
+.solucao-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;
+  margin-top:4rem;
+}
+.solucao-card{
+  background:var(--bg);
+  border:1px solid rgba(108,92,231,.1);
+  border-radius:20px;
+  padding:2rem;
+  transition:all .3s var(--ease-out);
+}
+.solucao-card:hover{
+  background:#fff;
+  transform:translateY(-4px);
+  box-shadow:0 16px 40px rgba(108,92,231,.1);
+  border-color:rgba(108,92,231,.25);
+}
+.solucao-num{
+  font-size:2rem;
+  font-weight:800;
+  letter-spacing:-0.04em;
+  background:linear-gradient(135deg,var(--purple),var(--teal));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:1rem;
+  display:block;
+}
+.solucao-card h3{
+  font-size:1rem;
+  font-weight:700;
+  color:var(--dark);
+  margin-bottom:.5rem;
+}
+.solucao-card p{
+  font-size:.875rem;
+  color:var(--muted);
+  line-height:1.6;
+}
+@media(max-width:768px){
+  .solucao-grid{grid-template-columns:1fr;}
+  .section{padding:5rem 1.5rem;}
+}
+
+/* =============================================
+   COMO FUNCIONA
+============================================= */
+#como-funciona{
+  background:var(--bg);
+}
+.fluxo{
+  display:flex;
+  align-items:flex-start;
+  gap:0;
+  margin-top:4rem;
+  position:relative;
+}
+.fluxo::before{
+  content:'';
+  position:absolute;
+  top:28px;
+  left:28px;
+  right:28px;
+  height:2px;
+  background:linear-gradient(to right,var(--purple),var(--blue),var(--teal));
+  z-index:0;
+}
+.fluxo-step{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  position:relative;
+  z-index:1;
+  padding:0 .75rem;
+}
+.fluxo-num{
+  width:56px;height:56px;
+  border-radius:50%;
+  background:#fff;
+  border:2px solid var(--purple);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;
+  font-weight:800;
+  color:var(--purple);
+  margin-bottom:1.25rem;
+  box-shadow:0 0 0 6px rgba(108,92,231,.08);
+}
+.fluxo-step h3{
+  font-size:.9rem;
+  font-weight:700;
+  color:var(--dark);
+  margin-bottom:.4rem;
+}
+.fluxo-step p{
+  font-size:.8rem;
+  color:var(--muted);
+  line-height:1.5;
+}
+@media(max-width:768px){
+  .fluxo{flex-direction:column;gap:2rem;}
+  .fluxo::before{display:none;}
+  .fluxo-step{flex-direction:row;text-align:left;gap:1rem;align-items:flex-start;}
+  .fluxo-num{flex-shrink:0;}
+}
+
+/* =============================================
+   NEXUS AI
+============================================= */
+#nexus{
+  background:var(--dark);
+  overflow:hidden;
+  position:relative;
+}
+#nexus::before{
+  content:'';
+  position:absolute;
+  top:-200px;right:-200px;
+  width:600px;height:600px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(108,92,231,.25) 0%,transparent 70%);
+  pointer-events:none;
+}
+#nexus .section-label{color:var(--teal);}
+#nexus .section-title{color:#fff;}
+#nexus .section-sub{color:rgba(255,255,255,.55);max-width:540px;}
+.nexus-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:2rem;
+  margin-top:4rem;
+}
+.nexus-card{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:20px;
+  padding:2rem;
+  transition:all .3s var(--ease-out);
+}
+.nexus-card:hover{
+  background:rgba(255,255,255,.09);
+  border-color:rgba(108,92,231,.4);
+  transform:translateY(-3px);
+}
+.nexus-card h3{
+  font-size:1rem;
+  font-weight:700;
+  color:#fff;
+  margin-bottom:.5rem;
+}
+.nexus-card p{
+  font-size:.875rem;
+  color:rgba(255,255,255,.5);
+  line-height:1.6;
+}
+.nexus-icon-wrap{
+  width:42px;height:42px;
+  border-radius:12px;
+  background:linear-gradient(135deg,rgba(108,92,231,.3),rgba(0,201,167,.2));
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:1.25rem;
+}
+@media(max-width:768px){
+  .nexus-grid{grid-template-columns:1fr;}
+}
+
+/* =============================================
+   CTA FINAL
+============================================= */
+#cta-final{
+  background:#fff;
+  text-align:center;
+}
+#cta-final .section-inner{display:flex;flex-direction:column;align-items:center;}
+#cta-final .section-title{max-width:680px;text-align:center;}
+#cta-final .section-sub{text-align:center;margin:0 auto 2.5rem;}
+.cta-final-actions{
+  display:flex;
+  gap:1rem;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-bottom:2rem;
+}
+.trust-line{
+  font-size:.8rem;
+  color:var(--muted);
+}
+
+/* =============================================
+   FOOTER
+============================================= */
+.footer{
+  background:var(--dark);
+  color:rgba(255,255,255,.4);
+  text-align:center;
+  padding:2rem;
+  font-size:.8rem;
+}
+.footer a{color:rgba(255,255,255,.5);margin:0 .75rem;}
+.footer a:hover{color:#fff;}
+
+/* =============================================
+   PREMIUM ANIMATIONS LAYER
+   Extraídas e adaptadas dos reference files
+============================================= */
+
+/* --- Shimmer Beam: botões --- */
+@keyframes shimmer-beam{
+  from{transform:translateX(-100%) skewX(-15deg)}
+  to{transform:translateX(250%) skewX(-15deg)}
+}
+@keyframes spin-beam{
+  to{transform:rotate(360deg)}
+}
+/* Botão CTA com spinning border beam */
+.btn-cta-primary{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+.btn-cta-primary::before{
+  content:'';
+  position:absolute;
+  inset:-1px;
+  border-radius:inherit;
+  background:conic-gradient(from 0deg at 50% 50%,transparent 0deg 340deg,rgba(255,255,255,.6) 360deg);
+  animation:spin-beam 2.5s linear infinite;
+  opacity:0;
+  transition:opacity .4s;
+  z-index:-1;
+}
+.btn-cta-primary::after{
+  content:'';
+  position:absolute;
+  top:0;left:-60%;
+  width:40%;height:100%;
+  background:linear-gradient(to right,transparent,rgba(255,255,255,.3),transparent);
+  transform:skewX(-15deg);
+  opacity:0;
+  transition:opacity .3s;
+}
+.btn-cta-primary:hover::before{opacity:1}
+.btn-cta-primary:hover::after{
+  opacity:1;
+  animation:shimmer-beam .8s ease forwards;
+}
+/* Glow externo no botão primário hover */
+.btn-cta-primary:hover{
+  box-shadow:0 0 24px rgba(108,92,231,.6), 0 0 60px rgba(108,92,231,.25), 0 12px 32px rgba(108,92,231,.45);
+}
+
+/* Botão secundário shimmer */
+.btn-cta-secondary{
+  position:relative;
+  overflow:hidden;
+}
+.btn-cta-secondary::after{
+  content:'';
+  position:absolute;
+  top:0;left:-60%;
+  width:35%;height:100%;
+  background:linear-gradient(to right,transparent,rgba(255,255,255,.5),transparent);
+  transform:skewX(-15deg);
+  opacity:0;
+}
+.btn-cta-secondary:hover::after{
+  opacity:1;
+  animation:shimmer-beam .7s ease forwards;
+}
+
+/* Header btn shimmer */
+.btn-primary{
+  position:relative;
+  overflow:hidden;
+}
+.btn-primary::after{
+  content:'';
+  position:absolute;
+  top:0;left:-60%;
+  width:35%;height:100%;
+  background:linear-gradient(to right,transparent,rgba(255,255,255,.4),transparent);
+  transform:skewX(-15deg);
+  opacity:0;
+}
+.btn-primary:hover::after{
+  opacity:1;
+  animation:shimmer-beam .6s ease forwards;
+}
+
+/* --- Flashlight Effect: cards --- */
+.fl-card{
+  position:relative;
+  overflow:hidden;
+}
+.fl-card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(
+    600px circle at var(--mx,50%) var(--my,50%),
+    rgba(108,92,231,.12),
+    transparent 40%
+  );
+  opacity:0;
+  transition:opacity .5s;
+  pointer-events:none;
+  z-index:2;
+  border-radius:inherit;
+}
+.fl-card:hover::before{opacity:1}
+/* Borda que reage ao mouse */
+.fl-border{
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  padding:1px;
+  background:radial-gradient(
+    400px circle at var(--mx,50%) var(--my,50%),
+    rgba(108,92,231,.45),
+    transparent 40%
+  );
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  opacity:0;
+  transition:opacity .5s;
+  pointer-events:none;
+  z-index:3;
+}
+.fl-card:hover .fl-border{opacity:1}
+
+/* Nexus cards: flashlight em fundo escuro */
+.nexus-card.fl-card::before{
+  background:radial-gradient(
+    500px circle at var(--mx,50%) var(--my,50%),
+    rgba(108,92,231,.18),
+    transparent 40%
+  );
+}
+.nexus-card.fl-card .fl-border{
+  background:radial-gradient(
+    350px circle at var(--mx,50%) var(--my,50%),
+    rgba(0,201,167,.5),
+    transparent 40%
+  );
+}
+
+/* --- Glow Orbs de fundo animados --- */
+@keyframes orb-float{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(30px,-20px) scale(1.05)}
+  66%{transform:translate(-20px,15px) scale(.97)}
+}
+@keyframes orb-float-2{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(-25px,20px) scale(1.04)}
+  66%{transform:translate(20px,-10px) scale(.98)}
+}
+.bg-orbs{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:0;
+}
+.bg-orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(80px);
+  will-change:transform;
+}
+.bg-orb-1{
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(108,92,231,.2) 0%,transparent 70%);
+  top:-100px;right:-100px;
+  animation:orb-float 12s ease-in-out infinite;
+}
+.bg-orb-2{
+  width:400px;height:400px;
+  background:radial-gradient(circle,rgba(41,128,249,.15) 0%,transparent 70%);
+  bottom:-80px;left:5%;
+  animation:orb-float-2 15s ease-in-out infinite;
+}
+.bg-orb-3{
+  width:300px;height:300px;
+  background:radial-gradient(circle,rgba(0,201,167,.12) 0%,transparent 70%);
+  top:40%;right:20%;
+  animation:orb-float 18s ease-in-out infinite reverse;
+}
+
+/* --- Animated gradient linha divisória --- */
+.gradient-line{
+  width:100%;
+  height:1px;
+  background:linear-gradient(to right,transparent,var(--purple),var(--teal),transparent);
+  opacity:.3;
+  margin:0;
+}
+
+/* --- Reveal com blur (estilo animation-clean) --- */
+.reveal{
+  opacity:0;
+  transform:translateY(32px);
+  filter:blur(6px);
+  transition:opacity .9s var(--ease-out), transform .9s var(--ease-out), filter .9s var(--ease-out);
+}
+.reveal.in-view{
+  opacity:1;
+  transform:translateY(0);
+  filter:blur(0);
+}
+
+/* --- Text clip slide (headlines de seção) --- */
+.text-reveal-clip{
+  overflow:hidden;
+  display:block;
+}
+.text-reveal-clip span{
+  display:block;
+  transform:translateY(110%);
+  opacity:0;
+  transition:transform 1s var(--ease-out), opacity .8s;
+}
+.text-reveal-clip.in-view span{
+  transform:translateY(0);
+  opacity:1;
+}
+
+/* --- Número badge hover gradient pulse --- */
+.solucao-num{
+  position:relative;
+}
+.solucao-card:hover .solucao-num{
+  text-shadow:0 0 20px rgba(108,92,231,.5);
+}
+
+/* --- Fluxo step: glow no número ao hover --- */
+.fluxo-num{
+  transition:box-shadow .4s var(--ease-out), background .3s;
+}
+.fluxo-step:hover .fluxo-num{
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  color:#fff;
+  box-shadow:0 0 0 6px rgba(108,92,231,.15), 0 0 20px rgba(108,92,231,.3);
+}
+
+/* --- Problema card icon pop --- */
+.problema-icon{
+  transition:transform .4s var(--ease-out), box-shadow .4s;
+}
+.problema-card:hover .problema-icon{
+  transform:scale(1.15) rotate(-5deg);
+}
+
+/* --- Nexus icon wrap pulse --- */
+@keyframes icon-glow{
+  0%,100%{box-shadow:0 0 0 0 rgba(0,201,167,0)}
+  50%{box-shadow:0 0 12px 4px rgba(0,201,167,.25)}
+}
+.nexus-card:hover .nexus-icon-wrap{
+  animation:icon-glow 1.5s ease-in-out infinite;
+}
+
+/* --- CTA final: faixa glow --- */
+#cta-final{
+  position:relative;
+  overflow:hidden;
+}
+#cta-final::before{
+  content:'';
+  position:absolute;
+  top:-200px;left:50%;
+  transform:translateX(-50%);
+  width:800px;height:400px;
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(108,92,231,.1) 0%,transparent 70%);
+  pointer-events:none;
+}
+
+/* --- Smooth Scroll --- */
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .btn-cta-primary::before,.btn-cta-primary::after,
+  .btn-cta-secondary::after,.btn-primary::after{display:none}
+  .reveal{filter:none;transition:opacity .5s,transform .5s}
+  .bg-orb{animation:none}
+}
+</style>
+</head>
+<body>
+
+<!-- =============================================
+     HEADER
+============================================= -->
+<header class="header" id="site-header">
+  <a href="/" class="logo" aria-label="Zyncro - Página inicial">
+    <img src="ChatGPT Image 17 de jun. de 2026, 23_00_52.png" alt="Zyncro logo" id="logo-img">
+    <span class="logo-word">zyncro</span>
+  </a>
+  <nav aria-label="Navegação principal">
+    <a href="#problema">Problema</a>
+    <a href="#solucao">Solução</a>
+    <a href="#como-funciona">Como funciona</a>
+    <a href="#nexus">Nexus AI</a>
+  </nav>
+  <div class="header-cta">
+    <a href="#" class="btn btn-ghost">Entrar</a>
+    <a href="#" class="btn btn-primary">Solicitar demo</a>
+  </div>
+</header>
+
+<!-- =============================================
+     HERO
+============================================= -->
+<main>
+  <section class="hero-section" id="hero-section" aria-label="Hero">
+    <div class="hero-sticky" id="hero-sticky">
+
+      <!-- Orbs de glow no fundo da hero -->
+      <div class="bg-orbs" aria-hidden="true">
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-orb bg-orb-3"></div>
+      </div>
+
+      <!-- Canvas para animação de frames -->
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+
+      <!-- Fallback estático -->
+      <img
+        src="references/image-frames/pc/frame_0099.webp"
+        alt=""
+        class="hero-fallback"
+        aria-hidden="true"
+      >
+
+      <!-- Overlay de legibilidade -->
+      <div class="hero-overlay" aria-hidden="true"></div>
+
+      <!-- Conteúdo principal -->
+      <div class="hero-content">
+
+        <div class="badge anim-badge">
+          <span class="badge-dot"></span>
+          CRM com IA para atendimento e vendas
+        </div>
+
+        <h1 class="headline anim-h1">
+          Tudo sincronizado.<br>
+          <span>Resultados conectados.</span>
+        </h1>
+
+        <p class="subheadline anim-sub">
+          Centralize conversas, leads e vendas em um CRM com IA que organiza atendimentos, qualifica oportunidades e conecta sua equipe ao cliente certo, no momento certo.
+        </p>
+
+        <div class="cta-group anim-ctas">
+          <button class="btn-cta-primary">
+            Agendar demonstração
+            <svg class="arrow-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+          <button class="btn-cta-secondary">
+            <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+              <polygon points="10,8 16,12 10,16" fill="currentColor"/>
+            </svg>
+            Ver como funciona
+          </button>
+        </div>
+
+        <ul class="benefits anim-benefits" aria-label="Principais benefícios">
+          <li class="benefit">
+            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="#00C9A7" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            Atendimento omnichannel
+          </li>
+          <li class="benefit">
+            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="#6C5CE7" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            IA qualificando leads
+          </li>
+          <li class="benefit">
+            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="#2980F9" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            Pipeline inteligente
+          </li>
+          <li class="benefit">
+            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="#00C9A7" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            Transferência para humano
+          </li>
+        </ul>
+
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="scroll-indicator" aria-hidden="true">
+        <div class="scroll-mouse"></div>
+        <span>Role para explorar</span>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<!-- =============================================
+     PROBLEMA
+============================================= -->
+<section class="section" id="problema" aria-labelledby="problema-title">
+  <div class="section-inner">
+    <span class="section-label reveal">O desafio</span>
+    <h2 class="section-title reveal reveal-delay-1" id="problema-title">
+      Seu atendimento está espalhado.<br>Suas vendas também.
+    </h2>
+    <p class="section-sub reveal reveal-delay-2">Conversas no WhatsApp pessoal, leads sem acompanhamento, equipe sem visibilidade do funil. Cada canal funciona de forma isolada — e as oportunidades escorregam.</p>
+    <div class="problema-grid">
+      <div class="problema-card fl-card reveal reveal-delay-1">
+        <div class="fl-border"></div>
+        <div class="problema-icon icon-red">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3>Conversas perdidas</h3>
+        <p>Mensagens que chegam em vários canais ao mesmo tempo sem um único lugar para gerenciar e responder.</p>
+      </div>
+      <div class="problema-card fl-card reveal reveal-delay-2">
+        <div class="fl-border"></div>
+        <div class="problema-icon icon-orange">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>WhatsApp pessoal misturado</h3>
+        <p>Vendedores usando o número pessoal para atender clientes — sem histórico, sem controle e sem transferência segura.</p>
+      </div>
+      <div class="problema-card fl-card reveal reveal-delay-3">
+        <div class="fl-border"></div>
+        <div class="problema-icon icon-amber">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3>Sem visão do funil</h3>
+        <p>Não há como saber onde cada lead está, qual o status da negociação ou quem deve agir agora.</p>
+      </div>
+      <div class="problema-card fl-card reveal reveal-delay-4">
+        <div class="fl-border"></div>
+        <div class="problema-icon icon-slate">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <h3>Dados fragmentados</h3>
+        <p>Planilhas, grupos de WhatsApp e anotações soltas. Impossível escalar uma operação comercial assim.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     SOLUÇÃO
+============================================= -->
+<section class="section" id="solucao" aria-labelledby="solucao-title">
+  <div class="section-inner">
+    <span class="section-label reveal">A plataforma</span>
+    <h2 class="section-title" id="solucao-title">
+      <span class="text-reveal-clip"><span>A Zyncro transforma conversas</span></span>
+      <span class="text-reveal-clip" style="transition-delay:.15s"><span>em operação comercial.</span></span>
+    </h2>
+    <p class="section-sub reveal reveal-delay-2">Uma única plataforma que conecta todos os canais, organiza o pipeline, aplica IA para qualificar leads e dá visibilidade completa para gestores e vendedores.</p>
+    <div class="gradient-line"></div>
+    <div class="solucao-grid">
+      <div class="solucao-card fl-card reveal reveal-delay-1"><div class="fl-border"></div>
+        <span class="solucao-num">01</span>
+        <h3>Atendimento omnichannel</h3>
+        <p>WhatsApp, Instagram, Messenger, site e outros canais em uma única caixa de entrada compartilhada pela equipe.</p>
+      </div>
+      <div class="solucao-card reveal reveal-delay-2">
+        <span class="solucao-num">02</span>
+        <h3>CRM integrado</h3>
+        <p>Cada conversa vira um registro de contato. Histórico completo, tags, status e contexto sempre disponíveis.</p>
+      </div>
+      <div class="solucao-card reveal reveal-delay-3">
+        <span class="solucao-num">03</span>
+        <h3>Pipeline visual</h3>
+        <p>Arraste e visualize oportunidades em etapas do funil. Saiba exatamente o que está quente e o que precisa de ação.</p>
+      </div>
+      <div class="solucao-card fl-card reveal reveal-delay-1"><div class="fl-border"></div>
+        <span class="solucao-num">04</span>
+        <h3>IA e automação</h3>
+        <p>Qualificação automática, aplicação de tags, resumos de conversa e acionamento de fluxos sem intervenção manual.</p>
+      </div>
+      <div class="solucao-card reveal reveal-delay-2">
+        <span class="solucao-num">05</span>
+        <h3>Transferência para humano</h3>
+        <p>A IA atende, qualifica e, no momento certo, transfere a conversa com todo o contexto para o vendedor ideal.</p>
+      </div>
+      <div class="solucao-card reveal reveal-delay-3">
+        <span class="solucao-num">06</span>
+        <h3>Relatórios e gestão</h3>
+        <p>Visibilidade em tempo real da equipe: tempo de resposta, conversões por canal, desempenho individual e do funil.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     COMO FUNCIONA
+============================================= -->
+<section class="section" id="como-funciona" aria-labelledby="como-title">
+  <div class="section-inner">
+    <span class="section-label reveal">O fluxo</span>
+    <h2 class="section-title" id="como-title">
+      <span class="text-reveal-clip"><span>Do primeiro contato ao fechamento,</span></span>
+      <span class="text-reveal-clip" style="transition-delay:.12s"><span>tudo conectado.</span></span>
+    </h2>
+      Do primeiro contato ao fechamento,
+      <br>tudo conectado.
+    </h2>
+    <div class="fluxo">
+      <div class="fluxo-step reveal reveal-delay-1">
+        <div class="fluxo-num">1</div>
+        <h3>Lead entra</h3>
+        <p>Por qualquer canal: WhatsApp, Instagram, formulário ou chat do site.</p>
+      </div>
+      <div class="fluxo-step reveal reveal-delay-2">
+        <div class="fluxo-num">2</div>
+        <h3>IA qualifica</h3>
+        <p>O Nexus identifica o interesse, aplica tags e classifica a oportunidade automaticamente.</p>
+      </div>
+      <div class="fluxo-step reveal reveal-delay-3">
+        <div class="fluxo-num">3</div>
+        <h3>CRM organiza</h3>
+        <p>O contato entra no pipeline com histórico completo, status e próxima ação sugerida.</p>
+      </div>
+      <div class="fluxo-step reveal reveal-delay-4">
+        <div class="fluxo-num">4</div>
+        <h3>Humano assume</h3>
+        <p>No momento certo, o vendedor recebe a conversa com todo o contexto para fechar.</p>
+      </div>
+      <div class="fluxo-step reveal reveal-delay-4">
+        <div class="fluxo-num">5</div>
+        <h3>Gestor acompanha</h3>
+        <p>Relatórios em tempo real mostram conversões, gargalos e oportunidades de melhoria.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     NEXUS AI
+============================================= -->
+<section class="section" id="nexus" aria-labelledby="nexus-title">
+  <div class="section-inner">
+    <span class="section-label reveal">Nexus AI</span>
+    <h2 class="section-title" id="nexus-title">
+      <span class="text-reveal-clip"><span>A inteligência que sincroniza</span></span>
+      <span class="text-reveal-clip" style="transition-delay:.12s"><span>sua operação.</span></span>
+    </h2>
+      A inteligência que sincroniza<br>sua operação.
+    </h2>
+    <p class="section-sub reveal reveal-delay-2">O Nexus é a camada de IA da Zyncro. Ele trabalha em segundo plano, aprendendo o contexto de cada conversa para tomar ações precisas e reduzir o trabalho manual da equipe.</p>
+    <div class="nexus-grid">
+      <div class="nexus-card fl-card reveal reveal-delay-1">
+        <div class="fl-border"></div>
+        <div class="nexus-icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00C9A7" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <h3>Qualificação automática</h3>
+        <p>Entende o interesse do lead pela conversa e classifica o nível de maturidade para compra sem perguntar manualmente.</p>
+      </div>
+      <div class="nexus-card fl-card reveal reveal-delay-2">
+        <div class="fl-border"></div>
+        <div class="nexus-icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C5CE7" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        </div>
+        <h3>Tags e status inteligentes</h3>
+        <p>Aplica etiquetas e atualiza o status do contato no CRM conforme o andamento real da conversa.</p>
+      </div>
+      <div class="nexus-card fl-card reveal reveal-delay-3">
+        <div class="fl-border"></div>
+        <div class="nexus-icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2980F9" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <h3>Resumo de conversa</h3>
+        <p>Gera um resumo automático antes da transferência para o humano, para que o vendedor entre já contextualizado.</p>
+      </div>
+      <div class="nexus-card fl-card reveal reveal-delay-4">
+        <div class="fl-border"></div>
+        <div class="nexus-icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00C9A7" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <h3>Acionamento de automações</h3>
+        <p>Dispara fluxos de follow-up, notificações para vendedores e atualizações no CRM baseado em gatilhos da conversa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     CTA FINAL
+============================================= -->
+<section class="section" id="cta-final" aria-labelledby="cta-final-title">
+  <div class="section-inner">
+    <span class="section-label reveal">Próximo passo</span>
+    <h2 class="section-title reveal reveal-delay-1" id="cta-final-title">
+      Sua operação comercial não precisa<br>continuar espalhada.
+    </h2>
+    <p class="section-sub reveal reveal-delay-2">
+      Veja como a Zyncro centraliza seus canais, organiza o pipeline e coloca a IA para trabalhar pela sua equipe.
+    </p>
+    <div class="cta-final-actions reveal reveal-delay-3">
+      <button class="btn-cta-primary">
+        Agendar demonstração
+        <svg class="arrow-icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+      <button class="btn-cta-secondary">
+        Falar com o time
+      </button>
+    </div>
+    <p class="trust-line reveal reveal-delay-4">Sem compromisso. Demonstração de 30 minutos com o time da Zyncro.</p>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>&copy; 2026 Zyncro. Todos os direitos reservados. <a href="#">Privacidade</a><a href="#">Termos</a></p>
+</footer>
+
+<!-- =============================================
+     CDNs
+============================================= -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<script>
+/* =============================================
+   CONFIGURAÇÃO DOS FRAMES
+============================================= */
+const FRAME_PATH  = 'references/image-frames/pc/frame_';
+const FRAME_EXT   = '.webp';
+const FRAME_COUNT = 150;  // frame_0000 → frame_0149
+
+/* =============================================
+   HEADER — efeito ao rolar
+============================================= */
+const header = document.getElementById('site-header');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
+
+/* =============================================
+   CANVAS — SCROLL-DRIVEN ANIMATION
+   Padrão Apple: scroll mapeia para frame index
+============================================= */
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (!prefersReduced) {
+  gsap.registerPlugin(ScrollTrigger);
+
+  const canvas  = document.getElementById('hero-canvas');
+  const ctx     = canvas.getContext('2d');
+  const section = document.getElementById('hero-section');
+
+  // Ajusta resolução do canvas ao tamanho real
+  function resizeCanvas() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', () => { resizeCanvas(); drawFrame(); }, { passive: true });
+
+  // Array de imagens pré-carregadas
+  const frames = [];
+  let loadedCount  = 0;
+  let failedCount  = 0;
+  let currentIndex = 0;
+  const state = { frame: 0 };
+
+  // Desenha o frame atual no canvas
+  function drawFrame() {
+    const img = frames[Math.round(state.frame)];
+    if (!img || !img.complete || !img.naturalWidth) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Cover: preenche o canvas mantendo proporção
+    const scale = Math.max(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
+    const w = img.naturalWidth  * scale;
+    const h = img.naturalHeight * scale;
+    const x = (canvas.width  - w) / 2;
+    const y = (canvas.height - h) / 2;
+    ctx.drawImage(img, x, y, w, h);
+  }
+
+  // Fallback visual se muitos frames falharem
+  function activateFallback() {
+    document.getElementById('hero-sticky').classList.add('canvas-failed');
+  }
+
+  // Pré-carregamento dos frames
+  for (let i = 0; i < FRAME_COUNT; i++) {
+    const img = new Image();
+    const src = `${FRAME_PATH}${String(i).padStart(4, '0')}${FRAME_EXT}`;
+    img.src = src;
+
+    img.onload = () => {
+      loadedCount++;
+      // Renderiza frame 0 assim que carregar
+      if (i === 0) drawFrame();
+    };
+
+    img.onerror = () => {
+      failedCount++;
+      // Se mais de 50% falhar, ativa fallback
+      if (failedCount > FRAME_COUNT * 0.5) activateFallback();
+    };
+
+    frames.push(img);
+  }
+
+  // GSAP ScrollTrigger mapeia scroll → frame
+  gsap.to(state, {
+    frame: FRAME_COUNT - 1,
+    ease: 'none',
+    scrollTrigger: {
+      trigger:  section,
+      start:    'top top',
+      end:      'bottom bottom',
+      scrub:    0.8,      // lag suave = sensação premium
+    },
+    onUpdate: drawFrame
+  });
+}
+
+/* =============================================
+   SCROLL REVEAL — IntersectionObserver
+   Blur + slide + fade ao entrar na viewport
+============================================= */
+const revealEls = document.querySelectorAll('.reveal, .text-reveal-clip');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in-view');
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => revealObs.observe(el));
+
+/* =============================================
+   FLASHLIGHT EFFECT
+   Mouse tracking em todos os .fl-card
+============================================= */
+document.querySelectorAll('.fl-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.style.setProperty('--mx', x + 'px');
+    card.style.setProperty('--my', y + 'px');
+  });
+});
+
+/* =============================================
+   MAGNETIC BUTTONS
+   Leve atração magnética nos CTAs principais
+============================================= */
+document.querySelectorAll('.btn-cta-primary, .btn-cta-secondary').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    btn.style.transform = `translate(${x * 0.12}px, ${y * 0.12}px) translateY(-3px)`;
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transform = '';
+    btn.style.transition = 'transform .5s var(--ease-out), box-shadow .3s';
+  });
+});
+
+/* =============================================
+   ACTIVE NAV LINK
+   Destaca o link da seção visível
+============================================= */
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('nav a[href^="#"]');
+const navObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(a => a.style.color = '');
+      const active = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+      if (active) active.style.color = 'var(--purple)';
+    }
+  });
+}, { threshold: 0.4 });
+sections.forEach(s => navObs.observe(s));
+
+/* Smooth scroll para links de nav */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
