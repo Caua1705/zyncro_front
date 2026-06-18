@@ -912,7 +912,164 @@
       .fluxo-step { flex-direction:row; text-align:left; align-items:flex-start; gap:16px; }
       .footer { padding:24px; flex-direction:column; gap:16px; text-align:center; }
     }
+
+    /* =========================================
+       NEW PREMIUM SECTIONS
+    ========================================= */
+
+    /* ── Section variants ── */
+    .section-alt  { background: var(--bg-surface); border-top: 1px dashed rgba(0,0,0,.06); border-bottom: 1px dashed rgba(0,0,0,.06); }
+    .section-dark { background: var(--text-main); border-top: 1px dashed rgba(255,255,255,.06); }
+
+    /* ── Challenge Grid ── */
+    .challenge-grid {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: 16px; margin-top: 3rem;
+    }
+    .challenge-card {
+      background: #fff;
+      border: 1px solid var(--border-light);
+      border-radius: 12px; padding: 28px 24px;
+      display: flex; flex-direction: column; gap: 10px;
+      transition: all .4s var(--ease-expo);
+      position: relative; overflow: hidden;
+    }
+    .challenge-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.07); }
+    .cc-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--bg-highlight);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: background .3s, color .3s;
+    }
+    .challenge-card:hover .cc-icon { background: var(--text-main); color: #fff; }
+    .cc-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .9rem; font-weight: 700;
+      color: var(--text-main); letter-spacing: -.02em;
+    }
+    .cc-text { font-size: .8rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── Split Layout (image + text) ── */
+    .split-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+    .split-layout.split-reverse { direction: rtl; }
+    .split-layout.split-reverse > * { direction: ltr; }
+    .split-text { display: flex; flex-direction: column; gap: 20px; }
+    .split-image {
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,.1);
+    }
+    .split-image img { width: 100%; height: auto; display: block; }
+
+    /* Feature list */
+    .feature-list { list-style: none; display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+    .feature-list li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: .9rem; color: var(--text-muted); line-height: 1.6;
+    }
+    .feature-list strong { color: var(--text-main); }
+    .fl-dot {
+      flex-shrink: 0; margin-top: 7px;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--z-grad);
+    }
+
+    /* ── Timeline ── */
+    .timeline {
+      position: relative;
+      display: flex; gap: 0;
+      margin-top: 3.5rem;
+      align-items: flex-start;
+    }
+    .tl-line {
+      position: absolute;
+      top: 22px; left: 36px; right: 36px; height: 2px;
+      background: linear-gradient(to right, var(--z-purple), var(--z-blue), var(--z-teal));
+      z-index: 0;
+    }
+    .tl-step {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; text-align: center;
+      position: relative; z-index: 1; padding: 0 16px;
+    }
+    .tl-num {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: #fff; border: 2px solid var(--z-purple);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .65rem; font-weight: 700; color: var(--z-purple);
+      margin-bottom: 1rem;
+      box-shadow: 0 0 0 6px rgba(108,92,231,.06);
+      transition: all .3s;
+    }
+    .tl-step:hover .tl-num { background: var(--z-purple); color: #fff; box-shadow: 0 0 0 6px rgba(108,92,231,.12), 0 0 20px rgba(108,92,231,.3); }
+    .tl-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem; font-weight: 700; color: var(--text-main);
+      letter-spacing: -.02em; margin-bottom: 4px;
+    }
+    .tl-text { font-size: .8rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── Nexus mini-cards (dark section) ── */
+    .nexus-mini-cards { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+    .nmc {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 16px; border-radius: 10px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      transition: background .3s, border-color .3s;
+    }
+    .nmc:hover { background: rgba(255,255,255,.09); border-color: rgba(108,92,231,.4); }
+    .nmc-icon { font-size: 1.25rem; line-height: 1; flex-shrink: 0; }
+    .nmc-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .9rem; font-weight: 700; color: #fff;
+      letter-spacing: -.02em; margin-bottom: 2px;
+    }
+    .nmc-text { font-size: .8rem; color: rgba(255,255,255,.5); line-height: 1.5; }
+
+    /* ── Channels layout ── */
+    .channels-layout {
+      display: grid; grid-template-columns: 1fr 1.5fr;
+      gap: 80px; align-items: center;
+    }
+    .channels-image {
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,.1);
+    }
+    .channels-image img { width: 100%; height: auto; display: block; }
+
+    /* ── CTA final ── */
+    #cta-final { background: #fff; border-top: 1px dashed rgba(0,0,0,.06); text-align: center; overflow: hidden; position: relative; }
+    .cta-inner { display: flex; flex-direction: column; align-items: center; position: relative; }
+    .cta-glow {
+      position: absolute; top: -160px; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 400px; border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(108,92,231,.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    #cta-final .section-title { max-width: 640px; text-align: center; }
+    #cta-final .section-sub { text-align: center; margin: 0 auto 2.5rem; }
+
+    /* ── Responsive for new sections ── */
+    @media (max-width: 1100px) {
+      .split-layout, .split-layout.split-reverse { grid-template-columns: 1fr; direction: ltr; gap: 40px; }
+      .channels-layout { grid-template-columns: 1fr; gap: 40px; }
+      .challenge-grid { grid-template-columns: repeat(2,1fr); }
+      .timeline { flex-direction: column; align-items: flex-start; gap: 24px; }
+      .tl-line { display: none; }
+      .tl-step { flex-direction: row; text-align: left; align-items: flex-start; gap: 16px; }
+      .tl-num { margin-bottom: 0; flex-shrink: 0; }
+    }
+    @media (max-width: 700px) {
+      .challenge-grid { grid-template-columns: 1fr; }
+      .split-text { gap: 14px; }
+    }
   </style>
+
 </head>
 <body>
 
@@ -1068,145 +1225,7 @@
     </div>
   </section>
 
-  <!-- Spacer so page continues after hero -->
-  <div style="height:80px; background:var(--bg-body); position:relative; z-index:10;"></div>
-
-
-  <script>
-    gsap.registerPlugin(ScrollTrigger);
-
-    document.addEventListener('DOMContentLoaded', () => {
-
-      /* ── 1. HERO REVEAL ON LOAD (exact exemplo.html pattern) ── */
-      /* Sequential stagger: each .reveal-up in hero gets active 100ms apart */
-      const heroReveals = document.querySelectorAll('.hero-scene .reveal-up');
-      heroReveals.forEach((el, index) => {
-        setTimeout(() => el.classList.add('active'), 100 * (index + 1));
-      });
-
-      /* ── 2. CANVAS INTRO (exact exemplo.html) ── */
-      const canvas = document.getElementById('frame-canvas');
-      gsap.fromTo(canvas,
-        { opacity: 0, scale: 1.08 },
-        { opacity: 1, scale: 1, duration: 1.5, ease: 'power3.out' }
-      );
-
-      /* ── 3. SCROLL BLUR-OUT (exact exemplo.html scrub) ── */
-      gsap.to('.hero-scene .reveal-up', {
-        y: -60,
-        opacity: 0,
-        filter: 'blur(15px)',
-        stagger: 0.05,
-        scrollTrigger: {
-          trigger: '.hero-scene',
-          start: 'top top',
-          end: '15% top',
-          scrub: true
-        }
-      });
-
-      /* ── 4. Glow card mousemove ── */
-      document.querySelectorAll('.glow-card').forEach(card => {
-        card.addEventListener('mousemove', e => {
-          const r = card.getBoundingClientRect();
-          card.style.setProperty('--x', (e.clientX - r.left) + 'px');
-          card.style.setProperty('--y', (e.clientY - r.top)  + 'px');
-        });
-      });
-
-      /* ── 5. Frame canvas scroll animation ── */
-      (function () {
-        const TOTAL = 150;
-        const DIR   = 'references/image-frames/pc/frame_';
-        const EXT   = '.webp';
-        const pad   = n => String(n).padStart(4, '0');
-
-        const scene   = document.getElementById('hero');
-        const endCard = document.getElementById('frame-end');
-        const mps     = document.querySelectorAll('.mp');
-        const ctx     = canvas.getContext('2d');
-
-        function resize() {
-          canvas.width  = window.innerWidth;
-          canvas.height = window.innerHeight;
-        }
-        resize();
-        window.addEventListener('resize', () => { resize(); draw(cur); }, { passive:true });
-
-        const imgs = [];
-        for (let i = 0; i < TOTAL; i++) {
-          const img = new Image();
-          img.src = DIR + pad(i) + EXT;
-          imgs.push(img);
-        }
-        imgs[0].onload = () => draw(0);
-
-        let cur = 0, raf;
-        function draw(idx) {
-          const img = imgs[idx];
-          if (!img || !img.complete || !img.naturalWidth) return;
-          const s = Math.max(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
-          const w = img.naturalWidth * s, h = img.naturalHeight * s;
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, (canvas.width-w)/2, (canvas.height-h)/2, w, h);
-        }
-
-        window.addEventListener('scroll', () => {
-          const rect = scene.getBoundingClientRect();
-          const prog = Math.max(0, Math.min(1, -rect.top / (scene.offsetHeight - window.innerHeight)));
-          const frame = Math.min(TOTAL-1, Math.floor(prog * TOTAL));
-          if (frame !== cur) {
-            cur = frame;
-            cancelAnimationFrame(raf);
-            raf = requestAnimationFrame(() => draw(cur));
-          }
-          
-          if (mps.length === 6) {
-            if (prog > 0.45 && prog <= 0.85) mps[0].classList.add('show'); else mps[0].classList.remove('show');
-            if (prog > 0.52 && prog <= 0.85) mps[3].classList.add('show'); else mps[3].classList.remove('show');
-            if (prog > 0.58 && prog <= 0.85) mps[1].classList.add('show'); else mps[1].classList.remove('show');
-            if (prog > 0.64 && prog <= 0.85) mps[5].classList.add('show'); else mps[5].classList.remove('show');
-            if (prog > 0.70 && prog <= 0.85) mps[2].classList.add('show'); else mps[2].classList.remove('show');
-            if (prog > 0.76 && prog <= 0.85) mps[4].classList.add('show'); else mps[4].classList.remove('show');
-          }
-
-          endCard.classList.toggle('visible', prog > 0.88);
-        }, { passive:true });
-      })();
-
-      window.dispatchEvent(new Event('scroll'));
-
-      /* ── 6. Reveal-up + reveal-zoom for SECTIONS (not hero) ── */
-      gsap.utils.toArray('section:not(#hero) .reveal-up, section .reveal-zoom').forEach(elem => {
-        ScrollTrigger.create({
-          trigger: elem,
-          start: 'top 85%',
-          onEnter: () => elem.classList.add('active')
-        });
-      });
-
-      /* ── 6b. .reveal class (section-title, section-label, section-sub) ── */
-      gsap.utils.toArray('section .reveal').forEach(elem => {
-        ScrollTrigger.create({
-          trigger: elem,
-          start: 'top 88%',
-          onEnter: () => elem.classList.add('in-view')
-        });
-      });
-
-      /* ── 7. Flashlight cards ── */
-      document.querySelectorAll('.prob-card, .sol-card, .nexus-card').forEach(card => {
-        card.addEventListener('mousemove', e => {
-          const r = card.getBoundingClientRect();
-          card.style.setProperty('--mouse-x', (e.clientX - r.left) + 'px');
-          card.style.setProperty('--mouse-y', (e.clientY - r.top) + 'px');
-        });
-      });
-
-    });
-  </script>
-
-  <!-- ── 1. PROBLEMA ────────────────────────────────── -->
+  <!-- ── SEÇÃO 1: O DESAFIO ──────────────────────────────────────── -->
   <section class="section" id="problema" aria-labelledby="prob-title">
     <div class="section-inner">
       <span class="section-label reveal">O desafio</span>
@@ -1214,135 +1233,131 @@
         Seu atendimento está espalhado.<br>Suas vendas também.
       </h2>
       <p class="section-sub reveal rd2">
-        Mensagens chegando em vários canais, equipe respondendo no WhatsApp pessoal, leads sem acompanhamento e sem visão do funil.
+        Conversas chegam por vários canais, leads ficam sem acompanhamento e o gestor perde visibilidade do funil.
       </p>
-      <div class="prob-grid">
-        <div class="prob-card reveal-up ru-d1" id="prob1">
-          <div class="prob-icon" style="background:rgba(239,68,68,.1)">🔴</div>
-          <h3>Conversas perdidas</h3>
-          <p>WhatsApp, Instagram e chat do site em abas separadas. Mensagens sem resposta, clientes sem retorno.</p>
-          <div class="card-bar"><div class="card-bar-fill"></div></div>
+      <div class="challenge-grid">
+        <div class="challenge-card reveal-up ru-d1">
+          <div class="cc-icon">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <p class="cc-label">Conversas perdidas</p>
+          <p class="cc-text">Mensagens sem resposta em WhatsApp, Instagram e chat ao mesmo tempo.</p>
         </div>
-        <div class="prob-card reveal-up ru-d2" id="prob2">
-          <div class="prob-icon" style="background:rgba(249,115,22,.1)">📱</div>
-          <h3>WhatsApp pessoal na operação</h3>
-          <p>Vendedor sai da empresa e leva o histórico com ele. Sem controle, sem transferência, sem continuidade.</p>
-          <div class="card-bar"><div class="card-bar-fill"></div></div>
+        <div class="challenge-card reveal-up ru-d2">
+          <div class="cc-icon">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+          </div>
+          <p class="cc-label">WhatsApp pessoal na operação</p>
+          <p class="cc-text">Vendedor sai e leva o histórico. Sem controle, sem continuidade.</p>
         </div>
-        <div class="prob-card reveal-up ru-d3" id="prob3">
-          <div class="prob-icon" style="background:rgba(245,158,11,.1)">📊</div>
-          <h3>Funil invisível</h3>
-          <p>Impossível saber onde cada lead está, quem precisa de ação agora e qual negociação está esfriando.</p>
-          <div class="card-bar"><div class="card-bar-fill"></div></div>
+        <div class="challenge-card reveal-up ru-d3">
+          <div class="cc-icon">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <p class="cc-label">Funil invisível</p>
+          <p class="cc-text">Impossível saber onde cada lead está e qual negócio está esfriando.</p>
         </div>
-        <div class="prob-card reveal-up ru-d4" id="prob4">
-          <div class="prob-icon" style="background:rgba(100,116,139,.1)">🗂️</div>
-          <h3>Dados fragmentados</h3>
-          <p>Planilhas, anotações soltas e grupos de WhatsApp. Não existe operação escalável assim.</p>
-          <div class="card-bar"><div class="card-bar-fill"></div></div>
+        <div class="challenge-card reveal-up ru-d4">
+          <div class="cc-icon">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          </div>
+          <p class="cc-label">Dados fragmentados</p>
+          <p class="cc-text">Planilhas, anotações soltas e grupos. Sem escala, sem visibilidade.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <hr class="dashed-divider" style="position:relative;z-index:10;">
-
-  <!-- ── 2. SOLUÇÃO ─────────────────────────────────── -->
-  <section class="section" id="solucao" aria-labelledby="sol-title">
+  <!-- ── SEÇÃO 2: A PLATAFORMA (imagem + texto) ──────────────────── -->
+  <section class="section section-alt" id="plataforma" aria-labelledby="plat-title">
     <div class="section-inner">
-      <span class="section-label reveal">A plataforma</span>
-      <h2 class="section-title reveal rd1" id="sol-title">
-        A Zyncro transforma conversas<br>em operação comercial.
-      </h2>
-      <p class="section-sub reveal rd2">
-        Todos os canais, leads e negociações em um único lugar — com IA trabalhando em segundo plano.
-      </p>
-      <div class="sol-grid">
-        <div class="sol-card reveal-zoom ru-d1">
-          <span class="sol-num">01</span>
-          <h3>Atendimento omnichannel</h3>
-          <p>WhatsApp, Instagram, Messenger e site em uma caixa de entrada compartilhada pela equipe.</p>
-          <div class="card-bar"><div class="card-bar-fill"></div></div>
+      <div class="split-layout">
+        <div class="split-text reveal-up">
+          <span class="section-label">A plataforma</span>
+          <h2 class="section-title" id="plat-title">
+            A Zyncro transforma conversas em operação comercial.
+          </h2>
+          <p class="section-sub">
+            Todos os canais, leads e negociações em um só lugar — com IA trabalhando em segundo plano.
+          </p>
+          <ul class="feature-list">
+            <li class="reveal-up ru-d1">
+              <span class="fl-dot"></span>
+              <span><strong>Atendimento omnichannel</strong> — WhatsApp, Instagram e site unificados.</span>
+            </li>
+            <li class="reveal-up ru-d2">
+              <span class="fl-dot"></span>
+              <span><strong>CRM integrado</strong> — Cada conversa vira um registro com histórico e contexto.</span>
+            </li>
+            <li class="reveal-up ru-d3">
+              <span class="fl-dot"></span>
+              <span><strong>Pipeline visual</strong> — Veja onde cada oportunidade está no funil.</span>
+            </li>
+          </ul>
         </div>
-        <div class="sol-card reveal-zoom ru-d2">
-          <span class="sol-num">02</span>
-          <h3>CRM integrado</h3>
-          <p>Cada conversa vira um registro de contato com histórico, tags e contexto sempre disponíveis.</p>
-          <div class="card-bar"><div class="card-bar-fill"></div></div>
-        </div>
-        <div class="sol-card reveal-zoom ru-d3">
-          <span class="sol-num">03</span>
-          <h3>Pipeline visual</h3>
-          <p>Visualize oportunidades em etapas do funil e saiba exatamente o que precisa de ação agora.</p>
-          <div class="card-bar"><div class="card-bar-fill"></div></div>
-        </div>
-        <div class="sol-card reveal-zoom ru-d1">
-          <span class="sol-num">04</span>
-          <h3>IA e automação</h3>
-          <p>Qualificação automática, tags inteligentes e acionamento de fluxos sem intervenção manual.</p>
-          <div class="card-bar"><div class="card-bar-fill"></div></div>
-        </div>
-        <div class="sol-card reveal-zoom ru-d2">
-          <span class="sol-num">05</span>
-          <h3>Transferência para humano</h3>
-          <p>A IA qualifica e, no momento certo, passa a conversa com todo o contexto para o vendedor certo.</p>
-          <div class="card-bar"><div class="card-bar-fill"></div></div>
-        </div>
-        <div class="sol-card reveal-zoom ru-d3">
-          <span class="sol-num">06</span>
-          <h3>Relatórios em tempo real</h3>
-          <p>Tempo de resposta, conversões por canal e desempenho individual — tudo visível para o gestor.</p>
-          <div class="card-bar"><div class="card-bar-fill"></div></div>
+        <div class="split-image reveal-zoom">
+          <img src="img1.png" alt="Plataforma Zyncro — CRM e atendimento omnichannel" />
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ── 3. COMO FUNCIONA ───────────────────────────── -->
+  <!-- ── SEÇÃO 3: DO PRIMEIRO CONTATO AO FECHAMENTO (timeline) ──── -->
   <section class="section" id="como-funciona" aria-labelledby="fluxo-title">
     <div class="section-inner">
       <span class="section-label reveal">O fluxo</span>
       <h2 class="section-title reveal rd1" id="fluxo-title">
-        Do primeiro contato ao fechamento,<br>tudo conectado.
+        Do primeiro contato ao fechamento.
       </h2>
-      <div class="fluxo">
-        <div class="fluxo-step reveal rd1">
-          <div class="fluxo-num">1</div>
-          <h3>Lead entra</h3>
-          <p>Por qualquer canal: WhatsApp, Instagram, formulário ou chat do site.</p>
+      <div class="timeline">
+        <div class="tl-line" aria-hidden="true"></div>
+        <div class="tl-step reveal rd1">
+          <div class="tl-num">01</div>
+          <div class="tl-body">
+            <p class="tl-label">Lead entra</p>
+            <p class="tl-text">WhatsApp, Instagram, formulário ou chat do site.</p>
+          </div>
         </div>
-        <div class="fluxo-step reveal rd2">
-          <div class="fluxo-num">2</div>
-          <h3>IA qualifica</h3>
-          <p>O Nexus identifica o interesse, aplica tags e classifica a oportunidade.</p>
+        <div class="tl-step reveal rd2">
+          <div class="tl-num">02</div>
+          <div class="tl-body">
+            <p class="tl-label">IA qualifica</p>
+            <p class="tl-text">O Nexus identifica o interesse e classifica a oportunidade.</p>
+          </div>
         </div>
-        <div class="fluxo-step reveal rd3">
-          <div class="fluxo-num">3</div>
-          <h3>CRM organiza</h3>
-          <p>Contato entra no pipeline com histórico e próxima ação sugerida.</p>
+        <div class="tl-step reveal rd3">
+          <div class="tl-num">03</div>
+          <div class="tl-body">
+            <p class="tl-label">CRM organiza</p>
+            <p class="tl-text">Contato entra no pipeline com histórico e próxima ação definida.</p>
+          </div>
         </div>
-        <div class="fluxo-step reveal rd4">
-          <div class="fluxo-num">4</div>
-          <h3>Humano assume</h3>
-          <p>Vendedor recebe a conversa com contexto completo para fechar.</p>
+        <div class="tl-step reveal rd4">
+          <div class="tl-num">04</div>
+          <div class="tl-body">
+            <p class="tl-label">Humano assume</p>
+            <p class="tl-text">Vendedor recebe a conversa com contexto completo para fechar.</p>
+          </div>
         </div>
-        <div class="fluxo-step reveal" style="transition-delay:.5s">
-          <div class="fluxo-num">5</div>
-          <h3>Gestor acompanha</h3>
-          <p>Relatórios em tempo real revelam gargalos e oportunidades.</p>
+        <div class="tl-step reveal" style="transition-delay:.5s">
+          <div class="tl-num">05</div>
+          <div class="tl-body">
+            <p class="tl-label">Gestor acompanha</p>
+            <p class="tl-text">Relatórios em tempo real revelam gargalos e oportunidades.</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ── 4. NEXUS AI ────────────────────────────────── -->
-  <section class="section" id="nexus" aria-labelledby="nexus-title">
+  <!-- ── SEÇÃO 4: NEXUS AI ──────────────────────────────────────── -->
+  <section class="section section-dark" id="nexus" aria-labelledby="nexus-title">
     <div class="section-inner">
-      <span class="section-label reveal">Nexus AI</span>
-      <h2 class="section-title reveal rd1" id="nexus-title">
+      <span class="section-label reveal" style="color: var(--z-teal);">Nexus AI</span>
+      <h2 class="section-title reveal rd1" id="nexus-title" style="color:#fff;">
         A inteligência que sincroniza<br>sua operação.
       </h2>
-      <p class="section-sub reveal rd2">
+      <p class="section-sub reveal rd2" style="color:rgba(255,255,255,.55);">
         O Nexus é a camada de IA da Zyncro. Trabalha em segundo plano, aprende com cada conversa e toma ações precisas para reduzir o trabalho manual da equipe.
       </p>
       <div class="nexus-grid">
@@ -1374,15 +1389,37 @@
     </div>
   </section>
 
-  <!-- ── 5. CTA FINAL ───────────────────────────────── -->
-  <section class="section" id="cta-final" aria-labelledby="cta-title">
+
+  <!-- ── SEÇÃO 5: TODOS OS CANAIS (imagem full-width) ───────────── -->
+  <section class="section" id="canais" aria-labelledby="canais-title">
     <div class="section-inner">
+      <div class="channels-layout">
+        <div class="channels-text reveal-up">
+          <span class="section-label">Omnichannel</span>
+          <h2 class="section-title" id="canais-title">
+            Todos os canais.<br>Uma única operação.
+          </h2>
+          <p class="section-sub">
+            WhatsApp, Instagram, site e formulários deixam de ser pontos soltos e passam a alimentar uma operação comercial única.
+          </p>
+        </div>
+        <div class="channels-image reveal-zoom">
+          <img src="img3.png" alt="Canais integrados na Zyncro" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SEÇÃO 6: CTA FINAL ──────────────────────────────────────── -->
+  <section class="section" id="cta-final" aria-labelledby="cta-title">
+    <div class="section-inner cta-inner">
+      <div class="cta-glow" aria-hidden="true"></div>
       <span class="section-label reveal">Próximo passo</span>
       <h2 class="section-title reveal rd1" id="cta-title">
         Sua operação comercial não precisa<br>continuar espalhada.
       </h2>
       <p class="section-sub reveal rd2">
-        Veja como a Zyncro centraliza seus canais, organiza o pipeline e coloca a IA para trabalhar pela sua equipe.
+        Veja como a Zyncro centraliza seus canais, organiza seu pipeline e coloca IA para trabalhar pela sua equipe.
       </p>
       <div class="cta-final-btns reveal rd3">
         <button class="btn-solid">
@@ -1395,7 +1432,7 @@
     </div>
   </section>
 
-  <!-- ── FOOTER ─────────────────────────────────────── -->
+  <!-- ── FOOTER ────────────────────────────────────────────────── -->
   <footer class="footer" role="contentinfo">
     <div class="footer-logo">
       <img src="logo.png" alt="Zyncro" class="footer-logo-img" />
@@ -1407,5 +1444,124 @@
     </div>
   </footer>
 
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+      /* ── 1. HERO REVEAL ON LOAD ── */
+      const heroReveals = document.querySelectorAll('.hero-scene .reveal-up');
+      heroReveals.forEach((el, index) => {
+        setTimeout(() => el.classList.add('active'), 100 * (index + 1));
+      });
+
+      /* ── 2. CANVAS INTRO ── */
+      const canvas = document.getElementById('frame-canvas');
+      gsap.fromTo(canvas,
+        { opacity: 0, scale: 1.08 },
+        { opacity: 1, scale: 1, duration: 1.5, ease: 'power3.out' }
+      );
+
+      /* ── 3. SCROLL BLUR-OUT ── */
+      gsap.to('.hero-scene .reveal-up', {
+        y: -60, opacity: 0, filter: 'blur(15px)', stagger: 0.05,
+        scrollTrigger: {
+          trigger: '.hero-scene', start: 'top top', end: '15% top', scrub: true
+        }
+      });
+
+      /* ── 4. Glow card mousemove ── */
+      document.querySelectorAll('.glow-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const r = card.getBoundingClientRect();
+          card.style.setProperty('--x', (e.clientX - r.left) + 'px');
+          card.style.setProperty('--y', (e.clientY - r.top)  + 'px');
+        });
+      });
+
+      /* ── 5. Frame canvas scroll animation ── */
+      (function () {
+        const TOTAL = 150;
+        const DIR   = 'references/image-frames/pc/frame_';
+        const EXT   = '.webp';
+        const pad   = n => String(n).padStart(4, '0');
+
+        const scene   = document.getElementById('hero');
+        const endCard = document.getElementById('frame-end');
+        const mps     = document.querySelectorAll('.mp');
+        const ctx     = canvas.getContext('2d');
+
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        resize();
+        window.addEventListener('resize', () => { resize(); draw(cur); }, { passive:true });
+
+        const imgs = [];
+        for (let i = 0; i < TOTAL; i++) {
+          const img = new Image();
+          img.src = DIR + pad(i) + EXT;
+          imgs.push(img);
+        }
+        imgs[0].onload = () => draw(0);
+
+        let cur = 0, raf;
+        function draw(idx) {
+          const img = imgs[idx];
+          if (!img || !img.complete || !img.naturalWidth) return;
+          const s = Math.max(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
+          const w = img.naturalWidth * s, h = img.naturalHeight * s;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, (canvas.width-w)/2, (canvas.height-h)/2, w, h);
+        }
+
+        window.addEventListener('scroll', () => {
+          const rect = scene.getBoundingClientRect();
+          const prog = Math.max(0, Math.min(1, -rect.top / (scene.offsetHeight - window.innerHeight)));
+          const frame = Math.min(TOTAL-1, Math.floor(prog * TOTAL));
+          if (frame !== cur) { cur = frame; cancelAnimationFrame(raf); raf = requestAnimationFrame(() => draw(cur)); }
+
+          if (mps.length === 6) {
+            if (prog > 0.45 && prog <= 0.85) mps[0].classList.add('show'); else mps[0].classList.remove('show');
+            if (prog > 0.52 && prog <= 0.85) mps[3].classList.add('show'); else mps[3].classList.remove('show');
+            if (prog > 0.58 && prog <= 0.85) mps[1].classList.add('show'); else mps[1].classList.remove('show');
+            if (prog > 0.64 && prog <= 0.85) mps[5].classList.add('show'); else mps[5].classList.remove('show');
+            if (prog > 0.70 && prog <= 0.85) mps[2].classList.add('show'); else mps[2].classList.remove('show');
+            if (prog > 0.76 && prog <= 0.85) mps[4].classList.add('show'); else mps[4].classList.remove('show');
+          }
+          endCard.classList.toggle('visible', prog > 0.88);
+        }, { passive:true });
+      })();
+
+      window.dispatchEvent(new Event('scroll'));
+
+      /* ── 6. Reveal-up + reveal-zoom for SECTIONS ── */
+      gsap.utils.toArray('section:not(#hero) .reveal-up, section .reveal-zoom').forEach(elem => {
+        ScrollTrigger.create({
+          trigger: elem, start: 'top 85%',
+          onEnter: () => elem.classList.add('active')
+        });
+      });
+
+      /* ── 6b. .reveal class ── */
+      gsap.utils.toArray('section .reveal').forEach(elem => {
+        ScrollTrigger.create({
+          trigger: elem, start: 'top 88%',
+          onEnter: () => elem.classList.add('in-view')
+        });
+      });
+
+      /* ── 7. Flashlight cards ── */
+      document.querySelectorAll('.prob-card, .sol-card, .nexus-card, .challenge-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const r = card.getBoundingClientRect();
+          card.style.setProperty('--mouse-x', (e.clientX - r.left) + 'px');
+          card.style.setProperty('--mouse-y', (e.clientY - r.top) + 'px');
+        });
+      });
+
+    });
+  </script>
+
 </body>
 </html>
+
+
