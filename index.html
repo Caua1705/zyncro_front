@@ -11,6 +11,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@200;300;400;500;600;800&display=swap" rel="stylesheet" />
 
+  <!-- GSAP + ScrollTrigger (exemplo.html) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
   <style>
     /* =========================================
        TOKENS — design_system2
@@ -871,34 +875,26 @@
         <div class="hero-left-content">
 
           <!-- Badge -->
-          <div class="hero-badge animate-on-scroll">
+          <div class="hero-badge reveal-up">
             <span class="badge-pulse" aria-hidden="true"></span>
             IA Nativa · CRM · Automação
           </div>
 
           <!-- H1 -->
           <h1 class="hero-h1" id="hero-title">
-            <div class="text-reveal-wrapper">
-              <span class="text-reveal-content">Atendimento.</span>
-            </div>
-            <br>
-            <div class="text-reveal-wrapper" style="transition-delay:.15s">
-              <span class="text-reveal-content">Vendas.</span>
-            </div>
-            <br>
-            <div class="text-reveal-wrapper" style="transition-delay:.3s">
-              <span class="text-reveal-content grad-word">Sincronizados.</span>
-            </div>
+            <div class="reveal-up">Atendimento.</div>
+            <div class="reveal-up"><span class="text-stroke-outline">Vendas.</span></div>
+            <div class="reveal-up"><span class="grad-word">Sincronizados.</span></div>
           </h1>
 
           <!-- Subtitle -->
-          <p class="hero-sub animate-on-scroll delay-300">
+          <p class="hero-sub reveal-up">
             Conecte canais, automatize conversas e feche mais negócios —
             em um só lugar, com inteligência artificial nativa.
           </p>
 
           <!-- CTAs -->
-          <div class="hero-ctas animate-on-scroll delay-500">
+          <div class="hero-ctas reveal-up">
             <button class="beam-btn hover-lift" aria-label="Agendar demo">
               <span class="beam-spinner"></span>
               <span class="beam-btn-content">
@@ -909,8 +905,8 @@
             <a href="#produto" class="cta-ghost">Ver como funciona →</a>
           </div>
 
-          <!-- Feature tags (replaced false metrics) -->
-          <div class="hero-trust animate-on-scroll delay-700" style="gap: 16px;">
+          <!-- Feature tags -->
+          <div class="hero-trust reveal-up" style="gap: 16px;">
             <div class="trust-item">
               <span class="trust-label" style="font-size:.7rem; font-weight:600; color:var(--text-main); letter-spacing:.05em">OMNICHANNEL</span>
             </div>
@@ -972,33 +968,39 @@
 
 
   <script>
+    gsap.registerPlugin(ScrollTrigger);
+
     document.addEventListener('DOMContentLoaded', () => {
 
-      /* ── 1. Motion observer (design_system2 pattern) ── */
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-            if (entry.target.id === 'hero-title' ||
-                entry.target.querySelector('.text-reveal-wrapper')) {
-              entry.target.classList.add('reveal-active');
-            }
-          }
-        });
-      }, { threshold: 0.1 });
+      /* ── 1. HERO REVEAL ON LOAD (exact exemplo.html pattern) ── */
+      /* Sequential stagger: each .reveal-up in hero gets active 100ms apart */
+      const heroReveals = document.querySelectorAll('.hero-scene .reveal-up');
+      heroReveals.forEach((el, index) => {
+        setTimeout(() => el.classList.add('active'), 100 * (index + 1));
+      });
 
-      document.querySelectorAll('.motion-enter, .animate-on-scroll, h1, h2').forEach(el => observer.observe(el));
+      /* ── 2. CANVAS INTRO (exact exemplo.html) ── */
+      const canvas = document.getElementById('frame-canvas');
+      gsap.fromTo(canvas,
+        { opacity: 0, scale: 1.08 },
+        { opacity: 1, scale: 1, duration: 1.5, ease: 'power3.out' }
+      );
 
-      /* Fire hero title on load */
-      setTimeout(() => {
-        const t = document.getElementById('hero-title');
-        if (t) t.classList.add('reveal-active', 'active');
-        document.querySelectorAll('.animate-on-scroll').forEach(el => {
-          if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('active');
-        });
-      }, 300);
+      /* ── 3. SCROLL BLUR-OUT (exact exemplo.html scrub) ── */
+      gsap.to('.hero-scene .reveal-up', {
+        y: -60,
+        opacity: 0,
+        filter: 'blur(15px)',
+        stagger: 0.05,
+        scrollTrigger: {
+          trigger: '.hero-scene',
+          start: 'top top',
+          end: '15% top',
+          scrub: true
+        }
+      });
 
-      /* ── 2. Glow card mousemove (design_system2) ── */
+      /* ── 4. Glow card mousemove ── */
       document.querySelectorAll('.glow-card').forEach(card => {
         card.addEventListener('mousemove', e => {
           const r = card.getBoundingClientRect();
@@ -1007,18 +1009,17 @@
         });
       });
 
-      /* ── 3. Frame canvas scroll animation ── */
+      /* ── 5. Frame canvas scroll animation ── */
       (function () {
         const TOTAL = 150;
         const DIR   = 'references/image-frames/pc/frame_';
         const EXT   = '.webp';
         const pad   = n => String(n).padStart(4, '0');
 
-        const canvas  = document.getElementById('frame-canvas');
-        const ctx     = canvas.getContext('2d');
         const scene   = document.getElementById('hero');
         const label   = document.getElementById('frame-label');
         const endCard = document.getElementById('frame-end');
+        const ctx     = canvas.getContext('2d');
 
         function resize() {
           canvas.width  = window.innerWidth;
@@ -1059,36 +1060,32 @@
         }, { passive:true });
       })();
 
-      /* Init scroll state on load so overlays start hidden correctly */
       window.dispatchEvent(new Event('scroll'));
 
-      /* Reveal-up + reveal-zoom observer (exemplo.html) */
-      const upObs = new IntersectionObserver(entries => {
-        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('active'); upObs.unobserve(e.target); } });
-      }, { threshold: 0.1 });
-      document.querySelectorAll('.reveal-up, .reveal-zoom').forEach(el => upObs.observe(el));
+      /* ── 6. Reveal-up + reveal-zoom for SECTIONS (not hero) ── */
+      gsap.utils.toArray('section:not(#hero) .reveal-up, section .reveal-zoom').forEach(elem => {
+        ScrollTrigger.create({
+          trigger: elem,
+          start: 'top 85%',
+          onEnter: () => elem.classList.add('active')
+        });
+      });
 
-      /* Reveal observer for .reveal (sections) */
-      const revealObs = new IntersectionObserver(entries => {
-        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); revealObs.unobserve(e.target); } });
-      }, { threshold: 0.12 });
-      document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+      /* ── 6b. .reveal class (section-title, section-label, section-sub) ── */
+      gsap.utils.toArray('section .reveal').forEach(elem => {
+        ScrollTrigger.create({
+          trigger: elem,
+          start: 'top 88%',
+          onEnter: () => elem.classList.add('in-view')
+        });
+      });
 
-      /* Flashlight mousemove — prob, sol, nexus cards (exemplo.html) */
+      /* ── 7. Flashlight cards ── */
       document.querySelectorAll('.prob-card, .sol-card, .nexus-card').forEach(card => {
         card.addEventListener('mousemove', e => {
           const r = card.getBoundingClientRect();
           card.style.setProperty('--mouse-x', (e.clientX - r.left) + 'px');
           card.style.setProperty('--mouse-y', (e.clientY - r.top) + 'px');
-        });
-      });
-
-      /* Nexus card glow mousemove (legacy) */
-      document.querySelectorAll('.nexus-card').forEach(card => {
-        card.addEventListener('mousemove', e => {
-          const r = card.getBoundingClientRect();
-          card.style.setProperty('--x', (e.clientX - r.left) + 'px');
-          card.style.setProperty('--y', (e.clientY - r.top) + 'px');
         });
       });
 
