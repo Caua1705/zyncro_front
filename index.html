@@ -514,36 +514,57 @@
     .hero-float-card.float-3 { animation: float 8s ease-in-out 0.5s infinite; }
 
     /* Frame overlays */
-    .frame-label {
-      position:absolute; bottom:32px; left:50%;
-      transform:translateX(-50%);
-      font-family:'JetBrains Mono',monospace;
-      font-size:.65rem; letter-spacing:.16em;
-      text-transform:uppercase; color:rgba(15,23,42,.45);
-      white-space:nowrap; z-index:5;
-      opacity:0; visibility:hidden;
-      transition:opacity .4s, visibility .4s; pointer-events:none;
+    /* Micro-phrases */
+    .micro-phrases {
+      position: absolute; inset: 0; pointer-events: none; z-index: 5;
     }
-    .frame-label.visible { opacity:1; visibility:visible; }
+    .mp {
+      position: absolute;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .65rem; letter-spacing: .12em;
+      text-transform: uppercase; color: #fff;
+      background: rgba(10, 10, 15, 0.75);
+      backdrop-filter: blur(16px);
+      padding: 8px 16px; border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      opacity: 0; filter: blur(8px); transform: scale(0.9) translateY(20px);
+      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .mp.show {
+      opacity: 1; filter: blur(0); transform: scale(1) translateY(0);
+    }
+    .mp-1 { top: 30%; left: 15%; }
+    .mp-2 { top: 40%; right: 15%; }
+    .mp-3 { top: 60%; left: 20%; }
+    .mp-4 { top: 25%; right: 28%; }
+    .mp-5 { top: 70%; right: 20%; }
+    .mp-6 { top: 50%; left: 10%; }
+
+    /* Frame end climax */
     .frame-end {
-      position:absolute; bottom:10%; left:50%;
-      transform:translateX(-50%);
-      text-align:center; z-index:5;
-      opacity:0; visibility:hidden;
-      transition:opacity .6s, visibility .6s;
+      position:absolute; top:52%; left:50%;
+      transform:translate(-50%, -50%) scale(0.95);
+      text-align:center; z-index:6;
+      opacity:0; visibility:hidden; filter: blur(12px);
+      transition:all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
       white-space:nowrap; pointer-events:none;
     }
-    .frame-end.visible { opacity:1; visibility:visible; }
+    .frame-end.visible { opacity:1; visibility:visible; filter: blur(0); transform:translate(-50%, -50%) scale(1); }
     .frame-end-tag {
+      display: inline-block;
       font-family:'JetBrains Mono',monospace;
-      font-size:.65rem; letter-spacing:.15em;
-      text-transform:uppercase; color:var(--z-purple); margin-bottom:6px;
+      font-size:.7rem; font-weight:600; letter-spacing:.18em;
+      text-transform:uppercase; color:var(--z-purple);
+      background: rgba(108, 92, 231, 0.1); /* z-purple light bg */
+      padding: 6px 14px; border-radius: 999px;
+      margin-bottom:16px;
     }
     .frame-end-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size:clamp(1.4rem,3vw,2.5rem);
+      font-size:clamp(2.5rem,5vw,4.5rem);
       font-weight:700; letter-spacing:-.04em;
-      color:var(--text-main); line-height:1.05;
+      color:var(--text-main); line-height:1;
     }
 
     /* Scroll cue */
@@ -1028,9 +1049,19 @@
         <div class="scroll-line"></div>
       </div>
 
+      <!-- Micro-phrases (appear before the end) -->
+      <div class="micro-phrases" id="micro-phrases">
+        <span class="mp mp-1">Canais integrados</span>
+        <span class="mp mp-2">Leads organizados</span>
+        <span class="mp mp-3">IA em ação</span>
+        <span class="mp mp-4">Atendimento centralizado</span>
+        <span class="mp mp-5">Pipeline automático</span>
+        <span class="mp mp-6">Vendas em sincronia</span>
+      </div>
+
       <!-- Frame overlays (appear on scroll) -->
       <div class="frame-end" id="frame-end">
-        <p class="frame-end-tag">❆ Dashboard em tempo real</p>
+        <p class="frame-end-tag">OPERAÇÃO SINCRONIZADA</p>
         <p class="frame-end-title">Tudo conectado.<br>Resultados reais.</p>
       </div>
 
@@ -1092,6 +1123,7 @@
 
         const scene   = document.getElementById('hero');
         const endCard = document.getElementById('frame-end');
+        const mps     = document.querySelectorAll('.mp');
         const ctx     = canvas.getContext('2d');
 
         function resize() {
@@ -1128,6 +1160,16 @@
             cancelAnimationFrame(raf);
             raf = requestAnimationFrame(() => draw(cur));
           }
+          
+          if (mps.length === 6) {
+            if (prog > 0.45 && prog <= 0.85) mps[0].classList.add('show'); else mps[0].classList.remove('show');
+            if (prog > 0.52 && prog <= 0.85) mps[3].classList.add('show'); else mps[3].classList.remove('show');
+            if (prog > 0.58 && prog <= 0.85) mps[1].classList.add('show'); else mps[1].classList.remove('show');
+            if (prog > 0.64 && prog <= 0.85) mps[5].classList.add('show'); else mps[5].classList.remove('show');
+            if (prog > 0.70 && prog <= 0.85) mps[2].classList.add('show'); else mps[2].classList.remove('show');
+            if (prog > 0.76 && prog <= 0.85) mps[4].classList.add('show'); else mps[4].classList.remove('show');
+          }
+
           endCard.classList.toggle('visible', prog > 0.88);
         }, { passive:true });
       })();
