@@ -9,7 +9,7 @@
   <!-- Fonts — exatamente como design_system2 -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@200;300;400;500;600;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@200;300;400;500;600;800&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <!-- GSAP + ScrollTrigger (exemplo.html) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -258,16 +258,10 @@
       display: flex; align-items: center; gap: 10px;
       text-decoration: none;
     }
-    .nav-logo-icon {
-      width:34px; height:34px; border-radius:9px;
-      background: var(--z-grad);
-      display:flex; align-items:center; justify-content:center;
-      font-weight:800; font-size:16px; color:#fff;
-      font-family:'Inter',sans-serif;
-    }
-    .nav-logo-word {
-      font-weight:600; font-size:1.1rem;
-      letter-spacing:-.03em; color:var(--text-main);
+    .nav-logo-img {
+      height: 36px; /* Aumentado para melhor leitura */
+      width: auto;
+      display: block;
     }
     nav ul { display:flex; gap:32px; list-style:none; }
     nav ul a {
@@ -349,19 +343,21 @@
 
     /* H1 */
     .hero-h1 {
-      font-size: clamp(2.6rem, 4.5vw, 4.8rem);
-      font-weight: 800; line-height: 1.0;
-      letter-spacing: -.04em; color: var(--text-main);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(3rem, 5.5vw, 5.5rem);
+      font-weight: 700; line-height: 0.92;
+      letter-spacing: -.05em; color: var(--text-main);
       margin-bottom: 1.5rem;
     }
     .grad-word {
-      background: var(--z-grad);
+      background: linear-gradient(120deg, #2980F9, #6C5CE7);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
+      opacity: 0.95;
     }
     .text-stroke-outline {
       color: transparent;
-      -webkit-text-stroke: 1px rgba(0,0,0,0.18);
+      -webkit-text-stroke: 1px rgba(10, 10, 10, 0.65);
     }
 
     /* Subtitle */
@@ -415,40 +411,104 @@
     /* ── RIGHT: floating cards overlay ── */
     .hero-right {
       position: absolute; top:0; right:0; bottom:0;
-      width: 28%;
+      width: 30%;
       display: flex; flex-direction: column;
       justify-content: center;
-      padding: 0 40px 0 0;
-      gap: 16px;
+      padding: 0 36px 0 0;
+      gap: 12px;
       z-index: 10;
     }
+    /* Staggered offset */
+    .hero-right .reveal-up:nth-child(1) { margin-left: 24px; }
+    .hero-right .reveal-up:nth-child(2) { margin-left: 0px; }
+    .hero-right .reveal-up:nth-child(3) { margin-left: 16px; }
+
     .hero-float-card {
-      background: rgba(255,255,255,0.45);
-      backdrop-filter: blur(24px) saturate(1.2);
-      -webkit-backdrop-filter: blur(24px) saturate(1.2);
-      border: 1px solid rgba(255,255,255,0.4);
-      border-radius: 16px;
-      padding: 18px 20px;
-      max-width: 320px; /* slightly narrower */
-      box-shadow: 0 8px 32px rgba(0,0,0,.04), 0 1px 0 rgba(255,255,255,.6) inset;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(24px) saturate(1.3);
+      -webkit-backdrop-filter: blur(24px) saturate(1.3);
+      border: 1px solid rgba(230,230,230,0.7);
+      border-radius: 18px;
+      padding: 18px 22px 16px;
+      box-shadow:
+        0 2px 12px rgba(0,0,0,.05),
+        0 1px 0 rgba(255,255,255,0.9) inset;
       transition: transform .4s var(--ease-expo), box-shadow .4s var(--ease-expo);
       cursor: default;
+      position: relative;
+      overflow: hidden;
     }
     .hero-float-card:hover {
-      transform: translateY(-4px) translateX(-2px);
-      box-shadow: 0 16px 48px rgba(108,92,231,.08), 0 1px 0 rgba(255,255,255,.8) inset;
+      transform: translateY(-3px);
+      box-shadow:
+        0 12px 36px rgba(0,0,0,.08),
+        0 1px 0 rgba(255,255,255,0.9) inset;
     }
-    /* Staggered positions */
-    .hero-right .reveal-up:nth-child(1) { align-self: flex-start; }
-    .hero-right .reveal-up:nth-child(2) { align-self: flex-end; margin-right: 20px; }
-    .hero-right .reveal-up:nth-child(3) { align-self: center; margin-left: 20px; }
-    .hfc-icon {
-      width: 32px; height: 32px; border-radius: 8px;
+
+    /* Beam of light sweep on hover */
+    .hero-float-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -120%;
+      width: 55%; height: 100%;
+      background: linear-gradient(
+        105deg,
+        transparent 0%,
+        rgba(255,255,255,0.55) 45%,
+        rgba(255,255,255,0.85) 55%,
+        transparent 100%
+      );
+      transform: skewX(-12deg);
+      pointer-events: none;
+    }
+    .hero-float-card:hover::before {
+      animation: beamSweep 1.5s ease forwards;
+    }
+    @keyframes beamSweep {
+      from { left: -120%; }
+      to   { left: 160%; }
+    }
+
+    /* Card header row: icon + tag */
+    .hfc-header {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 10px;
+    }
+    .hfc-icon-sm {
+      width: 22px; height: 22px; border-radius: 6px;
       display: flex; align-items: center; justify-content: center;
-      font-size: .95rem; margin-bottom: 10px;
+      font-size: .75rem;
+      background: rgba(0,0,0,.05);
+      flex-shrink: 0;
     }
-    .hfc-title { font-size: .78rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
-    .hfc-text  { font-size: .72rem; color: var(--text-muted); line-height: 1.55; }
+    .hfc-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .6rem; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--text-light);
+      font-weight: 500;
+    }
+    /* Title: Space Grotesk display font matching foto */
+    .hfc-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.15rem; font-weight: 500;
+      color: var(--text-main); letter-spacing: -.03em;
+      line-height: 1.15; margin-bottom: 5px;
+    }
+    .hfc-title em {
+      font-style: normal; font-weight: 300;
+      color: var(--text-main); opacity: 0.75;
+    }
+    .hfc-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .58rem; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--text-light);
+      font-weight: 400;
+    }
+    .hfc-text  {
+      font-family: 'Inter', sans-serif;
+      font-size: .78rem; font-weight: 300;
+      color: var(--text-muted); line-height: 1.55;
+    }
     .hero-float-card.float-1 { animation: float 7s ease-in-out infinite; }
     .hero-float-card.float-2 { animation: float 6s ease-in-out 1s infinite; }
     .hero-float-card.float-3 { animation: float 8s ease-in-out 0.5s infinite; }
@@ -480,16 +540,19 @@
       text-transform:uppercase; color:var(--z-purple); margin-bottom:6px;
     }
     .frame-end-title {
-      font-size:clamp(1.2rem,2.5vw,2rem);
-      font-weight:800; letter-spacing:-.03em;
-      color:var(--text-main); line-height:1.1;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size:clamp(1.4rem,3vw,2.5rem);
+      font-weight:700; letter-spacing:-.04em;
+      color:var(--text-main); line-height:1.05;
     }
 
     /* Scroll cue */
     .scroll-cue {
-      position:absolute; bottom:28px; left:80px;
-      display:flex; flex-direction:column; align-items:flex-start; gap:6px;
+      position:absolute; bottom:32px; left:50%;
+      transform: translateX(-50%);
+      display:flex; flex-direction:column; align-items:center; gap:6px;
       z-index:11;
+      opacity: 0.7;
     }
     .scroll-cue span {
       font-family:'JetBrains Mono',monospace;
@@ -540,8 +603,9 @@
       margin-bottom: 1rem;
     }
     .section-title {
+      font-family: 'Space Grotesk', sans-serif;
       font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-      font-weight: 800; letter-spacing: -.04em;
+      font-weight: 700; letter-spacing: -.04em;
       line-height: 1.05; color: var(--text-main);
       margin-bottom: 1rem;
     }
@@ -596,7 +660,7 @@
       transition:background .5s, color .5s;
     }
     .prob-card:hover .prob-icon { background:var(--text-main); filter:grayscale(1) invert(1); }
-    .prob-card h3 { font-size:1rem; font-weight:700; margin-bottom:.5rem; color:var(--text-main); }
+    .prob-card h3 { font-family: 'Space Grotesk', sans-serif; font-size:1.05rem; font-weight:700; margin-bottom:.5rem; color:var(--text-main); letter-spacing:-.02em; }
     .prob-card p  { font-size:.875rem; color:var(--text-muted); line-height:1.7; flex:1; }
     /* Progress bar on card bottom — exemplo.html */
     .prob-card .card-bar { height:2px; background:var(--bg-highlight); margin-top:1.5rem; overflow:hidden; }
@@ -631,13 +695,14 @@
       border-color:rgba(108,92,231,.2);
     }
     .sol-num {
-      display: block; font-size: 1.6rem; font-weight: 800;
+      font-family: 'Space Grotesk', sans-serif;
+      display: block; font-size: 1.8rem; font-weight: 700;
       letter-spacing: -.05em;
       background: var(--z-grad);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text; margin-bottom: .75rem;
     }
-    .sol-card h3 { font-size: .95rem; font-weight: 700; margin-bottom: .5rem; color: var(--text-main); }
+    .sol-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; margin-bottom: .5rem; color: var(--text-main); letter-spacing:-.02em; }
     .sol-card p  { font-size: .85rem; color: var(--text-muted); line-height: 1.7; }
     /* bottom progress bar */
     .sol-card .card-bar { height:2px; background:var(--bg-highlight); margin-top:1.25rem; overflow:hidden; }
@@ -678,7 +743,8 @@
       color:#fff; box-shadow:0 0 0 6px rgba(108,92,231,.12), 0 0 20px rgba(108,92,231,.25);
     }
     .fluxo-step h3 {
-      font-size:.9rem; font-weight:700; color:var(--text-main); margin-bottom:.3rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size:1rem; font-weight:700; color:var(--text-main); margin-bottom:.3rem; letter-spacing:-.02em;
       transition: transform .3s var(--ease-expo);
     }
     .fluxo-step:hover h3 { transform: translateY(-2px); }
@@ -740,7 +806,7 @@
     .nexus-card:hover .nexus-icon {
       background:linear-gradient(135deg,rgba(108,92,231,.5),rgba(0,201,167,.35));
     }
-    .nexus-card h3 { font-size:.95rem; font-weight:700; color:#fff; margin-bottom:.5rem; }
+    .nexus-card h3 { font-family: 'Space Grotesk', sans-serif; font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:.5rem; letter-spacing:-.02em; }
     .nexus-card p  { font-size:.85rem; color:rgba(255,255,255,.45); line-height:1.7; flex:1; }
     /* progress bar */
     .nexus-card .card-bar { height:1px; background:rgba(255,255,255,.08); margin-top:1.5rem; overflow:hidden; }
@@ -805,12 +871,14 @@
     .footer a { color:rgba(255,255,255,.4); text-decoration:none; margin-left:20px; transition:color .2s; }
     .footer a:hover { color:#fff; }
     .footer-logo { display:flex; align-items:center; gap:8px; }
-    .footer-logo-icon {
-      width:26px; height:26px; border-radius:7px;
-      background:var(--z-grad);
-      display:flex; align-items:center; justify-content:center;
-      font-weight:800; font-size:12px; color:#fff;
+    .footer-logo-img {
+      height: 22px;
+      width: auto;
+      display: block;
+      opacity: 0.8;
+      transition: opacity .2s;
     }
+    .footer-logo:hover .footer-logo-img { opacity: 1; }
 
     /* section responsive */
     @media (max-width:900px) {
@@ -841,8 +909,7 @@
   <!-- Navbar -->
   <header class="nav glass-panel motion-enter active" role="banner">
     <a class="nav-logo" href="#" aria-label="Zyncro">
-      <div class="nav-logo-icon">Z</div>
-      <span class="nav-logo-word">zyncro</span>
+      <img src="logo.png" alt="Zyncro" class="nav-logo-img" />
     </a>
     <nav aria-label="Principal">
       <ul>
@@ -855,7 +922,7 @@
     <button class="beam-btn" id="nav-cta" aria-label="Começar grátis">
       <span class="beam-spinner"></span>
       <span class="beam-btn-content">
-        Começar grátis
+        Agendar demo
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </span>
     </button>
@@ -877,20 +944,19 @@
           <!-- Badge -->
           <div class="hero-badge reveal-up">
             <span class="badge-pulse" aria-hidden="true"></span>
-            IA Nativa · CRM · Automação
+            CRM COM IA · ATENDIMENTO · VENDAS
           </div>
 
           <!-- H1 -->
           <h1 class="hero-h1" id="hero-title">
-            <div class="reveal-up">Atendimento.</div>
-            <div class="reveal-up"><span class="text-stroke-outline">Vendas.</span></div>
-            <div class="reveal-up"><span class="grad-word">Sincronizados.</span></div>
+            <div class="reveal-up">Atendimento</div>
+            <div class="reveal-up"><span class="text-stroke-outline">e vendas</span></div>
+            <div class="reveal-up"><span class="grad-word">em sincronia.</span></div>
           </h1>
 
           <!-- Subtitle -->
           <p class="hero-sub reveal-up">
-            Conecte canais, automatize conversas e feche mais negócios —
-            em um só lugar, com inteligência artificial nativa.
+            Centralize WhatsApp, Instagram e site em um CRM com IA que organiza leads, automatiza etapas e aciona sua equipe no momento certo.
           </p>
 
           <!-- CTAs -->
@@ -898,33 +964,27 @@
             <button class="beam-btn hover-lift" aria-label="Agendar demo">
               <span class="beam-spinner"></span>
               <span class="beam-btn-content">
-                Agendar demo
+                Agendar demonstração
                 <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
               </span>
             </button>
-            <a href="#produto" class="cta-ghost">Ver como funciona →</a>
+            <a href="#produto" class="cta-ghost">Conhecer o Nexus →</a>
           </div>
 
           <!-- Feature tags -->
           <div class="hero-trust reveal-up" style="gap: 16px;">
             <div class="trust-item">
-              <span class="trust-label" style="font-size:.7rem; font-weight:600; color:var(--text-main); letter-spacing:.05em">OMNICHANNEL</span>
+              <span class="trust-label" style="font-size:.7rem; font-weight:600; color:var(--text-main); letter-spacing:.05em">CANAIS INTEGRADOS</span>
             </div>
             <div class="trust-div" style="height: 16px" aria-hidden="true"></div>
             <div class="trust-item">
-              <span class="trust-label" style="font-size:.7rem; font-weight:600; color:var(--text-main); letter-spacing:.05em">IA NATIVA</span>
+              <span class="trust-label" style="font-size:.7rem; font-weight:600; color:var(--text-main); letter-spacing:.05em">IA OPERACIONAL</span>
             </div>
             <div class="trust-div" style="height: 16px" aria-hidden="true"></div>
             <div class="trust-item">
-              <span class="trust-label" style="font-size:.7rem; font-weight:600; color:var(--text-main); letter-spacing:.05em">PIPELINE</span>
+              <span class="trust-label" style="font-size:.7rem; font-weight:600; color:var(--text-main); letter-spacing:.05em">FUNIL AUTOMÁTICO</span>
             </div>
           </div>
-        </div>
-
-        <!-- Scroll cue -->
-        <div class="scroll-cue" aria-hidden="true">
-          <span>Scroll</span>
-          <div class="scroll-line"></div>
         </div>
       </div>
 
@@ -932,29 +992,43 @@
       <div class="hero-right">
         <div class="reveal-up ru-d2">
           <div class="hero-float-card float-1">
-            <div class="hfc-icon" style="background:rgba(41,128,249,.12)">💬</div>
-            <div class="hfc-title">Atendimento Omnichannel</div>
-            <div class="hfc-text">Unifique WhatsApp, Instagram e Facebook em um só lugar.</div>
+            <div class="hfc-header">
+              <span class="hfc-icon-sm">💬</span>
+              <span class="hfc-tag">Canais Centralizados</span>
+            </div>
+            <div class="hfc-title">Canais <em>centralizados</em></div>
+            <div class="hfc-text">Receba conversas de diferentes canais em uma única operação.</div>
           </div>
         </div>
         <div class="reveal-up ru-d4">
           <div class="hero-float-card float-2">
-            <div class="hfc-icon" style="background:rgba(108,92,231,.12)">⚡</div>
-            <div class="hfc-title">Nexus AI</div>
-            <div class="hfc-text">Agentes inteligentes que qualificam, respondem e automatizam tarefas.</div>
+            <div class="hfc-header">
+              <span class="hfc-icon-sm">⚡</span>
+              <span class="hfc-tag">Nexus AI</span>
+            </div>
+            <div class="hfc-title">Nexus <em>AI</em></div>
+            <div class="hfc-text">Agentes qualificam leads, atualizam status e acionam fluxos automaticamente.</div>
           </div>
         </div>
         <div class="reveal-up ru-d5">
           <div class="hero-float-card float-3">
-            <div class="hfc-icon" style="background:rgba(0,201,167,.12)">📊</div>
-            <div class="hfc-title">Pipeline Inteligente</div>
-            <div class="hfc-text">Leads organizados, automações visuais e avanço automático de etapas.</div>
+            <div class="hfc-header">
+              <span class="hfc-icon-sm">📊</span>
+              <span class="hfc-tag">Pipeline automático</span>
+            </div>
+            <div class="hfc-title">Pipeline <em>automático</em></div>
+            <div class="hfc-text">Cada lead entra no funil certo, com histórico, etapa e responsável definidos.</div>
           </div>
         </div>
       </div>
 
+      <!-- Scroll cue (Moved to bottom center) -->
+      <div class="scroll-cue" aria-hidden="true">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+
       <!-- Frame overlays (appear on scroll) -->
-      <div class="frame-label" id="frame-label">IA em ação</div>
       <div class="frame-end" id="frame-end">
         <p class="frame-end-tag">❆ Dashboard em tempo real</p>
         <p class="frame-end-title">Tudo conectado.<br>Resultados reais.</p>
@@ -1017,7 +1091,6 @@
         const pad   = n => String(n).padStart(4, '0');
 
         const scene   = document.getElementById('hero');
-        const label   = document.getElementById('frame-label');
         const endCard = document.getElementById('frame-end');
         const ctx     = canvas.getContext('2d');
 
@@ -1055,7 +1128,6 @@
             cancelAnimationFrame(raf);
             raf = requestAnimationFrame(() => draw(cur));
           }
-          label.classList.toggle('visible', prog > 0.05);
           endCard.classList.toggle('visible', prog > 0.88);
         }, { passive:true });
       })();
@@ -1284,8 +1356,7 @@
   <!-- ── FOOTER ─────────────────────────────────────── -->
   <footer class="footer" role="contentinfo">
     <div class="footer-logo">
-      <div class="footer-logo-icon">Z</div>
-      <span style="color:rgba(255,255,255,.5);font-size:.8rem;">zyncro</span>
+      <img src="logo.png" alt="Zyncro" class="footer-logo-img" />
     </div>
     <div>
       <span>&copy; 2026 Zyncro. Todos os direitos reservados.</span>
