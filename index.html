@@ -1273,6 +1273,532 @@
                   transform 0.35s var(--ease-expo),
                   filter 0.35s ease !important;
     }
+
+    /* =========================================
+       NOVAS SEÇÕES — CSS específico
+    ========================================= */
+
+    /* ── Seção Desafio: pain cards ── */
+    .pain-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 14px; margin-top: 3rem;
+    }
+    .pain-card {
+      background: #fff; border: 1px solid var(--border-light);
+      border-radius: 12px; padding: 24px 20px;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: all .4s var(--ease-expo); cursor: default;
+      position: relative; overflow: hidden;
+    }
+    .pain-card::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(500px circle at var(--px,50%) var(--py,50%), rgba(108,92,231,.07), transparent 40%);
+      opacity: 0; transition: opacity .4s;
+    }
+    .pain-card:hover::before { opacity: 1; }
+    .pain-card:hover { transform: translateY(-5px); box-shadow: 0 20px 48px rgba(0,0,0,.08); border-color: rgba(108,92,231,.2); }
+    .pain-icon { font-size: 1.5rem; line-height: 1; }
+    .pain-label { font-family: 'Space Grotesk', sans-serif; font-size: .95rem; font-weight: 700; color: var(--text-main); letter-spacing: -.02em; }
+    .pain-text { font-size: .78rem; color: var(--text-muted); line-height: 1.6; }
+    .pain-bar { height: 2px; background: var(--bg-highlight); margin-top: auto; overflow: hidden; border-radius: 2px; }
+    .pain-bar-fill { height: 100%; width: 0; background: var(--z-grad); transition: width .7s var(--ease-expo); }
+    .pain-card:hover .pain-bar-fill { width: 100%; }
+
+    /* ── Evolução: linha comparativa ── */
+    .evo-track {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: 0; margin-top: 3.5rem; position: relative;
+    }
+    .evo-track::before {
+      content: ''; position: absolute;
+      top: 28px; left: 0; right: 0; height: 2px;
+      background: linear-gradient(to right, #e5e5e5 0%, #e5e5e5 66%, var(--z-purple) 66%, var(--z-teal) 100%);
+      z-index: 0;
+    }
+    .evo-step {
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; padding: 0 16px; position: relative; z-index: 1;
+    }
+    .evo-dot {
+      width: 56px; height: 56px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.25rem; font-size: 1.1rem;
+      border: 2px solid var(--border-light);
+      background: #fff; color: var(--text-muted);
+      transition: all .4s var(--ease-expo);
+    }
+    .evo-step.is-active .evo-dot {
+      background: linear-gradient(135deg, var(--z-purple), var(--z-teal));
+      border-color: transparent; color: #fff;
+      box-shadow: 0 0 0 8px rgba(108,92,231,.1), 0 0 24px rgba(108,92,231,.25);
+    }
+    .evo-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .9rem; font-weight: 700;
+      color: var(--text-muted); letter-spacing: -.01em; margin-bottom: 6px;
+      transition: color .3s;
+    }
+    .evo-step.is-active .evo-label { color: var(--text-main); }
+    .evo-text { font-size: .75rem; color: var(--text-light); line-height: 1.55; }
+    .evo-step.is-active .evo-text { color: var(--text-muted); }
+    .evo-badge {
+      display: inline-block; margin-top: 8px;
+      padding: 3px 10px; border-radius: 999px;
+      background: linear-gradient(135deg, var(--z-purple), var(--z-teal));
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .55rem; letter-spacing: .14em; text-transform: uppercase;
+      color: #fff; font-weight: 600;
+    }
+
+    /* ── Plataforma: stack diagram de camadas ── */
+    .stack-diagram {
+      margin-top: 4rem; display: flex; flex-direction: column;
+      gap: 0; max-width: 720px; margin-left: auto; margin-right: auto;
+      position: relative;
+    }
+    .stack-diagram::before {
+      content: ''; position: absolute;
+      left: 31px; top: 0; bottom: 0; width: 2px;
+      background: linear-gradient(to bottom, var(--z-purple), var(--z-blue), var(--z-teal));
+      z-index: 0;
+    }
+    .stack-layer {
+      display: flex; align-items: flex-start; gap: 24px;
+      padding: 20px 20px 20px 0; position: relative; z-index: 1;
+      border-radius: 12px; transition: background .3s, box-shadow .3s;
+      cursor: default;
+    }
+    .stack-layer:hover { background: rgba(108,92,231,.04); box-shadow: 0 4px 24px rgba(108,92,231,.06); }
+    .stack-dot {
+      flex-shrink: 0; width: 64px; height: 64px; border-radius: 50%;
+      background: #fff; border: 2px solid var(--border-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; transition: all .4s var(--ease-expo);
+      box-shadow: 0 4px 16px rgba(0,0,0,.06);
+    }
+    .stack-layer:hover .stack-dot {
+      border-color: var(--z-purple);
+      box-shadow: 0 0 0 6px rgba(108,92,231,.1), 0 4px 16px rgba(108,92,231,.2);
+    }
+    .stack-body { flex: 1; padding-top: 14px; }
+    .stack-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--text-main); letter-spacing: -.03em; margin-bottom: 4px;
+      transition: color .3s;
+    }
+    .stack-layer:hover .stack-name { color: var(--z-purple); }
+    .stack-desc { font-size: .82rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── Como funciona: timeline ── */
+    .flow-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 24px; margin-top: 3rem;
+    }
+    .flow-card {
+      background: #fff; border: 1px solid var(--border-light);
+      border-radius: 16px; padding: 28px 24px;
+      display: flex; flex-direction: column; gap: 12px;
+      position: relative; overflow: hidden;
+      transition: all .4s var(--ease-expo);
+    }
+    .flow-card:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(0,0,0,.08); border-color: rgba(108,92,231,.2); }
+    .flow-step-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .6rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--z-purple); font-weight: 600;
+    }
+    .flow-icon {
+      font-size: 1.5rem; line-height: 1;
+    }
+    .flow-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--text-main); letter-spacing: -.02em;
+    }
+    .flow-text { font-size: .8rem; color: var(--text-muted); line-height: 1.65; }
+    .flow-connector {
+      position: absolute; top: 50%; right: -12px;
+      width: 24px; height: 2px;
+      background: linear-gradient(to right, var(--z-purple), var(--z-blue));
+      z-index: 2;
+    }
+    .flow-card:last-child .flow-connector { display: none; }
+
+    /* ── Nexus: grid 3×2 premium ── */
+    .nexus-grid-6 {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; margin-top: 3rem; position: relative; z-index: 1;
+    }
+    .nexus6-card {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 14px; padding: 28px;
+      display: flex; flex-direction: column; gap: 10px;
+      transition: all .4s var(--ease-expo); cursor: default;
+      position: relative; overflow: hidden; isolation: isolate;
+    }
+    .nexus6-card::after {
+      content: ''; position: absolute; inset: 0;
+      border-radius: inherit; pointer-events: none;
+      background: linear-gradient(135deg, var(--z-purple), var(--z-blue), var(--z-teal));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      padding: 1px; opacity: 0; transition: opacity .4s ease;
+    }
+    .nexus6-card:hover::after { opacity: 1; }
+    .nexus6-card:hover {
+      background: rgba(255,255,255,.07);
+      transform: translateY(-3px);
+    }
+    .n6-icon { font-size: 1.25rem; line-height: 1; }
+    .n6-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .95rem; font-weight: 700; color: #fff; letter-spacing: -.02em;
+    }
+    .n6-text { font-size: .78rem; color: rgba(255,255,255,.45); line-height: 1.6; }
+    .n6-bar { height: 1px; background: rgba(255,255,255,.08); margin-top: auto; overflow: hidden; }
+    .n6-bar-fill { height: 100%; width: 0; background: linear-gradient(to right, var(--z-purple), var(--z-teal)); transition: width .7s var(--ease-expo); }
+    .nexus6-card:hover .n6-bar-fill { width: 100%; }
+
+    /* ── Para quem: profile blocks ── */
+    .pq-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 16px; margin-top: 2.5rem;
+    }
+    .pq-block {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 22px 20px; border-radius: 12px;
+      background: #fff; border: 1px solid var(--border-light);
+      transition: all .3s var(--ease-expo);
+    }
+    .pq-block:hover { border-color: rgba(108,92,231,.25); box-shadow: 0 8px 24px rgba(108,92,231,.07); transform: translateX(4px); }
+    .pq-check {
+      flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--z-purple), var(--z-teal));
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 2px;
+    }
+    .pq-check svg { color: #fff; }
+    .pq-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .95rem; font-weight: 700;
+      color: var(--text-main); letter-spacing: -.02em; margin-bottom: 4px;
+    }
+    .pq-text { font-size: .8rem; color: var(--text-muted); line-height: 1.6; }
+    .pq-disclaimer {
+      margin-top: 2.5rem; padding: 24px 28px;
+      background: var(--bg-surface); border: 1px dashed rgba(0,0,0,.1);
+      border-radius: 12px; font-size: .875rem; color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .pq-disclaimer strong { color: var(--text-main); }
+
+    /* ── Entregas: grid 4×2 ── */
+    .entregas-grid {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: 14px; margin-top: 3rem;
+    }
+    .entrega-item {
+      background: #fff; border: 1px solid var(--border-light);
+      border-radius: 12px; padding: 22px 18px;
+      display: flex; flex-direction: column; gap: 8px;
+      transition: all .3s var(--ease-expo);
+    }
+    .entrega-item:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,.07); border-color: rgba(108,92,231,.2); }
+    .ei-icon { font-size: 1.3rem; line-height: 1; }
+    .ei-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .9rem; font-weight: 700; color: var(--text-main); letter-spacing: -.02em;
+    }
+    .ei-text { font-size: .75rem; color: var(--text-muted); line-height: 1.55; }
+
+    /* ── Canais: converging visual ── */
+    .canais-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+    .canal-nodes {
+      display: flex; flex-direction: column; gap: 12px;
+      position: relative;
+    }
+    .canal-node {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 18px; background: #fff;
+      border: 1px solid var(--border-light); border-radius: 10px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .9rem; font-weight: 600; color: var(--text-main);
+      transition: all .3s var(--ease-expo); cursor: default;
+    }
+    .canal-node:hover { border-color: rgba(108,92,231,.3); box-shadow: 0 8px 24px rgba(0,0,0,.07); transform: translateX(-4px); }
+    .canal-node-icon { font-size: 1.25rem; }
+    .canal-arrow {
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1rem; margin-bottom: 0.5rem;
+    }
+    .canal-center {
+      margin-top: 1rem;
+      padding: 20px 24px;
+      background: linear-gradient(135deg, var(--z-purple), var(--z-blue), var(--z-teal));
+      border-radius: 14px; text-align: center;
+      color: #fff;
+    }
+    .canal-center-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
+      color: rgba(255,255,255,.7); margin-bottom: 4px;
+    }
+    .canal-center-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem; font-weight: 700; letter-spacing: -.03em;
+    }
+
+    /* ── Responsive novos componentes ── */
+    @media (max-width: 1100px) {
+      .pain-grid { grid-template-columns: repeat(3, 1fr); }
+      .evo-track { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .evo-track::before { display: none; }
+      .nexus-grid-6 { grid-template-columns: repeat(2, 1fr); }
+      .flow-grid { grid-template-columns: repeat(2, 1fr); }
+      .canais-layout { grid-template-columns: 1fr; gap: 40px; }
+      .entregas-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .pain-grid { grid-template-columns: 1fr 1fr; }
+      .pq-grid { grid-template-columns: 1fr; }
+      .nexus-grid-6 { grid-template-columns: 1fr; }
+      .flow-grid { grid-template-columns: 1fr; }
+      .entregas-grid { grid-template-columns: repeat(2, 1fr); }
+      .evo-track { grid-template-columns: 1fr; }
+      .stack-diagram::before { display: none; }
+    }
+    @media (max-width: 480px) {
+      .pain-grid { grid-template-columns: 1fr; }
+      .entregas-grid { grid-template-columns: 1fr; }
+    }
+
+    /* =========================================
+       POLISH FINAL — Texturas · Aurora · Micro-animações
+    ========================================= */
+
+    /* ── Aurora blobs flutuantes ── */
+    @keyframes aurora-drift {
+      0%,100% { transform:translate(0,0) scale(1); }
+      33%      { transform:translate(35px,-25px) scale(1.06); }
+      66%      { transform:translate(-20px,20px) scale(0.96); }
+    }
+    @keyframes aurora-drift-b {
+      0%,100% { transform:translate(0,0) scale(1); }
+      50%      { transform:translate(-45px,35px) scale(1.08); }
+    }
+    .aurora-bg {
+      position:absolute; border-radius:50%;
+      filter:blur(90px); pointer-events:none; z-index:0;
+      will-change:transform;
+    }
+    .ab-purple {
+      background:radial-gradient(circle,rgba(108,92,231,.11) 0%,transparent 70%);
+      animation:aurora-drift 14s ease-in-out infinite;
+    }
+    .ab-blue {
+      background:radial-gradient(circle,rgba(41,128,249,.08) 0%,transparent 70%);
+      animation:aurora-drift-b 18s ease-in-out infinite;
+    }
+    .ab-teal {
+      background:radial-gradient(circle,rgba(0,201,167,.08) 0%,transparent 70%);
+      animation:aurora-drift 22s ease-in-out infinite reverse;
+    }
+
+    /* ── Textura hatch diagonal ── */
+    .hatch-texture {
+      position:absolute; inset:0; pointer-events:none; z-index:0;
+      background-image:repeating-linear-gradient(
+        -55deg,
+        transparent 0px, transparent 7px,
+        rgba(0,0,0,.014) 7px, rgba(0,0,0,.014) 8px
+      );
+    }
+
+    /* ── Ticker/marquee strip ── */
+    .ticker-strip {
+      background:var(--text-main);
+      padding:12px 0; overflow:hidden;
+      position:relative; z-index:10;
+    }
+    .ticker-strip::before,.ticker-strip::after {
+      content:''; position:absolute;
+      inset-block:0; width:100px; z-index:2; pointer-events:none;
+    }
+    .ticker-strip::before { left:0; background:linear-gradient(90deg,var(--text-main),transparent); }
+    .ticker-strip::after  { right:0; background:linear-gradient(270deg,var(--text-main),transparent); }
+    .ticker-track {
+      display:flex;
+      animation:marquee 28s linear infinite;
+      will-change:transform;
+    }
+    .ticker-item {
+      display:inline-flex; align-items:center; gap:10px;
+      padding:0 24px; flex-shrink:0;
+      font-family:'JetBrains Mono',monospace;
+      font-size:.58rem; letter-spacing:.18em;
+      text-transform:uppercase; color:rgba(255,255,255,.38);
+    }
+    .ticker-item strong { color:rgba(255,255,255,.65); }
+    .ticker-sep {
+      width:3px; height:3px; border-radius:50%;
+      background:var(--z-purple); flex-shrink:0;
+    }
+
+    /* ── Section number watermark ── */
+    .sec-wm {
+      position:absolute; top:56px; right:64px;
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(5rem,9vw,8rem); font-weight:800;
+      letter-spacing:-.06em; line-height:1;
+      color:rgba(0,0,0,.025); pointer-events:none;
+      user-select:none; z-index:0;
+    }
+    .section-dark .sec-wm { color:rgba(255,255,255,.03); }
+
+    /* ── Orbit rings (plataforma) ── */
+    @keyframes orbit-rot { to { transform:translate(-50%,-50%) rotate(360deg); } }
+    .orbit-ring {
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      border-radius:50%; pointer-events:none; z-index:0;
+      border:1px dashed rgba(108,92,231,.07);
+      animation:orbit-rot linear infinite;
+    }
+
+    /* ── Scanline (dark sections) ── */
+    @keyframes scan-move {
+      0%   { top:-2px; }
+      100% { top:calc(100% + 2px); }
+    }
+    .scanline-anim {
+      position:absolute; left:0; right:0; height:1px;
+      background:linear-gradient(90deg,
+        transparent 0%,
+        rgba(108,92,231,.35) 25%,
+        rgba(0,201,167,.4) 50%,
+        rgba(41,128,249,.35) 75%,
+        transparent 100%
+      );
+      pointer-events:none; z-index:3;
+      animation:scan-move 12s linear infinite;
+    }
+
+    /* ── Floating data tags (Nexus) ── */
+    @keyframes data-bob {
+      0%,100% { transform:translateY(0); opacity:.35; }
+      50%      { transform:translateY(-10px); opacity:.65; }
+    }
+    .nexus-float-tag {
+      position:absolute; pointer-events:none;
+      font-family:'JetBrains Mono',monospace;
+      font-size:.5rem; letter-spacing:.14em;
+      text-transform:uppercase;
+      color:rgba(108,92,231,.55);
+      padding:4px 10px;
+      background:rgba(108,92,231,.08);
+      border:1px solid rgba(108,92,231,.18);
+      border-radius:999px;
+      animation:data-bob ease-in-out infinite;
+    }
+
+    /* ── Canal node live dot ── */
+    @keyframes live-ping {
+      0%   { transform:scale(1); opacity:.8; }
+      100% { transform:scale(2.8); opacity:0; }
+    }
+    .canal-node { position:relative; padding-right:36px; }
+    .live-dot {
+      position:absolute; right:14px; top:50%;
+      transform:translateY(-50%);
+      width:7px; height:7px; border-radius:50%;
+      background:var(--z-teal);
+    }
+    .live-dot::after {
+      content:''; position:absolute; inset:0;
+      border-radius:50%; background:var(--z-teal);
+      animation:live-ping 2.2s ease-out infinite;
+    }
+
+    /* ── Flow connector glow pulse ── */
+    @keyframes conn-pulse {
+      0%,100% { opacity:.35; }
+      50%      { opacity:1; box-shadow:0 0 8px rgba(108,92,231,.5); }
+    }
+    .flow-connector { animation:conn-pulse 2.4s ease-in-out infinite; }
+
+    /* ── Nexus card shimmer ── */
+    @keyframes dark-shimmer {
+      0%   { left:-100%; }
+      100% { left:200%; }
+    }
+    .nexus6-card {
+      overflow:hidden;
+    }
+    .nexus6-card::before {
+      content:''; position:absolute;
+      top:0; left:-100%; width:50%; height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);
+      animation:dark-shimmer 6s ease-in-out infinite;
+      pointer-events:none; z-index:1;
+    }
+
+    /* ── CTA pulsing rings ── */
+    @keyframes cta-ring-out {
+      0%   { transform:translateX(-50%) scale(0.85); opacity:.2; }
+      100% { transform:translateX(-50%) scale(1.7); opacity:0; }
+    }
+    .cta-pulse-ring {
+      position:absolute; bottom:-120px; left:50%;
+      transform:translateX(-50%);
+      border-radius:50%;
+      border:1px solid rgba(108,92,231,.18);
+      pointer-events:none; z-index:0;
+    }
+    .cpr-1 { width:400px; height:400px; animation:cta-ring-out 4s ease-out infinite; }
+    .cpr-2 { width:600px; height:600px; animation:cta-ring-out 4s ease-out infinite 1.4s; }
+    .cpr-3 { width:800px; height:800px; animation:cta-ring-out 4s ease-out infinite 2.8s; }
+
+    /* ── Gradient overline accent ── */
+    .grad-overline {
+      width:36px; height:2px; border-radius:2px;
+      background:var(--z-grad); margin-bottom:1.2rem;
+    }
+
+    /* ── Pain bar alt color per card ── */
+    .pain-card:nth-child(2) .pain-bar-fill { background:linear-gradient(to right,var(--z-blue),var(--z-teal)); }
+    .pain-card:nth-child(3) .pain-bar-fill { background:linear-gradient(to right,var(--z-teal),var(--z-purple)); }
+    .pain-card:nth-child(4) .pain-bar-fill { background:linear-gradient(to right,var(--z-blue),var(--z-purple)); }
+    .pain-card:nth-child(5) .pain-bar-fill { background:linear-gradient(to right,var(--z-purple),var(--z-blue)); }
+
+    /* ── Evo step hover lift ── */
+    .evo-step { transition:transform .4s var(--ease-expo); }
+    .evo-step:hover { transform:translateY(-4px); }
+
+    /* ── Entrega icon micro-bounce ── */
+    .entrega-item:hover .ei-icon { animation:float .7s ease-in-out; display:inline-block; }
+
+    /* ── Check pop animation ── */
+    @keyframes check-pop {
+      0%   { transform:scale(1); }
+      50%  { transform:scale(1.2); }
+      100% { transform:scale(1); }
+    }
+    .pq-block:hover .pq-check { animation:check-pop .4s var(--ease-expo); }
+
+    /* ── ru-d7, ru-d8 delays ── */
+    .ru-d7 { transition-delay:.7s; }
+    .ru-d8 { transition-delay:.8s; }
+
+    @media (max-width:768px) {
+      .sec-wm { display:none; }
+      .orbit-ring { display:none; }
+      .nexus-float-tag { display:none; }
+    }
   </style>
 
 </head>
@@ -1433,281 +1959,588 @@
     </div>
   </section>
 
+  <!-- ── TICKER STRIP ── -->
+  <div class="ticker-strip" aria-hidden="true">
+    <div class="ticker-track">
+      <span class="ticker-item"><span class="ticker-sep"></span> <strong>CRM Omnichannel</strong></span>
+      <span class="ticker-item"><span class="ticker-sep"></span> IA Agêntica</span>
+      <span class="ticker-item"><span class="ticker-sep"></span> <strong>Nexus AI</strong></span>
+      <span class="ticker-item"><span class="ticker-sep"></span> Pipeline Automático</span>
+      <span class="ticker-item"><span class="ticker-sep"></span> <strong>WhatsApp Business</strong></span>
+      <span class="ticker-item"><span class="ticker-sep"></span> Instagram Direct</span>
+      <span class="ticker-item"><span class="ticker-sep"></span> <strong>Qualificação por IA</strong></span>
+      <span class="ticker-item"><span class="ticker-sep"></span> Follow-up Inteligente</span>
+      <span class="ticker-item"><span class="ticker-sep"></span> <strong>Canais Integrados</strong></span>
+      <span class="ticker-item"><span class="ticker-sep"></span> Operação Escalável</span>
+      <!-- duplicate for seamless loop -->
+      <span class="ticker-item"><span class="ticker-sep"></span> <strong>CRM Omnichannel</strong></span>
+      <span class="ticker-item"><span class="ticker-sep"></span> IA Agêntica</span>
+      <span class="ticker-item"><span class="ticker-sep"></span> <strong>Nexus AI</strong></span>
+      <span class="ticker-item"><span class="ticker-sep"></span> Pipeline Automático</span>
+      <span class="ticker-item"><span class="ticker-sep"></span> <strong>WhatsApp Business</strong></span>
+      <span class="ticker-item"><span class="ticker-sep"></span> Instagram Direct</span>
+      <span class="ticker-item"><span class="ticker-sep"></span> <strong>Qualificação por IA</strong></span>
+      <span class="ticker-item"><span class="ticker-sep"></span> Follow-up Inteligente</span>
+      <span class="ticker-item"><span class="ticker-sep"></span> <strong>Canais Integrados</strong></span>
+      <span class="ticker-item"><span class="ticker-sep"></span> Operação Escalável</span>
+    </div>
+  </div>
+
   <!-- ── SEÇÃO 1: O DESAFIO ── -->
   <hr class="grad-divider">
-  <section class="section dot-grid-bg" id="problema" aria-labelledby="prob-title"
-    style="background:var(--bg-surface); border-top:1px solid var(--border-light); overflow:hidden; position:relative;">
-
-    <!-- Watermark text -->
-    <div style="position:absolute;top:0;right:-3rem;pointer-events:none;user-select:none;opacity:.025;overflow:hidden;z-index:0;line-height:1;">
-      <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14rem;color:var(--z-purple);white-space:nowrap;">DESAFIO</span>
-    </div>
-
-    <div class="section-inner" style="position:relative;z-index:1;">
-
-      <!-- Header -->
-      <div class="reveal-up" style="margin-bottom:5rem;">
-        <div style="display:inline-flex;align-items:center;gap:8px;margin-bottom:1.5rem;">
-          <span style="width:6px;height:6px;background:var(--z-purple);border-radius:50%;display:inline-block;"></span>
-          <span style="font-family:'JetBrains Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.2em;color:var(--z-purple);">O desafio</span>
+  <section class="section dot-grid-bg" id="desafio" aria-labelledby="desafio-title" style="background: var(--bg-surface); border-top: 1px solid var(--border-light); overflow: hidden; position: relative;">
+    <div class="hatch-texture" aria-hidden="true"></div>
+    <div class="aurora-bg ab-purple" style="width:500px;height:500px;top:-100px;right:-100px" aria-hidden="true"></div>
+    <div class="aurora-bg ab-teal" style="width:350px;height:350px;bottom:-80px;left:-60px" aria-hidden="true"></div>
+    <div class="sec-wm" aria-hidden="true">01</div>
+    <div class="section-inner" style="position: relative; z-index: 1;">
+      <div class="reveal-up" style="margin-bottom: 4rem;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 1.5rem;">
+          <span style="width: 6px; height: 6px; background: var(--z-purple); border-radius: 50%; display: inline-block;"></span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .2em; color: var(--z-purple);">O Desafio</span>
         </div>
-        <h2 class="section-title" id="prob-title"
-          style="font-size:clamp(2.2rem,5vw,4rem);letter-spacing:-.05em;line-height:.95;max-width:800px;">
-          Seu atendimento está espalhado.<br>
-          <span style="background:var(--z-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Suas vendas também.</span>
+        <h2 class="section-title" id="desafio-title" style="font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -.05em; line-height: .98; max-width: 900px; margin-bottom: 1.5rem;">
+          Seu atendimento já digitalizou.<br>
+          <span style="background: var(--z-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Agora precisa operar sozinho.</span>
         </h2>
-        <p style="margin-top:2rem;font-size:1.05rem;color:var(--text-muted);max-width:560px;font-weight:300;line-height:1.7;">
-          Conversas chegam por vários canais, leads ficam sem acompanhamento e o gestor perde visibilidade do funil.
+        <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 680px; font-weight: 300; line-height: 1.7;">
+          Empresas que crescem no digital não sofrem apenas por falta de canais. Sofrem porque conversas, dados, CRM e follow-ups ainda dependem de esforço manual.
         </p>
       </div>
 
-      <div style="display:grid;grid-template-columns:7fr 5fr;gap:64px;align-items:center;">
-
-        <!-- LEFT: Image with scanline + glassmorphism overlays -->
-        <div class="ts-img-wrap reveal-zoom" style="position:relative;">
-          <!-- Shadow layer -->
-          <div style="position:absolute;inset:0;background:rgba(108,92,231,.15);border-radius:16px;transform:rotate(2deg) scale(0.98);z-index:0;transition:transform .7s;"></div>
-          <!-- Image container -->
-          <div class="ts-img-container" style="position:relative;border-radius:16px;overflow:hidden;aspect-ratio:4/3;background:#F0F0F0;box-shadow:0 32px 64px rgba(0,0,0,.1);z-index:1;">
-            <!-- Scanline hover effect -->
-            <div class="ts-scanline"></div>
-            <img src="img1.png" alt="Zyncro — Plataforma de CRM e Atendimento" class="ts-img" style="width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.05);transition:transform .7s, filter .7s;filter:grayscale(0.3);">
-            <!-- Glassmorphism overlay 1 -->
-            <div style="position:absolute;top:24px;left:24px;padding:14px 18px;background:rgba(255,255,255,.75);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.5);border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.08);">
-              <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.14em;color:var(--text-muted);margin-bottom:6px;">Canais ativos</div>
-              <div style="height:3px;width:100%;background:rgba(108,92,231,.2);border-radius:2px;overflow:hidden;">
-                <div style="height:100%;width:80%;background:var(--z-grad);border-radius:2px;"></div>
-              </div>
-            </div>
-            <!-- Glassmorphism overlay 2 -->
-            <div style="position:absolute;bottom:24px;right:24px;padding:14px 18px;background:rgba(255,255,255,.75);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.5);border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.08);text-align:right;">
-              <div style="font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;color:var(--text-main);letter-spacing:-.04em;line-height:1;">100<span style="font-size:.75rem;color:var(--z-purple);font-family:'JetBrains Mono',monospace;vertical-align:top;margin-left:3px;">%</span></div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.14em;color:var(--text-muted);margin-top:2px;">Centralizado</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT: Numbered feature list -->
-        <div style="display:flex;flex-direction:column;gap:0;">
-
-          <!-- Feature 01 -->
-          <div class="ts-feature reveal-up ru-d1">
-            <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:10px;">
-              <span class="ts-num">01</span>
-              <h3 class="ts-feat-title">Conversas perdidas</h3>
-            </div>
-            <p class="ts-feat-text">WhatsApp, Instagram e chat do site em abas separadas. Mensagens sem resposta, clientes sem retorno.</p>
-          </div>
-
-          <!-- Feature 02 -->
-          <div class="ts-feature reveal-up ru-d2">
-            <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:10px;">
-              <span class="ts-num">02</span>
-              <h3 class="ts-feat-title">Funil invisível</h3>
-            </div>
-            <p class="ts-feat-text">Impossível saber onde cada lead está, quem precisa de ação agora e qual negociação está esfriando.</p>
-          </div>
-
-          <!-- Feature 03 -->
-          <div class="ts-feature reveal-up ru-d3">
-            <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:10px;">
-              <span class="ts-num">03</span>
-              <h3 class="ts-feat-title">Dados fragmentados</h3>
-            </div>
-            <p class="ts-feat-text">Planilhas, anotações soltas e grupos de WhatsApp. Não existe operação escalável assim.</p>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ── SEÇÃO 2: A PLATAFORMA (flashlight cards) ── -->
-  <hr class="grad-divider">
-  <section class="section" id="plataforma" aria-labelledby="plat-title" style="background:#FFFFFF; border-bottom:1px solid var(--border-light); overflow:hidden; position:relative;">
-    <!-- Background decor -->
-    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;background:radial-gradient(circle, rgba(108,92,231,.05), transparent 70%);border-radius:50%;pointer-events:none;z-index:0;"></div>
-    <div class="section-inner" style="position:relative;z-index:1;">
-      <div class="reveal-up" style="text-align:center;margin-bottom:5rem;">
-        <span class="section-label" style="display:block;margin-bottom:1.5rem;">A plataforma</span>
-        <h2 class="section-title" id="plat-title" style="font-size:clamp(2.2rem,5vw,4rem);letter-spacing:-.05em;line-height:.95;max-width:700px;margin:0 auto 1.5rem;">
-          A Zyncro transforma conversas<br><span style="color:var(--z-blue);">em operação comercial.</span>
-        </h2>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
-
+      <div class="pain-grid">
         <!-- Card 1 -->
-        <div class="fc-plat reveal-up ru-d1" onmousemove="fcMouseMove(event,this)">
-          <div class="fc-icon">
-            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          </div>
-          <div class="fc-body">
-            <h3 class="fc-title">Atendimento omnichannel</h3>
-            <p class="fc-text">WhatsApp, Instagram e site em uma única caixa de entrada compartilhada pela equipe.</p>
-          </div>
-          <div class="fc-bar"><div class="fc-bar-fill"></div></div>
+        <div class="pain-card reveal-up ru-d1">
+          <div class="pain-icon">🔌</div>
+          <h3 class="pain-label">Canais desconectados</h3>
+          <p class="pain-text">WhatsApp, Instagram e site em abas separadas. Conversas perdidas e clientes sem retorno histórico.</p>
+          <div class="pain-bar"><div class="pain-bar-fill"></div></div>
         </div>
-
         <!-- Card 2 -->
-        <div class="fc-plat reveal-up ru-d2" onmousemove="fcMouseMove(event,this)">
-          <div class="fc-icon">
-            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-          </div>
-          <div class="fc-body">
-            <h3 class="fc-title">CRM integrado</h3>
-            <p class="fc-text">Cada conversa vira um registro de contato com histórico, tags e contexto sempre disponíveis.</p>
-          </div>
-          <div class="fc-bar"><div class="fc-bar-fill"></div></div>
+        <div class="pain-card reveal-up ru-d2">
+          <div class="pain-icon">🤖</div>
+          <h3 class="pain-label">Chatbots limitados</h3>
+          <p class="pain-text">Menus rígidos que irritam o cliente e não resolvem nada além de dúvidas frequentes simples.</p>
+          <div class="pain-bar"><div class="pain-bar-fill"></div></div>
         </div>
-
         <!-- Card 3 -->
-        <div class="fc-plat reveal-up ru-d3" onmousemove="fcMouseMove(event,this)">
-          <div class="fc-icon">
-            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-          </div>
-          <div class="fc-body">
-            <h3 class="fc-title">Pipeline visual</h3>
-            <p class="fc-text">Visualize oportunidades em etapas do funil e saiba exatamente o que precisa de ação agora.</p>
-          </div>
-          <div class="fc-bar"><div class="fc-bar-fill"></div></div>
+        <div class="pain-card reveal-up ru-d3">
+          <div class="pain-icon">📁</div>
+          <h3 class="pain-label">CRM desatualizado</h3>
+          <p class="pain-text">A equipe esquece de registrar contatos, mover etapas ou preencher dados de qualificação manual.</p>
+          <div class="pain-bar"><div class="pain-bar-fill"></div></div>
         </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ── SEÇÃO 3: TIMELINE ── -->
-  <hr class="grad-divider">
-  <section class="section dot-grid-bg" id="como-funciona" aria-labelledby="fluxo-title">
-    <div class="section-inner">
-      <span class="section-label reveal">O fluxo</span>
-      <h2 class="section-title reveal rd1" id="fluxo-title">
-        Do primeiro contato ao fechamento.
-      </h2>
-      <div class="timeline">
-        <div class="tl-line" aria-hidden="true"></div>
-        <div class="tl-step reveal rd1">
-          <div class="tl-num">01</div>
-          <div class="tl-body">
-            <p class="tl-label">Lead entra</p>
-            <p class="tl-text">WhatsApp, Instagram, formulário ou chat do site.</p>
-          </div>
+        <!-- Card 4 -->
+        <div class="pain-card reveal-up ru-d4">
+          <div class="pain-icon">⏳</div>
+          <h3 class="pain-label">Follow-up manual</h3>
+          <p class="pain-text">Vendedores perdendo tempo cobrando retorno de leads frios um por um pelo WhatsApp comercial.</p>
+          <div class="pain-bar"><div class="pain-bar-fill"></div></div>
         </div>
-        <div class="tl-step reveal rd2">
-          <div class="tl-num">02</div>
-          <div class="tl-body">
-            <p class="tl-label">IA qualifica</p>
-            <p class="tl-text">O Nexus identifica o interesse e classifica a oportunidade.</p>
-          </div>
-        </div>
-        <div class="tl-step reveal rd3">
-          <div class="tl-num">03</div>
-          <div class="tl-body">
-            <p class="tl-label">CRM organiza</p>
-            <p class="tl-text">Contato entra no pipeline com histórico e próxima ação definida.</p>
-          </div>
-        </div>
-        <div class="tl-step reveal rd4">
-          <div class="tl-num">04</div>
-          <div class="tl-body">
-            <p class="tl-label">Humano assume</p>
-            <p class="tl-text">Vendedor recebe a conversa com contexto completo para fechar.</p>
-          </div>
-        </div>
-        <div class="tl-step reveal" style="transition-delay:.5s">
-          <div class="tl-num">05</div>
-          <div class="tl-body">
-            <p class="tl-label">Gestor acompanha</p>
-            <p class="tl-text">Relatórios em tempo real revelam gargalos e oportunidades.</p>
-          </div>
+        <!-- Card 5 -->
+        <div class="pain-card reveal-up ru-d5">
+          <div class="pain-icon">👁️</div>
+          <h3 class="pain-label">Gestor sem visão</h3>
+          <p class="pain-text">Dificuldade para identificar gargalos de conversão, tempos de resposta e performance real do funil.</p>
+          <div class="pain-bar"><div class="pain-bar-fill"></div></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ── SEÇÃO 4: NEXUS AI ── -->
+  <!-- ── SEÇÃO 2: EVOLUÇÃO DO ATENDIMENTO ── -->
   <hr class="grad-divider">
-  <section class="section section-dark dot-grid-bg" id="nexus" aria-labelledby="nexus-title">
+  <section class="section" id="evolucao" aria-labelledby="evo-title" style="background: #FFFFFF; overflow: hidden; position: relative;">
+    <div class="aurora-bg ab-blue" style="width:600px;height:600px;top:50%;left:50%;transform:translate(-50%,-50%)" aria-hidden="true"></div>
+    <div class="sec-wm" aria-hidden="true">02</div>
     <div class="section-inner">
-      <span class="section-label reveal" style="color: var(--z-teal);">Nexus AI</span>
-      <h2 class="section-title reveal rd1" id="nexus-title" style="color:#fff;">
-        A inteligência que sincroniza<br>sua operação.
-      </h2>
-      <p class="section-sub reveal rd2" style="color:rgba(255,255,255,.55);">
-        O Nexus é a camada de IA da Zyncro. Trabalha em segundo plano, aprende com cada conversa e toma ações precisas para reduzir o trabalho manual da equipe.
-      </p>
-      <div class="nexus-grid">
-        <div class="nexus-card reveal-zoom ru-d1">
-          <div class="nexus-icon">⚡</div>
-          <h3>Qualificação automática</h3>
-          <p>Entende o interesse do lead pela conversa e classifica a maturidade de compra sem perguntar manualmente.</p>
-          <div class="card-bar"><div class="card-bar-fill"></div></div>
+      <div class="reveal-up" style="text-align: center; margin-bottom: 4rem;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 1.5rem;">
+          <span style="width: 6px; height: 6px; background: var(--z-purple); border-radius: 50%; display: inline-block;"></span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .2em; color: var(--z-purple);">A Evolução</span>
         </div>
-        <div class="nexus-card reveal-zoom ru-d2">
-          <div class="nexus-icon">🏷️</div>
-          <h3>Tags e status inteligentes</h3>
-          <p>Aplica etiquetas e atualiza o status do contato no CRM conforme o andamento real da conversa.</p>
-          <div class="card-bar"><div class="card-bar-fill"></div></div>
+        <h2 class="section-title" id="evo-title" style="font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -.05em; line-height: .98; max-width: 900px; margin: 0 auto 1.5rem;">
+          Chatbots respondem perguntas.<br>
+          <span style="background: var(--z-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Agentes executam etapas da operação.</span>
+        </h2>
+        <p style="font-size: 1.05rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; font-weight: 300; line-height: 1.7;">
+          A inteligência agêntica da Zyncro vai além das respostas prontas. Ela executa tarefas complexas em segundo plano, integrando conversas e processos comerciais.
+        </p>
+      </div>
+
+      <div class="evo-track reveal-up">
+        <!-- Step 1 -->
+        <div class="evo-step">
+          <div class="evo-dot">👤</div>
+          <div class="evo-label">Atendimento Manual</div>
+          <div class="evo-text">Operador humano faz triagem, qualificação e digitação manual no CRM de cada conversa. Sem escala.</div>
         </div>
-        <div class="nexus-card reveal-zoom ru-d3">
-          <div class="nexus-icon">📝</div>
-          <h3>Resumo antes da transferência</h3>
-          <p>Gera um resumo automático para que o vendedor entre na conversa já contextualizado e pronto para fechar.</p>
-          <div class="card-bar"><div class="card-bar-fill"></div></div>
+        <!-- Step 2 -->
+        <div class="evo-step">
+          <div class="evo-dot">💬</div>
+          <div class="evo-label">Chatbot Simples</div>
+          <div class="evo-text">Menus numéricos rígidos ("Digite 1 para financeiro, 2 para suporte"). Experiência cansativa e limitada.</div>
         </div>
-        <div class="nexus-card reveal-zoom ru-d4">
-          <div class="nexus-icon">🔁</div>
-          <h3>Acionamento de automações</h3>
-          <p>Dispara follow-ups, notificações e atualizações no CRM baseados em gatilhos da conversa.</p>
-          <div class="card-bar"><div class="card-bar-fill"></div></div>
+        <!-- Step 3 -->
+        <div class="evo-step">
+          <div class="evo-dot">🧠</div>
+          <div class="evo-label">IA Conversacional</div>
+          <div class="evo-text">Entende linguagem natural para responder perguntas frequentes e FAQ, mas sem ações práticas no sistema.</div>
+        </div>
+        <!-- Step 4 -->
+        <div class="evo-step is-active">
+          <div class="evo-dot">⚡</div>
+          <div class="evo-label">Atendimento Agêntico <span class="evo-badge">Zyncro</span></div>
+          <div class="evo-text">Entende contexto de ponta a ponta, qualifica leads, atualiza CRM em tempo real e prepara o vendedor.</div>
         </div>
       </div>
     </div>
   </section>
 
-
-  <!-- ── SEÇÃO 5: CANAIS ── -->
+  <!-- ── SEÇÃO 3: A PLATAFORMA ── -->
   <hr class="grad-divider">
-  <section class="section dot-grid-bg" id="canais" aria-labelledby="canais-title">
+  <section class="section dot-grid-bg" id="plataforma" aria-labelledby="plat-title" style="background: var(--bg-surface); overflow: hidden; position: relative;">
+    <div class="orbit-ring" style="width:900px;height:900px;animation-duration:80s" aria-hidden="true"></div>
+    <div class="orbit-ring" style="width:600px;height:600px;animation-duration:55s;animation-direction:reverse;border-color:rgba(41,128,249,.06)" aria-hidden="true"></div>
+    <div class="aurora-bg ab-purple" style="width:400px;height:400px;top:-50px;right:-50px" aria-hidden="true"></div>
+    <div class="sec-wm" aria-hidden="true">03</div>
+    <div class="section-inner" style="position: relative; z-index: 1;">
+      <div class="reveal-up" style="text-align: center; margin-bottom: 3rem;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 1.5rem;">
+          <span style="width: 6px; height: 6px; background: var(--z-purple); border-radius: 50%; display: inline-block;"></span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .2em; color: var(--z-purple);">A Plataforma</span>
+        </div>
+        <h2 class="section-title" id="plat-title" style="font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -.05em; line-height: .98; max-width: 900px; margin: 0 auto 1.5rem;">
+          Uma operação comercial conectada<br>
+          <span style="background: var(--z-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">do primeiro contato ao fechamento.</span>
+        </h2>
+        <p style="font-size: 1.05rem; color: var(--text-muted); max-width: 620px; margin: 0 auto; font-weight: 300; line-height: 1.7;">
+          A Zyncro centraliza canais, organiza leads, atualiza o CRM e permite que o Nexus AI trabalhe em segundo plano para reduzir o esforço manual da equipe.
+        </p>
+      </div>
+
+      <div class="stack-diagram reveal-up">
+        <!-- Layer 1 -->
+        <div class="stack-layer">
+          <div class="stack-dot">📥</div>
+          <div class="stack-body">
+            <h3 class="stack-name">1. Canais de Entrada</h3>
+            <p class="stack-desc">Conexão direta com WhatsApp, Instagram Direct, chat do site e formulários de captura.</p>
+          </div>
+        </div>
+        <!-- Layer 2 -->
+        <div class="stack-layer">
+          <div class="stack-dot">💬</div>
+          <div class="stack-body">
+            <h3 class="stack-name">2. Inbox Omnichannel</h3>
+            <p class="stack-desc">Centralização absoluta. Todo o seu time comercial em uma única tela conversacional unificada.</p>
+          </div>
+        </div>
+        <!-- Layer 3 -->
+        <div class="stack-layer">
+          <div class="stack-dot">📂</div>
+          <div class="stack-body">
+            <h3 class="stack-name">3. CRM de Contatos</h3>
+            <p class="stack-desc">Histórico completo por cliente, tags automáticas de contexto e notas sincronizadas.</p>
+          </div>
+        </div>
+        <!-- Layer 4 -->
+        <div class="stack-layer">
+          <div class="stack-dot">📊</div>
+          <div class="stack-body">
+            <h3 class="stack-name">4. Pipeline Visual</h3>
+            <p class="stack-desc">Acompanhamento das negociações em etapas claras de funil de vendas, evitando esquecimentos.</p>
+          </div>
+        </div>
+        <!-- Layer 5 -->
+        <div class="stack-layer">
+          <div class="stack-dot">🤖</div>
+          <div class="stack-body">
+            <h3 class="stack-name">5. Nexus AI</h3>
+            <p class="stack-desc">Agente agêntico que analisa conversas, qualifica perfis e prepara resumos operacionais automáticos.</p>
+          </div>
+        </div>
+        <!-- Layer 6 -->
+        <div class="stack-layer">
+          <div class="stack-dot">📈</div>
+          <div class="stack-body">
+            <h3 class="stack-name">6. Relatórios & Performance</h3>
+            <p class="stack-desc">Dados reais de conversão de leads, gargalos no funil e velocidade de fechamento da equipe.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SEÇÃO 4: COMO FUNCIONA NA PRÁTICA ── -->
+  <hr class="grad-divider">
+  <section class="section" id="como-funciona" aria-labelledby="flow-title" style="background: #FFFFFF; overflow: hidden; position: relative;">
+    <div class="aurora-bg ab-teal" style="width:500px;height:500px;top:50%;right:-100px;transform:translateY(-50%)" aria-hidden="true"></div>
+    <div class="aurora-bg ab-blue" style="width:350px;height:350px;bottom:-60px;left:-40px" aria-hidden="true"></div>
+    <div class="sec-wm" aria-hidden="true">04</div>
+    <div class="section-inner" style="position:relative;z-index:1">
+      <div class="reveal-up" style="text-align: center; margin-bottom: 4rem;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 1.5rem;">
+          <span style="width: 6px; height: 6px; background: var(--z-purple); border-radius: 50%; display: inline-block;"></span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .2em; color: var(--z-purple);">O Fluxo</span>
+        </div>
+        <h2 class="section-title" id="flow-title" style="font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -.05em; line-height: .98; max-width: 900px; margin: 0 auto 1.5rem;">
+          Como funciona na prática
+        </h2>
+        <p style="font-size: 1.05rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; font-weight: 300; line-height: 1.7;">
+          Acompanhe o caminho automatizado de um contato, do momento em que envia uma mensagem até o fechamento.
+        </p>
+      </div>
+
+      <div class="flow-grid">
+        <!-- Step 1 -->
+        <div class="flow-card reveal-up ru-d1">
+          <div class="flow-step-num">Passo 01</div>
+          <div class="flow-icon">💬</div>
+          <h3 class="flow-title">Lead entra em contato</h3>
+          <p class="flow-text">O cliente envia mensagem pelo WhatsApp, Instagram Direct, site ou preenche um formulário.</p>
+          <div class="flow-connector"></div>
+        </div>
+        <!-- Step 2 -->
+        <div class="flow-card reveal-up ru-d2">
+          <div class="flow-step-num">Passo 02</div>
+          <div class="flow-icon">🧠</div>
+          <h3 class="flow-title">Nexus identifica intenção</h3>
+          <p class="flow-text">A IA analisa o contexto da conversa, entende o interesse imediato e define a intenção do lead.</p>
+          <div class="flow-connector"></div>
+        </div>
+        <!-- Step 3 -->
+        <div class="flow-card reveal-up ru-d3">
+          <div class="flow-step-num">Passo 03</div>
+          <div class="flow-icon">✅</div>
+          <h3 class="flow-title">Qualificação automática</h3>
+          <p class="flow-text">A IA faz perguntas sutis, levanta informações cruciais (verba, urgência) e valida o perfil.</p>
+          <div class="flow-connector"></div>
+        </div>
+        <!-- Step 4 -->
+        <div class="flow-card reveal-up ru-d4">
+          <div class="flow-step-num">Passo 04</div>
+          <div class="flow-icon">🔄</div>
+          <h3 class="flow-title">CRM e Pipeline atualizados</h3>
+          <p class="flow-text">O lead é movido automaticamente para a etapa certa do funil no CRM de acordo com as respostas.</p>
+          <div class="flow-connector"></div>
+        </div>
+        <!-- Step 5 -->
+        <div class="flow-card reveal-up ru-d5">
+          <div class="flow-step-num">Passo 05</div>
+          <div class="flow-icon">👤</div>
+          <h3 class="flow-title">Humano assume com resumo</h3>
+          <p class="flow-text">O vendedor recebe a conversa com um resumo executivo gerado pela IA. Entra direto para fechar.</p>
+          <div class="flow-connector"></div>
+        </div>
+        <!-- Step 6 -->
+        <div class="flow-card reveal-up ru-d6">
+          <div class="flow-step-num">Passo 06</div>
+          <div class="flow-icon">📊</div>
+          <h3 class="flow-title">Gestor monitora tudo</h3>
+          <p class="flow-text">Visão completa dos gargalos, conversão de canais e performance da operação em tempo real.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SEÇÃO 5: NEXUS AI (DARK) ── -->
+  <hr class="grad-divider">
+  <section class="section section-dark dot-grid-bg" id="nexus" aria-labelledby="nexus-title" style="background: var(--text-main); border-top: 1px solid rgba(255,255,255,.08); overflow: hidden; position: relative;">
+    <div class="scanline-anim" aria-hidden="true"></div>
+    <div class="nexus-float-tag" style="top:18%;left:5%;animation-duration:5s" aria-hidden="true">lead_score: 94</div>
+    <div class="nexus-float-tag" style="top:35%;right:6%;animation-duration:7s;animation-delay:1s" aria-hidden="true">intent: compra</div>
+    <div class="nexus-float-tag" style="bottom:22%;left:8%;animation-duration:6s;animation-delay:2s" aria-hidden="true">status: qualificado</div>
+    <div class="nexus-float-tag" style="bottom:14%;right:10%;animation-duration:8s;animation-delay:.5s" aria-hidden="true">action: follow_up</div>
+    <div style="position:absolute;bottom:-2rem;left:-1rem;pointer-events:none;user-select:none;opacity:.03;overflow:hidden;z-index:0;line-height:1">
+      <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14rem;color:#fff;white-space:nowrap">NEXUS</span>
+    </div>
+    <div class="sec-wm" aria-hidden="true">05</div>
+    <div class="section-inner" style="position: relative; z-index: 1;">
+      <div class="reveal-up" style="margin-bottom: 4rem;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 1.5rem;">
+          <span style="width: 6px; height: 6px; background: var(--z-teal); border-radius: 50%; display: inline-block;"></span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .2em; color: var(--z-teal);">Nexus AI</span>
+        </div>
+        <h2 class="section-title" id="nexus-title" style="font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -.05em; line-height: .98; max-width: 900px; margin-bottom: 1.5rem; color: #fff;">
+          Nexus AI: a camada agêntica<br>
+          <span style="background: linear-gradient(135deg, #00C9A7 0%, #2980F9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">da sua operação comercial.</span>
+        </h2>
+        <p style="font-size: 1.1rem; color: rgba(255,255,255,.55); max-width: 650px; font-weight: 300; line-height: 1.7;">
+          O Nexus não é apenas um chatbot. Ele atua como uma camada inteligente que entende conversas, executa tarefas e sincroniza atendimento, CRM e vendas de ponta a ponta.
+        </p>
+      </div>
+
+      <div class="nexus-grid-6">
+        <!-- Card 1 -->
+        <div class="nexus6-card reveal-zoom ru-d1">
+          <div class="n6-icon">⚡</div>
+          <h3 class="n6-title">Qualificação automática</h3>
+          <p class="n6-text">Extrai informações de forma fluida durante a conversa (como faturamento, tamanho de equipe e orçamento) e qualifica o lead.</p>
+          <div class="n6-bar"><div class="n6-bar-fill"></div></div>
+        </div>
+        <!-- Card 2 -->
+        <div class="nexus6-card reveal-zoom ru-d2">
+          <div class="n6-icon">🏷️</div>
+          <h3 class="n6-title">Atualização de tags e status</h3>
+          <p class="n6-text">Aplica etiquetas de interesse e muda a fase do lead no funil do CRM conforme o andamento real e tópicos abordados.</p>
+          <div class="n6-bar"><div class="n6-bar-fill"></div></div>
+        </div>
+        <!-- Card 3 -->
+        <div class="nexus6-card reveal-zoom ru-d3">
+          <div class="n6-icon">📝</div>
+          <h3 class="n6-title">Resumo antes da transferência</h3>
+          <p class="n6-text">Gera um sumário executivo em tópicos com as dores do lead para que o vendedor humano entre na conversa sabendo tudo.</p>
+          <div class="n6-bar"><div class="n6-bar-fill"></div></div>
+        </div>
+        <!-- Card 4 -->
+        <div class="nexus6-card reveal-zoom ru-d4">
+          <div class="n6-icon">🔁</div>
+          <h3 class="n6-title">Acionamento de automações</h3>
+          <p class="n6-text">Dispara webhooks para outros sistemas, cria alertas internos, atualiza tarefas e notifica canais específicos.</p>
+          <div class="n6-bar"><div class="n6-bar-fill"></div></div>
+        </div>
+        <!-- Card 5 -->
+        <div class="nexus6-card reveal-zoom ru-d5">
+          <div class="n6-icon">⏳</div>
+          <h3 class="n6-title">Follow-up inteligente</h3>
+          <p class="n6-text">Identifica quando um lead parou de responder e reativa o contato de forma humanizada e personalizada no dia seguinte.</p>
+          <div class="n6-bar"><div class="n6-bar-fill"></div></div>
+        </div>
+        <!-- Card 6 -->
+        <div class="nexus6-card reveal-zoom ru-d6">
+          <div class="n6-icon">📈</div>
+          <h3 class="n6-title">Insights operacionais</h3>
+          <p class="n6-text">Analisa os dados de todas as conversas para sugerir melhorias no roteiro de atendimento e otimização da jornada.</p>
+          <div class="n6-bar"><div class="n6-bar-fill"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SEÇÃO 6: PARA QUEM É ── -->
+  <hr class="grad-divider">
+  <section class="section" id="para-quem" aria-labelledby="pq-title" style="background: #FFFFFF; overflow: hidden; position: relative;">
+    <div class="aurora-bg ab-purple" style="width:550px;height:550px;top:50%;left:-100px;transform:translateY(-50%)" aria-hidden="true"></div>
+    <div class="sec-wm" aria-hidden="true">06</div>
+    <div class="section-inner" style="position:relative;z-index:1">
+      <div class="reveal-up" style="text-align: center; margin-bottom: 3.5rem;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 1.5rem;">
+          <span style="width: 6px; height: 6px; background: var(--z-purple); border-radius: 50%; display: inline-block;"></span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .2em; color: var(--z-purple);">ICP & Fit</span>
+        </div>
+        <h2 class="section-title" id="pq-title" style="font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -.05em; line-height: .98; max-width: 900px; margin: 0 auto 1.5rem;">
+          Feita para operações que<br>
+          <span style="background: var(--z-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">já passaram do básico.</span>
+        </h2>
+        <p style="font-size: 1.05rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; font-weight: 300; line-height: 1.7;">
+          A Zyncro foi pensada para empresas que já validaram seus canais digitais e agora buscam escala, governança de dados e automação real.
+        </p>
+      </div>
+
+      <div class="pq-grid reveal-up">
+        <!-- Block 1 -->
+        <div class="pq-block">
+          <div class="pq-check">
+            <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <div>
+            <h3 class="pq-label">Alto volume de conversas</h3>
+            <p class="pq-text">Operações que recebem centenas de contatos diariamente e precisam de triagem veloz e automatizada.</p>
+          </div>
+        </div>
+        <!-- Block 2 -->
+        <div class="pq-block">
+          <div class="pq-check">
+            <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <div>
+            <h3 class="pq-label">Times que vivem de follow-up</h3>
+            <p class="pq-text">Negócios que dependem de cadências de mensagens constantes e estruturadas para esquentar leads.</p>
+          </div>
+        </div>
+        <!-- Block 3 -->
+        <div class="pq-block">
+          <div class="pq-check">
+            <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <div>
+            <h3 class="pq-label">IA básica já não é suficiente</h3>
+            <p class="pq-text">Empresas que já usam chatbots simples ou respostas automáticas, mas sentem falta de ação e contexto.</p>
+          </div>
+        </div>
+        <!-- Block 4 -->
+        <div class="pq-block">
+          <div class="pq-check">
+            <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <div>
+            <h3 class="pq-label">Atendimento e vendas fragmentados</h3>
+            <p class="pq-text">Dificuldade crônica em sincronizar o WhatsApp comercial dos vendedores com a base central do CRM.</p>
+          </div>
+        </div>
+        <!-- Block 5 -->
+        <div class="pq-block" style="grid-column: span 2; max-width: 100%;">
+          <div class="pq-check">
+            <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <div>
+            <h3 class="pq-label">Gestores que precisam de governança</h3>
+            <p class="pq-text">Líderes que necessitam acompanhar o pipeline, conversão real por canal e performance geral do time sem depender de planilhas manuais ou checagem manual de conversas.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="pq-disclaimer reveal-up">
+        💡 <strong>Nota de transparência:</strong> Se você está buscando apenas um primeiro chatbot simples ou uma ferramenta apenas para respostas automáticas de FAQ, talvez a Zyncro não seja o seu ponto de partida agora. A Zyncro é projetada para operações maduras que buscam transformar atendimento fragmentado em uma <strong>operação comercial inteligente e integrada</strong>.
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SEÇÃO 7: O QUE A ZYNCRO ENTREGA ── -->
+  <hr class="grad-divider">
+  <section class="section dot-grid-bg" id="entregas" aria-labelledby="ent-title" style="background: var(--bg-surface); overflow: hidden; position: relative;">
+    <div class="hatch-texture" aria-hidden="true"></div>
+    <div class="aurora-bg ab-blue" style="width:400px;height:400px;bottom:-80px;right:-60px" aria-hidden="true"></div>
+    <div class="sec-wm" aria-hidden="true">07</div>
+    <div class="section-inner" style="position:relative;z-index:1">
+      <div class="reveal-up" style="text-align: center; margin-bottom: 3.5rem;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 1.5rem;">
+          <span style="width: 6px; height: 6px; background: var(--z-purple); border-radius: 50%; display: inline-block;"></span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .2em; color: var(--z-purple);">Entregáveis Reais</span>
+        </div>
+        <h2 class="section-title" id="ent-title" style="font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -.05em; line-height: .98; max-width: 900px; margin: 0 auto 1.5rem;">
+          O que a Zyncro entrega
+        </h2>
+        <p style="font-size: 1.05rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; font-weight: 300; line-height: 1.7;">
+          Funcionalidades sólidas e voltadas para a produtividade e controle do seu processo comercial.
+        </p>
+      </div>
+
+      <div class="entregas-grid">
+        <!-- Item 1 -->
+        <div class="entrega-item reveal-up ru-d1">
+          <div class="ei-icon">📥</div>
+          <h3 class="ei-label">Caixa Omnichannel</h3>
+          <p class="ei-text">Centralize e distribua contatos de WhatsApp, Instagram e site de forma organizada.</p>
+        </div>
+        <!-- Item 2 -->
+        <div class="entrega-item reveal-up ru-d2">
+          <div class="ei-icon">📂</div>
+          <h3 class="ei-label">Histórico do Cliente</h3>
+          <p class="ei-text">Acesso a todo o contexto, tags aplicadas, contatos passados e notas em uma única tela.</p>
+        </div>
+        <!-- Item 3 -->
+        <div class="entrega-item reveal-up ru-d3">
+          <div class="ei-icon">📋</div>
+          <h3 class="ei-label">Pipeline Kanban</h3>
+          <p class="ei-text">Visualize cada negócio caminhando pelas etapas de qualificação até o fechamento.</p>
+        </div>
+        <!-- Item 4 -->
+        <div class="entrega-item reveal-up ru-d4">
+          <div class="ei-icon">🧠</div>
+          <h3 class="ei-label">Qualificação por IA</h3>
+          <p class="ei-text">O Nexus preenche campos e coleta dados durante o papo para poupar o vendedor.</p>
+        </div>
+        <!-- Item 5 -->
+        <div class="entrega-item reveal-up ru-d5">
+          <div class="ei-icon">🔄</div>
+          <h3 class="ei-label">Transferência Fluida</h3>
+          <p class="ei-text">Direcione contatos com resumo prévio da conversa direto para o operador correto.</p>
+        </div>
+        <!-- Item 6 -->
+        <div class="entrega-item reveal-up ru-d6">
+          <div class="ei-icon">🔁</div>
+          <h3 class="ei-label">Automações</h3>
+          <p class="ei-text">Agende contatos automáticos e follow-ups inteligentes baseados em ações e tempo.</p>
+        </div>
+        <!-- Item 7 -->
+        <div class="entrega-item reveal-up ru-d7">
+          <div class="ei-icon">📈</div>
+          <h3 class="ei-label">Relatórios Gerenciais</h3>
+          <p class="ei-text">Métricas claras de tempo de primeira resposta, conversão de etapas e vendas ganhas.</p>
+        </div>
+        <!-- Item 8 -->
+        <div class="entrega-item reveal-up ru-d8">
+          <div class="ei-icon">🔌</div>
+          <h3 class="ei-label">Integração Total</h3>
+          <p class="ei-text">Webhooks flexíveis para enviar informações para CRMs externos ou ERPs da empresa.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SEÇÃO 8: TODOS OS CANAIS ── -->
+  <hr class="grad-divider">
+  <section class="section" id="canais" aria-labelledby="canais-title" style="background: #FFFFFF; overflow: hidden; position: relative;">
+    <div class="aurora-bg ab-teal" style="width:450px;height:450px;top:50%;right:-80px;transform:translateY(-50%)" aria-hidden="true"></div>
+    <div class="sec-wm" aria-hidden="true">08</div>
     <div class="section-inner">
-      <div class="channels-layout">
-        <div class="channels-text reveal-up">
-          <span class="section-label">Omnichannel</span>
-          <h2 class="section-title" id="canais-title">
+      <div class="canais-layout">
+        <div class="reveal-up">
+          <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 1.5rem;">
+            <span style="width: 6px; height: 6px; background: var(--z-purple); border-radius: 50%; display: inline-block;"></span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .2em; color: var(--z-purple);">Conectividade</span>
+          </div>
+          <h2 class="section-title" id="canais-title" style="font-size: clamp(2.2rem, 5vw, 3.5rem); letter-spacing: -.05em; line-height: 1; margin-bottom: 1.5rem;">
             Todos os canais.<br>Uma única operação.
           </h2>
-          <p class="section-sub">
-            WhatsApp, Instagram, site e formulários deixam de ser pontos soltos e passam a alimentar uma operação comercial única.
+          <p style="font-size: 1.05rem; color: var(--text-muted); font-weight: 300; line-height: 1.7; margin-bottom: 2rem;">
+            WhatsApp, Instagram, site e formulários deixam de ser entradas soltas e passam a alimentar o mesmo funil comercial da Zyncro, de forma automatizada e organizada.
           </p>
         </div>
-        <div class="channels-image reveal-zoom">
-          <img src="img3.png" alt="Canais integrados na Zyncro" />
+        <div class="canal-nodes reveal-zoom">
+          <div class="canal-node">
+            <span class="canal-node-icon">🟢</span> WhatsApp Business
+            <span class="live-dot" aria-hidden="true"></span>
+          </div>
+          <div class="canal-node">
+            <span class="canal-node-icon">📸</span> Instagram Direct
+            <span class="live-dot" style="animation-delay:.7s" aria-hidden="true"></span>
+          </div>
+          <div class="canal-node">
+            <span class="canal-node-icon">🌐</span> Chat do Site / Formulários
+            <span class="live-dot" style="animation-delay:1.4s" aria-hidden="true"></span>
+          </div>
+          <div class="canal-arrow">
+            <svg width="24" height="24" fill="none" stroke="var(--z-purple)" stroke-width="2.5" viewBox="0 0 24 24">
+              <path d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+          </div>
+          <div class="canal-center">
+            <div class="canal-center-label">Central Operacional</div>
+            <div class="canal-center-name">Zyncro CRM & Nexus AI</div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ── SEÇÃO 6: CTA FINAL ── -->
+  <!-- ── SEÇÃO 9: CTA FINAL ── -->
   <hr class="grad-divider">
-  <section class="section dot-grid-bg" id="cta-final" aria-labelledby="cta-title">
+  <section class="section dot-grid-bg" id="cta-final" aria-labelledby="cta-title" style="background: #ffffff; overflow: hidden; position: relative;">
+    <div class="cta-pulse-ring cpr-1" aria-hidden="true"></div>
+    <div class="cta-pulse-ring cpr-2" aria-hidden="true"></div>
+    <div class="cta-pulse-ring cpr-3" aria-hidden="true"></div>
     <div class="section-inner cta-inner">
       <div class="cta-glow" aria-hidden="true"></div>
-      <span class="section-label reveal">Próximo passo</span>
-      <h2 class="section-title reveal rd1" id="cta-title">
-        Sua operação comercial não precisa<br>continuar espalhada.
+      <span class="section-label reveal">Demonstração</span>
+      <h2 class="section-title reveal rd1" id="cta-title" style="font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -.05em; line-height: 1; margin-bottom: 1.5rem; text-align: center;">
+        Descubra onde sua operação<br>está perdendo leads.
       </h2>
-      <p class="section-sub reveal rd2">
-        Veja como a Zyncro centraliza seus canais, organiza seu pipeline e coloca IA para trabalhar pela sua equipe.
+      <p class="section-sub reveal rd2" style="text-align: center; max-width: 620px; margin-bottom: 2.5rem;">
+        Em uma demonstração, mostramos como a Zyncro pode centralizar seus canais, organizar seu pipeline e colocar IA agêntica para trabalhar junto da sua equipe.
       </p>
       <div class="cta-final-btns reveal rd3">
         <button class="btn-solid">
-          <span>Agendar demonstração</span>
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <span>Agendar diagnóstico</span>
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
         </button>
-        <button class="btn-outline">Falar com o time</button>
+        <button class="btn-outline">Ver como funciona</button>
       </div>
-      <p class="trust-note reveal rd4">Sem compromisso · Demo de 30 minutos</p>
+      <p class="trust-note reveal rd4">Sem compromisso · Apresentação personalizada de 20 minutos</p>
     </div>
   </section>
 
@@ -1846,12 +2679,12 @@
         function updateOverlays() {
           const p = progress;
           if (mps.length === 6) {
-            mps[0].classList.toggle('show', p > 0.45 && p <= 0.88);
-            mps[3].classList.toggle('show', p > 0.52 && p <= 0.88);
-            mps[1].classList.toggle('show', p > 0.58 && p <= 0.88);
-            mps[5].classList.toggle('show', p > 0.64 && p <= 0.88);
-            mps[2].classList.toggle('show', p > 0.70 && p <= 0.88);
-            mps[4].classList.toggle('show', p > 0.76 && p <= 0.88);
+            mps[0].classList.toggle('show', p > 0.22 && p <= 0.94);
+            mps[3].classList.toggle('show', p > 0.29 && p <= 0.94);
+            mps[1].classList.toggle('show', p > 0.36 && p <= 0.94);
+            mps[5].classList.toggle('show', p > 0.43 && p <= 0.94);
+            mps[2].classList.toggle('show', p > 0.50 && p <= 0.94);
+            mps[4].classList.toggle('show', p > 0.57 && p <= 0.94);
           }
           endCard.classList.toggle('visible', p > 0.90);
         }
@@ -2059,11 +2892,17 @@
       });
 
       /* ── 7. Flashlight cards ── */
-      document.querySelectorAll('.prob-card, .sol-card, .nexus-card, .challenge-card').forEach(card => {
+      document.querySelectorAll('.pain-card, .flow-card, .nexus6-card, .pq-block, .entrega-item, .canal-node').forEach(card => {
         card.addEventListener('mousemove', e => {
           const r = card.getBoundingClientRect();
-          card.style.setProperty('--mouse-x', (e.clientX - r.left) + 'px');
-          card.style.setProperty('--mouse-y', (e.clientY - r.top) + 'px');
+          const x = (e.clientX - r.left) + 'px';
+          const y = (e.clientY - r.top) + 'px';
+          card.style.setProperty('--mouse-x', x);
+          card.style.setProperty('--mouse-y', y);
+          card.style.setProperty('--px', x);
+          card.style.setProperty('--py', y);
+          card.style.setProperty('--fx', x);
+          card.style.setProperty('--fy', y);
         });
       });
 
