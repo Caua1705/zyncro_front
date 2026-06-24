@@ -1430,12 +1430,13 @@
     /* Cards */
     .evo-card {
       border-radius: 16px;
-      padding: 24px 28px;
+      padding: 32px 34px;
+      min-height: 240px;
       position: relative;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: space-between;
       transition: transform .45s cubic-bezier(.4,0,.2,1), box-shadow .45s cubic-bezier(.4,0,.2,1), opacity .3s, border-color .3s;
     }
     .evo-card:hover { transform: translateY(-2px); }
@@ -1445,32 +1446,33 @@
       flex: 1;
       background: #ffffff;
       border: 1px solid var(--border-light);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.015);
-      opacity: 0.8;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.01);
+      opacity: 0.88;
     }
     .evo-card-plain:hover {
       opacity: 1;
       background: #ffffff;
-      border-color: rgba(108,92,231,0.25);
-      box-shadow: 0 12px 32px rgba(0,0,0,.06);
+      border-color: rgba(108,92,231,0.22);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.04);
     }
 
     /* Featured card — agêntico, premium */
     .evo-card-feat {
       flex: 1.15;
       background: #ffffff;
-      border: 1px solid rgba(108,92,231,.28);
+      border: 1.5px solid transparent;
+      background: linear-gradient(#ffffff, #ffffff) padding-box,
+                  linear-gradient(135deg, rgba(108,92,231,.28), rgba(0,201,167,.22)) border-box;
       box-shadow:
-        0 4px 20px rgba(108,92,231,.04),
-        inset 0 1px 0 #ffffff;
+        0 10px 30px rgba(108,92,231,.04);
       opacity: 1;
     }
     .evo-card-feat:hover {
+      background: linear-gradient(#ffffff, #ffffff) padding-box,
+                  linear-gradient(135deg, rgba(108,92,231,.55), rgba(0,201,167,.45)) border-box;
       box-shadow:
         0 16px 40px rgba(108,92,231,.1),
-        0 0 20px rgba(0,201,167,.02),
-        inset 0 1px 0 #ffffff;
-      border-color: rgba(108,92,231,.55);
+        0 0 20px rgba(0,201,167,.02);
     }
 
     /* Gradient top bar */
@@ -1504,7 +1506,12 @@
     /* Card header */
     .evo-card-hd {
       display: flex; align-items: center; gap: 14px;
-      margin-bottom: 8px;
+      margin-bottom: 16px;
+    }
+    .evo-card-hd-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
     .evo-ico {
       width: 36px; height: 36px; border-radius: 9px;
@@ -1513,12 +1520,12 @@
     }
     .evo-card:hover .evo-ico { transform: scale(1.08); }
     .evo-ico-plain {
-      background: var(--bg-surface); border: 1px solid var(--border-light); color: var(--text-muted);
+      background: #F2F4F7; border: 1px solid #E4E7EC; color: #475467;
     }
     .evo-ico-brand {
       background: linear-gradient(135deg, var(--z-purple), var(--z-teal));
       color: #fff;
-      box-shadow: 0 0 15px rgba(108,92,231,.3);
+      box-shadow: 0 4px 12px rgba(108,92,231,.2);
     }
 
     .evo-card-name {
@@ -1528,46 +1535,50 @@
     .evo-name-plain { color: var(--text-main); }
     .evo-name-brand { color: var(--text-main); }
     .evo-card-sub {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;
+      font-family: 'Inter', sans-serif;
+      font-size: .8rem; font-weight: 400; letter-spacing: 0; text-transform: none;
     }
-    .evo-sub-plain { color: var(--text-light); }
+    .evo-sub-plain { color: #667085; }
     .evo-sub-brand { color: var(--z-purple); }
 
     /* Body text */
     .evo-card-desc {
-      font-size: .88rem; line-height: 1.55; font-weight: 300; margin: 0;
+      font-size: .88rem; line-height: 1.55; font-weight: 400; margin: 0 0 20px 0;
     }
     .evo-card-plain .evo-card-desc {
-      color: var(--text-muted);
+      color: #475467;
     }
     .evo-card-feat .evo-card-desc {
-      color: var(--text-main) !important;
-      font-weight: 400;
+      color: #1D2939 !important;
     }
 
     /* Scannable chips */
     .evo-card-chips {
       display: flex;
       gap: 8px;
-      margin-top: 12px;
+      margin-top: 0;
       flex-wrap: wrap;
     }
     .evo-chip {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Inter', sans-serif;
       font-size: 11px;
       font-weight: 500;
       padding: 4px 10px;
-      border-radius: 6px;
+      border-radius: 12px;
       background: var(--bg-surface);
       border: 1px solid var(--border-light);
       color: var(--text-muted);
-      letter-spacing: 0.02em;
+      letter-spacing: 0;
     }
-    .evo-chip.active {
-      background: rgba(0, 201, 167, 0.06);
-      border-color: rgba(0, 201, 167, 0.16);
-      color: var(--z-teal);
+    .evo-card-plain .evo-chip {
+      background: #F2F4F7;
+      border: 1px solid #E4E7EC;
+      color: #344054;
+    }
+    .evo-card-feat .evo-chip {
+      background: rgba(108, 92, 231, 0.05);
+      border: 1px solid rgba(108, 92, 231, 0.15);
+      color: var(--z-purple);
     }
 
     /* VS divider */
@@ -1756,13 +1767,13 @@
 
     /* macOS style window header */
     .evo-window-header {
-      background: #111115;
+      background: #ffffff;
       height: 38px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 16px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      border-bottom: 1px solid var(--border-light);
       user-select: none;
     }
     .evo-dots-container {
@@ -1783,14 +1794,14 @@
     .evo-window-title {
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
-      color: rgba(255, 255, 255, 0.4);
+      color: var(--text-muted);
       font-weight: 400;
       letter-spacing: -0.01em;
     }
     .evo-window-badge {
-      background: rgba(0, 201, 167, 0.12);
-      color: var(--z-teal);
-      border: 1px solid rgba(0, 201, 167, 0.2);
+      background: rgba(108, 92, 231, 0.08);
+      color: var(--z-purple);
+      border: 1px solid rgba(108, 92, 231, 0.2);
       font-family: 'JetBrains Mono', monospace;
       font-size: 8px;
       font-weight: 600;
@@ -1805,23 +1816,23 @@
       position: absolute;
       bottom: 24px;
       left: -20px;
-      background: rgba(18, 18, 20, 0.85);
+      background: #ffffff;
       backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.09);
+      border: 1px solid var(--border-light);
       border-radius: 12px;
       padding: 10px 16px;
       display: flex;
       align-items: center;
       gap: 10px;
       z-index: 5;
-      box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.08);
       animation: evo-float 5s ease-in-out infinite;
     }
     .evo-floating-tag span {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 11px;
       font-weight: 600;
-      color: #fff;
+      color: var(--text-main);
       letter-spacing: -0.01em;
     }
     .eft-bullet {
@@ -1845,51 +1856,111 @@
     .evo-divider-line {
       flex: 1;
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      background: linear-gradient(90deg, transparent, var(--border-light), transparent);
     }
     .evo-card-plain + .evo-divider-wrap .evo-divider-line {
-      background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(108,92,231,0.25));
+      background: linear-gradient(90deg, var(--border-light), rgba(108,92,231,0.25));
     }
     .evo-divider-badge {
       font-family: 'JetBrains Mono', monospace;
       font-size: 8px;
       letter-spacing: 0.15em;
-      color: rgba(255, 255, 255, 0.4);
+      color: var(--text-muted);
       font-weight: 600;
-      background: #111116;
+      background: #ffffff;
       padding: 3px 10px;
       border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid var(--border-light);
       text-transform: uppercase;
+    }
+
+    /* Conic Rotating Beam Border */
+    .evo-card-beam {
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .evo-card-feat:hover .evo-card-beam {
+      opacity: 1;
+    }
+    .evo-card-beam-inner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 250%;
+      height: 250%;
+      transform: translate(-50%, -50%);
+      background: conic-gradient(from 0deg, transparent 0% 280deg, var(--z-purple) 330deg, var(--z-teal) 360deg);
+      animation: evo-spin-slow 6s linear infinite;
+    }
+    /* Make sure featured card children sit above the beam border */
+    .evo-card-feat > *:not(.evo-card-beam) {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Bottom Animated Progress Line */
+    .evo-card-progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(0, 0, 0, 0.03);
+      overflow: hidden;
+      border-radius: 0 0 16px 16px;
+      z-index: 2;
+    }
+    .evo-card-progress-bar {
+      height: 100%;
+      width: 0;
+      background: var(--text-light);
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .evo-card-progress-bar.featured {
+      background: var(--z-grad);
+    }
+    .evo-card:hover .evo-card-progress-bar {
+      width: 100%;
+    }
+
+    @keyframes evo-spin-slow {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
     /* Additional polish for cards */
     .evo-card-tag {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Inter', sans-serif;
       font-size: 11px;
-      letter-spacing: 0.08em;
-      color: rgba(255,255,255,0.45);
-      margin-bottom: 8px;
+      letter-spacing: 0.04em;
+      color: #667085;
+      margin-bottom: 16px;
       text-transform: uppercase;
       font-weight: 600;
     }
     .evo-card-tag-active {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Inter', sans-serif;
       font-size: 11px;
-      letter-spacing: 0.08em;
-      color: var(--z-teal);
-      margin-bottom: 8px;
+      letter-spacing: 0.04em;
+      color: var(--z-purple);
+      margin-bottom: 16px;
       text-transform: uppercase;
       font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
     }
     .evo-card-tag-active::before {
       content: '';
       width: 5px;
       height: 5px;
-      background: var(--z-teal);
+      background: var(--z-purple);
       border-radius: 50%;
       animation: evo-pulse 1.8s infinite;
     }
@@ -2805,20 +2876,23 @@
 
           <!-- Card A — Chatbot, muted -->
           <div class="evo-card evo-card-plain">
-            <div class="evo-card-tag">STATUS: PASSIVO</div>
+            <div class="evo-card-tag">Tecnologia tradicional</div>
             <div class="evo-card-hd">
               <div class="evo-ico evo-ico-plain">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
               </div>
-              <div>
+              <div class="evo-card-hd-text">
                 <div class="evo-card-name evo-name-plain">Chatbot simples</div>
-                <div class="evo-card-sub">Resposta programada</div>
+                <div class="evo-card-sub evo-sub-plain">Resposta programada</div>
               </div>
             </div>
-            <p class="evo-card-desc evo-desc-plain" style="margin-bottom:0">Responde dúvidas comuns seguindo fluxos rígidos pré-programados.</p>
+            <p class="evo-card-desc evo-desc-plain">Responde dúvidas comuns, mas depende de fluxos rígidos e ações manuais.</p>
             <div class="evo-card-chips">
               <span class="evo-chip">Sem contexto</span>
-              <span class="evo-chip">Ações manuais</span>
+              <span class="evo-chip">Fluxo fixo</span>
+            </div>
+            <div class="evo-card-progress" aria-hidden="true">
+              <div class="evo-card-progress-bar"></div>
             </div>
           </div>
 
@@ -2831,24 +2905,35 @@
 
           <!-- Card B — Agentic, featured -->
           <div class="evo-card evo-card-feat" onmousemove="dcMouseMove(event, this)">
+            <!-- rotating conic gradient beam border -->
+            <div class="evo-card-beam" aria-hidden="true">
+              <div class="evo-card-beam-inner"></div>
+            </div>
             <!-- gradient top bar -->
             <div class="evo-feat-bar" aria-hidden="true"></div>
             <!-- ambient glow wash -->
             <div class="evo-feat-glow" aria-hidden="true"></div>
-            <div class="evo-card-tag-active">STATUS: OPERANDO AUTOMATICAMENTE</div>
+            <div class="evo-card-tag-active">Agente inteligente</div>
             <div class="evo-card-hd">
               <div class="evo-ico evo-ico-brand">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="4" y="4" width="16" height="16" rx="2"/>
+                  <rect x="9" y="9" width="6" height="6" rx="1"/>
+                  <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/>
+                </svg>
               </div>
-              <div>
+              <div class="evo-card-hd-text">
                 <div class="evo-card-name evo-name-brand">Atendimento agêntico</div>
                 <div class="evo-card-sub evo-sub-brand">Nexus AI · Zyncro</div>
               </div>
             </div>
-            <p class="evo-card-desc" style="margin-bottom:0">Entende a intenção do lead, atualiza o funil de vendas e aciona a sua equipe.</p>
+            <p class="evo-card-desc">Entende intenção, atualiza o CRM e aciona a equipe no momento certo.</p>
             <div class="evo-card-chips">
-              <span class="evo-chip active">Qualificação autônoma</span>
-              <span class="evo-chip active">Integração ativa</span>
+              <span class="evo-chip">Qualificação automática</span>
+              <span class="evo-chip">CRM atualizado</span>
+            </div>
+            <div class="evo-card-progress" aria-hidden="true">
+              <div class="evo-card-progress-bar featured"></div>
             </div>
           </div>
 
@@ -2877,8 +2962,8 @@
                 <span class="evo-dot-window minimize"></span>
                 <span class="evo-dot-window maximize"></span>
               </div>
-              <div class="evo-window-title">zyncro_nexus_demo.mp4</div>
-              <div class="evo-window-badge">LIVE DEMO</div>
+              <div class="evo-window-title">zyncro_nexus_autopilot.mp4</div>
+              <div class="evo-window-badge">NEXUS ACTIVE</div>
             </div>
             <video autoplay loop muted playsinline class="evo-vid">
               <source src="video_202606241350.mp4" type="video/mp4">
@@ -2888,7 +2973,7 @@
           <!-- Floating UI badge tag -->
           <div class="evo-floating-tag">
             <span class="eft-bullet"></span>
-            <span>CRM Atualizado com Sucesso</span>
+            <span>Hubspot: Lead Qualificado & CRM Atualizado</span>
           </div>
         </div><!-- /right -->
 
