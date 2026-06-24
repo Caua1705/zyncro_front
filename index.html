@@ -93,7 +93,9 @@
     .delay-100 { animation-delay:.1s; transition-delay:.1s; }
     .delay-200 { animation-delay:.2s; transition-delay:.2s; }
     .delay-300 { animation-delay:.3s; transition-delay:.3s; }
+    .delay-400 { animation-delay:.4s; transition-delay:.4s; }
     .delay-500 { animation-delay:.5s; transition-delay:.5s; }
+    .delay-600 { animation-delay:.6s; transition-delay:.6s; }
     .delay-700 { animation-delay:.7s; transition-delay:.7s; }
 
     /* reveal-up — exemplo.html (mais dramático: blur 15px) */
@@ -1304,51 +1306,639 @@
     .pain-bar-fill { height: 100%; width: 0; background: var(--z-grad); transition: width .7s var(--ease-expo); }
     .pain-card:hover .pain-bar-fill { width: 100%; }
 
-    /* ── Evolução: linha comparativa ── */
-    .evo-track {
-      display: grid; grid-template-columns: repeat(4,1fr);
-      gap: 0; margin-top: 3.5rem; position: relative;
+    /* ═══════════════════════════════════════════════════
+       EVO SECTION — Complete premium redesign
+    ═══════════════════════════════════════════════════ */
+
+    /* Keyframes */    .evo-section {
+      background: #F5F6F8;
+      overflow: hidden;
+      position: relative;
+      padding: 50px 0 42px;
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
     }
-    .evo-track::before {
-      content: ''; position: absolute;
-      top: 28px; left: 0; right: 0; height: 2px;
-      background: linear-gradient(to right, #e5e5e5 0%, #e5e5e5 66%, var(--z-purple) 66%, var(--z-teal) 100%);
+
+    /* Dot grid */
+    .evo-bg-dots {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image: radial-gradient(circle, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+      background-size: 26px 26px;
+      opacity: .25;
+    }
+
+    /* Corner glow — bottom right */
+    .evo-corner-glow {
+      position: absolute; bottom: -80px; right: -60px;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(108,92,231,.08) 0%, rgba(0,201,167,.03) 50%, transparent 70%);
+      pointer-events: none; z-index: 0;
+      animation: evo-float 8s ease-in-out infinite;
+    }
+
+    /* Top-left soft glow */
+    .evo-section::before {
+      content: '';
+      position: absolute; top: -80px; left: -60px;
+      width: 380px; height: 380px; border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(0,201,167,.03) 0%, transparent 68%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* Watermark number */
+    .evo-wm {
+      position: absolute; right: 40px; top: 16px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(3.5rem, 10vw, 8rem); font-weight: 900;
+      color: rgba(0,0,0,.008);
+      letter-spacing: -.08em; line-height: 1;
+      pointer-events: none; user-select: none; z-index: 0;
+    }
+
+    .evo-inner {
+      position: relative; z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* ── HEADER ── */
+    .evo-header {
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
+
+    /* Pill badge */
+    .evo-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 999px;
+      border: 1px solid rgba(108,92,231,.3);
+      background: rgba(108,92,231,.08);
+      margin-bottom: 0.5rem;
+      backdrop-filter: blur(4px);
+    }
+    .evo-pill-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--z-purple); display: inline-block;
+      animation: evo-pulse 2.4s ease-in-out infinite;
+    }
+    .evo-pill span:last-child {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .68rem; text-transform: uppercase;
+      letter-spacing: .22em; color: var(--z-purple); font-weight: 500;
+    }
+
+    /* Headline */
+    .evo-h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+      font-weight: 700; letter-spacing: -.04em;
+      line-height: 1.05; color: var(--text-main);
+      max-width: 780px; margin: 0 auto 0.4rem;
+    }
+    .evo-h2-grad {
+      background: var(--z-grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Subtitle */
+    .evo-lead {
+      font-size: .92rem; color: var(--text-muted);
+      font-weight: 300; line-height: 1.6;
+      max-width: 580px; margin: 0 auto;
+    }
+
+    /* ── BODY GRID ── */
+    .evo-body {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 54px;
+      align-items: stretch;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── LEFT COLUMN ── */
+    .evo-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    /* Cards */
+    .evo-card {
+      border-radius: 16px;
+      padding: 24px 28px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: transform .45s cubic-bezier(.4,0,.2,1), box-shadow .45s cubic-bezier(.4,0,.2,1), opacity .3s, border-color .3s;
+    }
+    .evo-card:hover { transform: translateY(-2px); }
+
+    /* Plain card — chatbot, intentionally muted */
+    .evo-card-plain {
+      flex: 1;
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.015);
+      opacity: 0.8;
+    }
+    .evo-card-plain:hover {
+      opacity: 1;
+      background: #ffffff;
+      border-color: rgba(108,92,231,0.25);
+      box-shadow: 0 12px 32px rgba(0,0,0,.06);
+    }
+
+    /* Featured card — agêntico, premium */
+    .evo-card-feat {
+      flex: 1.15;
+      background: #ffffff;
+      border: 1px solid rgba(108,92,231,.28);
+      box-shadow:
+        0 4px 20px rgba(108,92,231,.04),
+        inset 0 1px 0 #ffffff;
+      opacity: 1;
+    }
+    .evo-card-feat:hover {
+      box-shadow:
+        0 16px 40px rgba(108,92,231,.1),
+        0 0 20px rgba(0,201,167,.02),
+        inset 0 1px 0 #ffffff;
+      border-color: rgba(108,92,231,.55);
+    }
+
+    /* Gradient top bar */
+    .evo-feat-bar {
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--z-grad); border-radius: 16px 16px 0 0; opacity: .8;
+    }
+    /* Shimmer overlay on featured */
+    .evo-feat-shimmer {
+      position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(105deg,
+        transparent 40%,
+        rgba(255,255,255,.2) 50%,
+        transparent 60%);
+      background-size: 300% 100%;
+      animation: evo-shimmer 4s linear infinite;
+      opacity: .15;
+    }
+    /* Ambient glow */
+    .evo-feat-glow {
+      position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(135deg,
+        rgba(108,92,231,.03) 0%,
+        rgba(0,201,167,.02) 100%);
       z-index: 0;
     }
-    .evo-step {
-      display: flex; flex-direction: column; align-items: center;
-      text-align: center; padding: 0 16px; position: relative; z-index: 1;
+    .evo-card-feat > *:not(.evo-feat-bar):not(.evo-feat-glow):not(.evo-feat-shimmer) {
+      position: relative; z-index: 1;
     }
-    .evo-dot {
-      width: 56px; height: 56px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 1.25rem; font-size: 1.1rem;
-      border: 2px solid var(--border-light);
-      background: #fff; color: var(--text-muted);
-      transition: all .4s var(--ease-expo);
+
+    /* Card header */
+    .evo-card-hd {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 8px;
     }
-    .evo-step.is-active .evo-dot {
+    .evo-ico {
+      width: 36px; height: 36px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      transition: transform .35s cubic-bezier(.4,0,.2,1);
+    }
+    .evo-card:hover .evo-ico { transform: scale(1.08); }
+    .evo-ico-plain {
+      background: var(--bg-surface); border: 1px solid var(--border-light); color: var(--text-muted);
+    }
+    .evo-ico-brand {
       background: linear-gradient(135deg, var(--z-purple), var(--z-teal));
-      border-color: transparent; color: #fff;
-      box-shadow: 0 0 0 8px rgba(108,92,231,.1), 0 0 24px rgba(108,92,231,.25);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(108,92,231,.3);
     }
-    .evo-label {
+
+    .evo-card-name {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: .9rem; font-weight: 700;
-      color: var(--text-muted); letter-spacing: -.01em; margin-bottom: 6px;
+      font-size: 1.1rem; font-weight: 700; letter-spacing: -.01em; line-height: 1.2;
+    }
+    .evo-name-plain { color: var(--text-main); }
+    .evo-name-brand { color: var(--text-main); }
+    .evo-card-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;
+    }
+    .evo-sub-plain { color: var(--text-light); }
+    .evo-sub-brand { color: var(--z-purple); }
+
+    /* Body text */
+    .evo-card-desc {
+      font-size: .88rem; line-height: 1.55; font-weight: 300; margin: 0;
+    }
+    .evo-card-plain .evo-card-desc {
+      color: var(--text-muted);
+    }
+    .evo-card-feat .evo-card-desc {
+      color: var(--text-main) !important;
+      font-weight: 400;
+    }
+
+    /* Scannable chips */
+    .evo-card-chips {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .evo-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+    }
+    .evo-chip.active {
+      background: rgba(0, 201, 167, 0.06);
+      border-color: rgba(0, 201, 167, 0.16);
+      color: var(--z-teal);
+    }
+
+    /* VS divider */
+    .evo-vs {
+      display: flex; align-items: center; justify-content: flex-start;
+      gap: 8px; height: 24px; padding: 0 4px;
+      color: var(--text-light);
+      font-size: .6rem; font-family: 'JetBrains Mono', monospace;
+      letter-spacing: .1em; text-transform: uppercase;
+    }
+    .evo-vs::before, .evo-vs::after {
+      content: ''; flex: 1; height: 1px;
+      background: var(--border-light);
+    }
+
+    /* ── RIGHT COLUMN — video ── */
+    .evo-right {
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Decorative lines */
+    .evo-deco-lines { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+    .evo-dl {
+      position: absolute;
+      background: linear-gradient(90deg, transparent, rgba(108,92,231,.08), transparent);
+      height: 1px;
+    }
+    .evo-dl-1 {
+      top: 25%; left: -60px; right: -24px;
+      background: linear-gradient(90deg, rgba(108,92,231,0.15) 0%, rgba(108,92,231,0.02) 100%);
+    }
+    .evo-dl-2 {
+      bottom: 25%; left: -40px; right: -12px; opacity: .7;
+      background: linear-gradient(90deg, rgba(0,201,167,0.15) 0%, rgba(0,201,167,0.02) 100%);
+    }
+    .evo-dl-3 {
+      width: 1px; height: auto; top: 8%; bottom: 8%; right: -18px;
+      background: linear-gradient(180deg, transparent, rgba(41,128,249,.06), transparent);
+    }
+
+    /* Ambient glow halo around video */
+    .evo-vid-glow {
+      position: absolute; inset: -32px; border-radius: 28px;
+      background: radial-gradient(ellipse at 50% 50%,
+        rgba(108,92,231,.08) 0%,
+        rgba(0,201,167,.03) 50%,
+        transparent 72%);
+      pointer-events: none; z-index: 0;
+      filter: blur(16px);
+    }
+
+    /* Video container */
+    .evo-vid-frame {
+      position: relative; z-index: 1;
+      width: 100%; border-radius: 20px; overflow: hidden;
+      background: #111116;
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow:
+        0 0 0 1px rgba(108,92,231,0.05),
+        0 20px 50px rgba(0,0,0,0.15);
+      transition: transform .5s cubic-bezier(.4,0,.2,1), box-shadow .5s cubic-bezier(.4,0,.2,1);
+    }
+    .evo-vid-frame:hover {
+      transform: translateY(-4px) scale(1.005);
+      border-color: rgba(108,92,231,.2);
+      box-shadow:
+        0 0 0 1px rgba(108,92,231,0.15),
+        0 0 25px rgba(108,92,231,0.05),
+        0 28px 72px rgba(0,0,0,0.22);
+    }
+    .evo-vid { width: 100%; height: auto; display: block; }
+
+    /* Dot accents */
+    .evo-dot-acc { position: absolute; border-radius: 50%; pointer-events: none; z-index: 2; }
+    .evo-da-1 {
+      width: 8px; height: 8px; top: 10%; right: -12px;
+      background: var(--z-purple);
+      box-shadow: 0 0 10px rgba(108,92,231,.3);
+      animation: evo-pulse 3s ease-in-out infinite;
+    }
+    .evo-da-2 {
+      width: 5px; height: 5px; bottom: 18%; left: -9px;
+      background: var(--z-teal);
+      box-shadow: 0 0 8px rgba(0,201,167,.3);
+      animation: evo-pulse 3.5s ease-in-out infinite .6s;
+    }
+    .evo-da-3 {
+      width: 10px; height: 10px; top: 50%; right: -16px;
+      border: 1.5px solid rgba(41,128,249,.2);
+      background: rgba(41,128,249,.03);
+    }
+    .evo-da-4 {
+      width: 6px; height: 6px; top: 30%; left: -10px;
+      background: rgba(108,92,231,.2);
+      box-shadow: 0 0 6px rgba(108,92,231,.2);
+      animation: evo-pulse 4s ease-in-out infinite 1s;
+    }
+
+    /* Vertical Connector to Timeline */
+    .evo-vertical-connector {
+      width: 1px;
+      height: 24px;
+      background: linear-gradient(180deg, rgba(108,92,231,0.15) 0%, var(--border-light) 100%);
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── TIMELINE ── */
+    .evo-tl {
+      display: flex; align-items: flex-start;
+      position: relative;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-light);
+    }
+    .evo-tl-line {
+      position: absolute; top: calc(1.5rem + 4.5px);
+      left: 12.5%; right: 12.5%; height: 1px;
+      background: linear-gradient(to right,
+        var(--border-light) 0%, var(--border-light) 66%,
+        rgba(108,92,231,.5) 66%, rgba(0,201,167,.6) 100%);
+      z-index: 0;
+      transform-origin: left;
+      animation: evo-line-in 1.2s cubic-bezier(.4,0,.2,1) both;
+    }
+    .evo-tl-step {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; text-align: center;
+      gap: 8px; position: relative; z-index: 1; padding: 0 4px;
+    }
+    .evo-tl-node {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: rgba(0,0,0,0.12); border: 2px solid var(--bg-body);
+      box-shadow: 0 0 0 1.5px rgba(0,0,0,0.06); flex-shrink: 0;
+      transition: all .35s cubic-bezier(.4,0,.2,1);
+    }
+    .evo-tl-step:hover .evo-tl-node { background: var(--z-purple); box-shadow: 0 0 0 3px rgba(108,92,231,0.22); }
+    .evo-tl-active-node {
+      width: 14px !important; height: 14px !important;
+      background: linear-gradient(135deg, var(--z-purple), var(--z-teal)) !important;
+      border-color: var(--bg-body) !important;
+      box-shadow: 0 0 0 5px rgba(108,92,231,0.12), 0 0 18px rgba(108,92,231,0.3) !important;
+      animation: evo-pulse-large 2s infinite !important;
+    }
+    .evo-tl-phase {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .52rem; text-transform: uppercase;
+      letter-spacing: .12em; color: var(--text-light);
       transition: color .3s;
     }
-    .evo-step.is-active .evo-label { color: var(--text-main); }
-    .evo-text { font-size: .75rem; color: var(--text-light); line-height: 1.55; }
-    .evo-step.is-active .evo-text { color: var(--text-muted); }
-    .evo-badge {
-      display: inline-block; margin-top: 8px;
-      padding: 3px 10px; border-radius: 999px;
-      background: linear-gradient(135deg, var(--z-purple), var(--z-teal));
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .55rem; letter-spacing: .14em; text-transform: uppercase;
-      color: #fff; font-weight: 600;
+    .evo-tl-name-step {
+      display: block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .78rem; font-weight: 500;
+      color: var(--text-muted);
+      transition: color .3s;
     }
+    .evo-tl-step:hover .evo-tl-phase { color: var(--text-muted); }
+    .evo-tl-step:hover .evo-tl-name-step { color: var(--text-main); }
+    .active-phase {
+      color: var(--z-purple) !important;
+      font-weight: 700 !important;
+      text-shadow: none;
+    }
+    .active-step {
+      background: var(--z-grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800 !important;
+      font-size: .88rem !important;
+    }
+    @keyframes evo-pulse-large {
+      0% { box-shadow: 0 0 0 0px rgba(108,92,231,0.3), 0 0 10px rgba(108,92,231,0.4); }
+      70% { box-shadow: 0 0 0 8px rgba(108,92,231,0), 0 0 20px rgba(108,92,231,0.2); }
+      100% { box-shadow: 0 0 0 0px rgba(108,92,231,0), 0 0 10px rgba(108,92,231,0.4); }
+    }
+    /* Responsive */
+    @media (max-width: 920px) {
+      .evo-body { grid-template-columns: 1fr; gap: 36px; }
+      .evo-right { order: -1; }
+      .evo-dl, .evo-dot-acc { display: none; }
+    }
+
+    /* macOS style window header */
+    .evo-window-header {
+      background: #111115;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      user-select: none;
+    }
+    .evo-dots-container {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .evo-dot-window {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .evo-dot-window.close { background: #FF5F56; }
+    .evo-dot-window.minimize { background: #FFBD2E; }
+    .evo-dot-window.maximize { background: #27C93F; }
+
+    .evo-window-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+    .evo-window-badge {
+      background: rgba(0, 201, 167, 0.12);
+      color: var(--z-teal);
+      border: 1px solid rgba(0, 201, 167, 0.2);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Floating UI Tag */
+    .evo-floating-tag {
+      position: absolute;
+      bottom: 24px;
+      left: -20px;
+      background: rgba(18, 18, 20, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 12px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 5;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+      animation: evo-float 5s ease-in-out infinite;
+    }
+    .evo-floating-tag span {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+    .eft-bullet {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #27C93F;
+      box-shadow: 0 0 10px #27C93F;
+      display: inline-block;
+      animation: evo-pulse 2s infinite;
+    }
+
+    /* Divider between cards */
+    .evo-divider-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 12px 0;
+      width: 100%;
+    }
+    .evo-divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    }
+    .evo-card-plain + .evo-divider-wrap .evo-divider-line {
+      background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(108,92,231,0.25));
+    }
+    .evo-divider-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 0.15em;
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 600;
+      background: #111116;
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.08);
+      text-transform: uppercase;
+    }
+
+    /* Additional polish for cards */
+    .evo-card-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .evo-card-tag-active {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--z-teal);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .evo-card-tag-active::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      background: var(--z-teal);
+      border-radius: 50%;
+      animation: evo-pulse 1.8s infinite;
+    }
+
+    /* Polished timeline items */
+    .evo-tl-label-group {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin-top: 6px;
+    }
+    .evo-tl-phase {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #999;
+    }
+    .evo-tl-name-step {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #555;
+    }
+    .active-phase {
+      color: var(--z-purple) !important;
+      font-weight: 700;
+    }
+    .active-step {
+      color: var(--text-main) !important;
+      font-weight: 800 !important;
+      font-size: 15px !important;
+    }
+
+    /* Custom spotlight glow hover for featured card */
+    .evo-card-feat::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      background: radial-gradient(350px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(108, 92, 231, 0.08), transparent 50%);
+    }
+    .evo-card-feat:hover::before {
+      opacity: 1;
+    }
+
 
     /* ── Plataforma: stack diagram de camadas ── */
     .stack-diagram {
@@ -1803,25 +2393,24 @@
     /* =========================================
        DESAFIO — Flashlight cards (exemplo.html style with Zyncro colors)
     ========================================= */
+    #desafio .section-inner {
+      max-width: 1162px; /* Restored previous container width */
+    }
     .desafio-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 32px; /* Matching gap-8 (32px) from exemplo.html */
       margin-top: 0;
-      max-width: 1162px; /* 366px * 3 + 32px * 2 to keep layout perfectly centered */
+      max-width: 1162px; /* Restored previous grid width */
       margin-left: auto;
       margin-right: auto;
     }
     .desafio-card {
       /* flashlight spotlight using Zyncro purple & teal */
       position: relative;
-      overflow: hidden;
       width: 100%;
-      max-width: 366px; /* Exact width from user */
+      max-width: 366px; /* Restored exact width from user */
       height: 400px; /* Exact height from exemplo.html (h-[400px]) */
-      background: #fff;
-      border: 1px solid rgba(0,0,0,.08);
-      border-radius: 2px; /* Exact rounded-sm from exemplo.html */
       padding: 32px; /* Exact p-8 from exemplo.html */
       display: flex;
       flex-direction: column;
@@ -1830,28 +2419,37 @@
       justify-content: space-between; /* Exact spacing from exemplo.html */
       cursor: crosshair;
       transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* Exact transition curve from exemplo.html */
+      isolation: isolate; /* Create localized stacking context */
     }
     .desafio-card::before {
       content: '';
-      position: absolute; inset: 0;
+      position: absolute;
+      top: -12px; left: -12px; right: -12px; bottom: -12px;
       pointer-events: none;
-      background: radial-gradient(
-        400px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
-        rgba(108, 92, 231, 0.12) 0%,
-        rgba(0, 201, 167, 0.04) 50%,
-        transparent 80%
-      );
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      z-index: 0;
+      background: linear-gradient(135deg, var(--z-purple), var(--z-blue), var(--z-teal));
+      opacity: 0; /* Hidden by default on light background */
+      filter: blur(28px); /* Increased blur for a much softer spread */
+      transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 0; /* Lowest layer, behind the card background */
     }
-    .desafio-card:hover::before { opacity: 1; }
+    .desafio-card:hover::before { opacity: 0.22; } /* Much lighter colorful aura on hover */
+    .desafio-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: #fff; /* White background restored */
+      border: 1px solid rgba(0,0,0,.08); /* Light border restored */
+      border-radius: 2px; /* Exact rounded-sm from exemplo.html */
+      z-index: 1; /* Above the glow, but below card content */
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .desafio-card:hover::after {
+      border-color: rgba(108, 92, 231, 0.25); /* Brand purple highlight on hover */
+      box-shadow: 0 25px 50px -12px rgba(108, 92, 231, 0.12), 0 4px 16px rgba(0,0,0,0.02); /* Exact hover shadow from exemplo.html */
+    }
     .desafio-card:hover {
-      border-color: rgba(108, 92, 231, 0.2);
-      box-shadow: 0 25px 50px -12px rgba(108, 92, 231, 0.16), 0 4px 16px rgba(0,0,0,0.02); /* Exact hover shadow from exemplo.html */
       transform: translateY(-4px); /* Exact hover lift from exemplo.html */
     }
-    .desafio-card > * { position: relative; z-index: 1; }
+    .desafio-card > * { position: relative; z-index: 2; }
     /* icon block */
     .dc-icon {
       width: 48px; height: 48px; /* Exact size from exemplo.html (w-12 h-12) */
@@ -1878,20 +2476,20 @@
     .dc-title {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 1.5rem; font-weight: 500; /* Exact font size and weight from exemplo.html (text-2xl font-medium) */
-      letter-spacing: -.03em; color: var(--text-main);
+      letter-spacing: -.03em; color: var(--text-main); /* Dark title restored */
       line-height: 1.2;
       margin: 0 0 12px 0; /* Exact mb-3 (12px) spacing from exemplo.html */
     }
     .dc-text {
       font-size: 0.875rem; /* Exact size from exemplo.html (text-sm) */
-      color: var(--text-muted); /* Exact color from exemplo.html */
+      color: var(--text-muted); /* Dark gray text restored */
       line-height: 1.625; font-weight: 300; /* Exact leading-relaxed from exemplo.html */
       margin: 0;
     }
     /* bottom bar */
     .dc-bar {
       height: 4px; width: 100%; /* Exact height from exemplo.html (h-1) */
-      background: var(--bg-highlight);
+      background: var(--bg-highlight); /* Light track restored */
       margin-top: 32px; /* Exact mt-8 (32px) spacing from exemplo.html */
       overflow: hidden;
       border-radius: 2px;
@@ -1905,7 +2503,6 @@
     /* responsive */
     @media (max-width: 900px) {
       .desafio-grid { grid-template-columns: 1fr; justify-items: center; }
-      .desafio-card { height: auto; }
     }
   </style>
 
@@ -2094,7 +2691,7 @@
     </div>
   </div>
   <hr class="grad-divider">
-  <section class="section" id="desafio" aria-labelledby="desafio-title" style="background: #ffffff; overflow: hidden; position: relative;">
+  <section class="section" id="desafio" aria-labelledby="desafio-title" style="background: #EAEAE5; overflow: hidden; position: relative;">
     <div class="aurora-bg ab-purple" style="width:600px;height:600px;top:-80px;right:-120px" aria-hidden="true"></div>
     <div class="aurora-bg ab-teal"   style="width:400px;height:400px;bottom:-100px;left:-80px" aria-hidden="true"></div>
     <div class="sec-wm" aria-hidden="true">01</div>
@@ -2114,7 +2711,7 @@
       <div class="desafio-grid">
 
         <!-- Card 1 -->
-        <div class="desafio-card reveal-up ru-d1" onmousemove="dcMouseMove(event,this)">
+        <div class="desafio-card reveal-up delay-200" onmousemove="dcMouseMove(event,this)">
           <div class="dc-icon">
             <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
               <path d="M9 17H7a5 5 0 0 1 0-10h2"/>
@@ -2130,7 +2727,7 @@
         </div>
 
         <!-- Card 2 -->
-        <div class="desafio-card reveal-up ru-d2" onmousemove="dcMouseMove(event,this)">
+        <div class="desafio-card reveal-up delay-400" onmousemove="dcMouseMove(event,this)">
           <div class="dc-icon">
             <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
               <polyline points="23 4 23 10 17 10"/>
@@ -2146,7 +2743,7 @@
         </div>
 
         <!-- Card 3 -->
-        <div class="desafio-card reveal-up ru-d3" onmousemove="dcMouseMove(event,this)">
+        <div class="desafio-card reveal-up delay-600" onmousemove="dcMouseMove(event,this)">
           <div class="dc-icon">
             <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
               <line x1="18" y1="20" x2="18" y2="10"/>
@@ -2167,51 +2764,176 @@
 
   <!-- ── SEÇÃO 2: EVOLUÇÃO DO ATENDIMENTO ── -->
   <hr class="grad-divider">
-  <section class="section" id="evolucao" aria-labelledby="evo-title" style="background: #FFFFFF; overflow: hidden; position: relative;">
-    <div class="aurora-bg ab-blue" style="width:600px;height:600px;top:50%;left:50%;transform:translate(-50%,-50%)" aria-hidden="true"></div>
-    <div class="sec-wm" aria-hidden="true">02</div>
-    <div class="section-inner">
-      <div class="reveal-up" style="text-align: center; margin-bottom: 4rem;">
-        <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 1.5rem;">
-          <span style="width: 6px; height: 6px; background: var(--z-purple); border-radius: 50%; display: inline-block;"></span>
-          <span style="font-family: 'JetBrains Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .2em; color: var(--z-purple);">A Evolução</span>
+  <section class="section evo-section" id="evolucao" aria-labelledby="evo-title">
+
+    <!-- bg dot grid -->
+    <div class="evo-bg-dots" aria-hidden="true"></div>
+    <!-- corner glow -->
+    <div class="evo-corner-glow" aria-hidden="true"></div>
+    <!-- watermark -->
+    <div class="evo-wm" aria-hidden="true">NEXUS</div>
+
+    <div class="section-inner evo-inner">
+
+      <!-- ═══════════════════════════════════
+           HEADER — compact, centred
+      ════════════════════════════════════ -->
+      <header class="evo-header reveal-up">
+        <!-- pill badge -->
+        <div class="evo-pill">
+          <span class="evo-pill-dot"></span>
+          <span>A Evolução</span>
         </div>
-        <h2 class="section-title" id="evo-title" style="font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -.05em; line-height: .98; max-width: 900px; margin: 0 auto 1.5rem;">
+
+        <h2 class="evo-h2" id="evo-title">
           Chatbots respondem perguntas.<br>
-          <span style="background: var(--z-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Agentes executam etapas da operação.</span>
+          <span class="evo-h2-grad">Agentes executam etapas da operação.</span>
         </h2>
-        <p style="font-size: 1.05rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; font-weight: 300; line-height: 1.7;">
-          A inteligência agêntica da Zyncro vai além das respostas prontas. Ela executa tarefas complexas em segundo plano, integrando conversas e processos comerciais.
+
+        <p class="evo-lead">
+          O problema não é apenas responder mensagens. É transformar conversas em ações automatizadas na sua operação.
         </p>
+      </header>
+
+      <!-- ═══════════════════════════════════
+           MAIN BODY — 2 cols
+      ════════════════════════════════════ -->
+      <div class="evo-body reveal-up">
+
+        <!-- ──────────────── LEFT ──────────── -->
+        <div class="evo-left">
+
+          <!-- Card A — Chatbot, muted -->
+          <div class="evo-card evo-card-plain">
+            <div class="evo-card-tag">STATUS: PASSIVO</div>
+            <div class="evo-card-hd">
+              <div class="evo-ico evo-ico-plain">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div>
+                <div class="evo-card-name evo-name-plain">Chatbot simples</div>
+                <div class="evo-card-sub">Resposta programada</div>
+              </div>
+            </div>
+            <p class="evo-card-desc evo-desc-plain" style="margin-bottom:0">Responde dúvidas comuns seguindo fluxos rígidos pré-programados.</p>
+            <div class="evo-card-chips">
+              <span class="evo-chip">Sem contexto</span>
+              <span class="evo-chip">Ações manuais</span>
+            </div>
+          </div>
+
+          <!-- Divider element -->
+          <div class="evo-divider-wrap" aria-hidden="true">
+            <div class="evo-divider-line"></div>
+            <div class="evo-divider-badge">EVOLUÇÃO</div>
+            <div class="evo-divider-line"></div>
+          </div>
+
+          <!-- Card B — Agentic, featured -->
+          <div class="evo-card evo-card-feat" onmousemove="dcMouseMove(event, this)">
+            <!-- gradient top bar -->
+            <div class="evo-feat-bar" aria-hidden="true"></div>
+            <!-- ambient glow wash -->
+            <div class="evo-feat-glow" aria-hidden="true"></div>
+            <div class="evo-card-tag-active">STATUS: OPERANDO AUTOMATICAMENTE</div>
+            <div class="evo-card-hd">
+              <div class="evo-ico evo-ico-brand">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <div>
+                <div class="evo-card-name evo-name-brand">Atendimento agêntico</div>
+                <div class="evo-card-sub evo-sub-brand">Nexus AI · Zyncro</div>
+              </div>
+            </div>
+            <p class="evo-card-desc" style="margin-bottom:0">Entende a intenção do lead, atualiza o funil de vendas e aciona a sua equipe.</p>
+            <div class="evo-card-chips">
+              <span class="evo-chip active">Qualificação autônoma</span>
+              <span class="evo-chip active">Integração ativa</span>
+            </div>
+          </div>
+
+        </div><!-- /left -->
+
+        <!-- ──────────────── RIGHT — video ─── -->
+        <div class="evo-right">
+          <!-- micro decorative lines -->
+          <div class="evo-deco-lines" aria-hidden="true">
+            <div class="evo-dl evo-dl-1"></div>
+            <div class="evo-dl evo-dl-2"></div>
+            <div class="evo-dl evo-dl-3"></div>
+          </div>
+          <!-- glow ring around video -->
+          <div class="evo-vid-glow" aria-hidden="true"></div>
+          <!-- dot accents -->
+          <div class="evo-dot-acc evo-da-1" aria-hidden="true"></div>
+          <div class="evo-dot-acc evo-da-2" aria-hidden="true"></div>
+          <div class="evo-dot-acc evo-da-3" aria-hidden="true"></div>
+
+          <!-- macOS-style UI Window Mockup -->
+          <div class="evo-vid-frame">
+            <div class="evo-window-header">
+              <div class="evo-dots-container">
+                <span class="evo-dot-window close"></span>
+                <span class="evo-dot-window minimize"></span>
+                <span class="evo-dot-window maximize"></span>
+              </div>
+              <div class="evo-window-title">zyncro_nexus_demo.mp4</div>
+              <div class="evo-window-badge">LIVE DEMO</div>
+            </div>
+            <video autoplay loop muted playsinline class="evo-vid">
+              <source src="video_202606241350.mp4" type="video/mp4">
+            </video>
+          </div>
+
+          <!-- Floating UI badge tag -->
+          <div class="evo-floating-tag">
+            <span class="eft-bullet"></span>
+            <span>CRM Atualizado com Sucesso</span>
+          </div>
+        </div><!-- /right -->
+
+      </div><!-- /body -->
+
+      <!-- Vertical Connector to Timeline -->
+      <div class="evo-vertical-connector" aria-hidden="true"></div>
+
+      <!-- ═══════════════════════════════════
+           TIMELINE
+      ════════════════════════════════════ -->
+      <div class="evo-tl reveal-up">
+        <div class="evo-tl-line" aria-hidden="true"></div>
+
+        <div class="evo-tl-step">
+          <div class="evo-tl-node"></div>
+          <div class="evo-tl-label-group">
+            <span class="evo-tl-phase">Fase 1</span>
+            <span class="evo-tl-name-step">Manual</span>
+          </div>
+        </div>
+        <div class="evo-tl-step">
+          <div class="evo-tl-node"></div>
+          <div class="evo-tl-label-group">
+            <span class="evo-tl-phase">Fase 2</span>
+            <span class="evo-tl-name-step">Chatbot</span>
+          </div>
+        </div>
+        <div class="evo-tl-step">
+          <div class="evo-tl-node"></div>
+          <div class="evo-tl-label-group">
+            <span class="evo-tl-phase">Fase 3</span>
+            <span class="evo-tl-name-step">IA Híbrida</span>
+          </div>
+        </div>
+        <div class="evo-tl-step evo-tl-last">
+          <div class="evo-tl-node evo-tl-active-node"></div>
+          <div class="evo-tl-label-group">
+            <span class="evo-tl-phase active-phase">Nexus AI</span>
+            <span class="evo-tl-name-step active-step">Agente Autônomo</span>
+          </div>
+        </div>
       </div>
 
-      <div class="evo-track reveal-up">
-        <!-- Step 1 -->
-        <div class="evo-step">
-          <div class="evo-dot">👤</div>
-          <div class="evo-label">Atendimento Manual</div>
-          <div class="evo-text">Operador humano faz triagem, qualificação e digitação manual no CRM de cada conversa. Sem escala.</div>
-        </div>
-        <!-- Step 2 -->
-        <div class="evo-step">
-          <div class="evo-dot">💬</div>
-          <div class="evo-label">Chatbot Simples</div>
-          <div class="evo-text">Menus numéricos rígidos ("Digite 1 para financeiro, 2 para suporte"). Experiência cansativa e limitada.</div>
-        </div>
-        <!-- Step 3 -->
-        <div class="evo-step">
-          <div class="evo-dot">🧠</div>
-          <div class="evo-label">IA Conversacional</div>
-          <div class="evo-text">Entende linguagem natural para responder perguntas frequentes e FAQ, mas sem ações práticas no sistema.</div>
-        </div>
-        <!-- Step 4 -->
-        <div class="evo-step is-active">
-          <div class="evo-dot">⚡</div>
-          <div class="evo-label">Atendimento Agêntico <span class="evo-badge">Zyncro</span></div>
-          <div class="evo-text">Entende contexto de ponta a ponta, qualifica leads, atualiza CRM em tempo real e prepara o vendedor.</div>
-        </div>
-      </div>
-    </div>
+    </div><!-- /inner -->
   </section>
 
   <!-- ── SEÇÃO 3: A PLATAFORMA ── -->
