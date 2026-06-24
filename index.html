@@ -1799,6 +1799,114 @@
       .orbit-ring { display:none; }
       .nexus-float-tag { display:none; }
     }
+
+    /* =========================================
+       DESAFIO — Flashlight cards (exemplo.html style with Zyncro colors)
+    ========================================= */
+    .desafio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px; /* Matching gap-8 (32px) from exemplo.html */
+      margin-top: 0;
+      max-width: 1162px; /* 366px * 3 + 32px * 2 to keep layout perfectly centered */
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .desafio-card {
+      /* flashlight spotlight using Zyncro purple & teal */
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      max-width: 366px; /* Exact width from user */
+      height: 400px; /* Exact height from exemplo.html (h-[400px]) */
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: 2px; /* Exact rounded-sm from exemplo.html */
+      padding: 32px; /* Exact p-8 from exemplo.html */
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start; /* Exact left alignment from exemplo.html */
+      text-align: left; /* Exact left alignment from exemplo.html */
+      justify-content: space-between; /* Exact spacing from exemplo.html */
+      cursor: crosshair;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* Exact transition curve from exemplo.html */
+    }
+    .desafio-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      pointer-events: none;
+      background: radial-gradient(
+        400px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
+        rgba(108, 92, 231, 0.12) 0%,
+        rgba(0, 201, 167, 0.04) 50%,
+        transparent 80%
+      );
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 0;
+    }
+    .desafio-card:hover::before { opacity: 1; }
+    .desafio-card:hover {
+      border-color: rgba(108, 92, 231, 0.2);
+      box-shadow: 0 25px 50px -12px rgba(108, 92, 231, 0.16), 0 4px 16px rgba(0,0,0,0.02); /* Exact hover shadow from exemplo.html */
+      transform: translateY(-4px); /* Exact hover lift from exemplo.html */
+    }
+    .desafio-card > * { position: relative; z-index: 1; }
+    /* icon block */
+    .dc-icon {
+      width: 48px; height: 48px; /* Exact size from exemplo.html (w-12 h-12) */
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: 8px; /* Exact rounded-lg from exemplo.html */
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* Exact transition from exemplo.html */
+      flex-shrink: 0;
+      margin-bottom: 24px; /* Exact mb-6 (24px) spacing from exemplo.html */
+    }
+    .desafio-card:hover .dc-icon {
+      background: var(--z-grad);
+      border-color: transparent;
+      color: #fff;
+      transform: scale(1.05);
+    }
+    /* body */
+    .dc-body {
+      /* Block container matching the simple wrapper div from exemplo.html */
+      text-align: left;
+    }
+    .dc-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem; font-weight: 500; /* Exact font size and weight from exemplo.html (text-2xl font-medium) */
+      letter-spacing: -.03em; color: var(--text-main);
+      line-height: 1.2;
+      margin: 0 0 12px 0; /* Exact mb-3 (12px) spacing from exemplo.html */
+    }
+    .dc-text {
+      font-size: 0.875rem; /* Exact size from exemplo.html (text-sm) */
+      color: var(--text-muted); /* Exact color from exemplo.html */
+      line-height: 1.625; font-weight: 300; /* Exact leading-relaxed from exemplo.html */
+      margin: 0;
+    }
+    /* bottom bar */
+    .dc-bar {
+      height: 4px; width: 100%; /* Exact height from exemplo.html (h-1) */
+      background: var(--bg-highlight);
+      margin-top: 32px; /* Exact mt-8 (32px) spacing from exemplo.html */
+      overflow: hidden;
+      border-radius: 2px;
+    }
+    .dc-bar-fill {
+      height: 100%; width: 0;
+      background: var(--z-grad);
+      transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1); /* Exact transition curve from exemplo.html */
+    }
+    .desafio-card:hover .dc-bar-fill { width: 100%; }
+    /* responsive */
+    @media (max-width: 900px) {
+      .desafio-grid { grid-template-columns: 1fr; justify-items: center; }
+      .desafio-card { height: auto; }
+    }
   </style>
 
 </head>
@@ -1985,65 +2093,74 @@
       <span class="ticker-item"><span class="ticker-sep"></span> Operação Escalável</span>
     </div>
   </div>
-
-  <!-- ── SEÇÃO 1: O DESAFIO ── -->
   <hr class="grad-divider">
-  <section class="section dot-grid-bg" id="desafio" aria-labelledby="desafio-title" style="background: var(--bg-surface); border-top: 1px solid var(--border-light); overflow: hidden; position: relative;">
-    <div class="hatch-texture" aria-hidden="true"></div>
-    <div class="aurora-bg ab-purple" style="width:500px;height:500px;top:-100px;right:-100px" aria-hidden="true"></div>
-    <div class="aurora-bg ab-teal" style="width:350px;height:350px;bottom:-80px;left:-60px" aria-hidden="true"></div>
+  <section class="section" id="desafio" aria-labelledby="desafio-title" style="background: #ffffff; overflow: hidden; position: relative;">
+    <div class="aurora-bg ab-purple" style="width:600px;height:600px;top:-80px;right:-120px" aria-hidden="true"></div>
+    <div class="aurora-bg ab-teal"   style="width:400px;height:400px;bottom:-100px;left:-80px" aria-hidden="true"></div>
     <div class="sec-wm" aria-hidden="true">01</div>
-    <div class="section-inner" style="position: relative; z-index: 1;">
-      <div class="reveal-up" style="margin-bottom: 4rem;">
-        <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 1.5rem;">
-          <span style="width: 6px; height: 6px; background: var(--z-purple); border-radius: 50%; display: inline-block;"></span>
-          <span style="font-family: 'JetBrains Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .2em; color: var(--z-purple);">O Desafio</span>
-        </div>
-        <h2 class="section-title" id="desafio-title" style="font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -.05em; line-height: .98; max-width: 900px; margin-bottom: 1.5rem;">
+
+    <div class="section-inner" style="position:relative;z-index:1">
+
+      <!-- header centralizado com as cores da imagem de referência -->
+      <div class="reveal-up" style="text-align:center;margin-bottom:6rem">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.22em;color:var(--text-muted);display:block;margin-bottom:1.5rem">O Desafio</span>
+        <h2 class="section-title" id="desafio-title" style="font-size:clamp(2.4rem,5vw,3.8rem);letter-spacing:-.05em;line-height:.96;max-width:860px;margin:0 auto">
           Seu atendimento já digitalizou.<br>
-          <span style="background: var(--z-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Agora precisa operar sozinho.</span>
+          <span style="background:var(--z-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:600">Agora precisa operar sozinho.</span>
         </h2>
-        <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 680px; font-weight: 300; line-height: 1.7;">
-          Empresas que crescem no digital não sofrem apenas por falta de canais. Sofrem porque conversas, dados, CRM e follow-ups ainda dependem de esforço manual.
-        </p>
       </div>
 
-      <div class="pain-grid">
+      <!-- 3 premium cards -->
+      <div class="desafio-grid">
+
         <!-- Card 1 -->
-        <div class="pain-card reveal-up ru-d1">
-          <div class="pain-icon">🔌</div>
-          <h3 class="pain-label">Canais desconectados</h3>
-          <p class="pain-text">WhatsApp, Instagram e site em abas separadas. Conversas perdidas e clientes sem retorno histórico.</p>
-          <div class="pain-bar"><div class="pain-bar-fill"></div></div>
+        <div class="desafio-card reveal-up ru-d1" onmousemove="dcMouseMove(event,this)">
+          <div class="dc-icon">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <path d="M9 17H7a5 5 0 0 1 0-10h2"/>
+              <path d="M15 7h2a5 5 0 0 1 0 10h-2"/>
+              <line x1="8" y1="12" x2="16" y2="12"/>
+            </svg>
+          </div>
+          <div class="dc-body">
+            <h3 class="dc-title">Canais desconectados</h3>
+            <p class="dc-text">Conversas espalhadas entre WhatsApp, Instagram, site e CRM.</p>
+          </div>
+          <div class="dc-bar"><div class="dc-bar-fill"></div></div>
         </div>
+
         <!-- Card 2 -->
-        <div class="pain-card reveal-up ru-d2">
-          <div class="pain-icon">🤖</div>
-          <h3 class="pain-label">Chatbots limitados</h3>
-          <p class="pain-text">Menus rígidos que irritam o cliente e não resolvem nada além de dúvidas frequentes simples.</p>
-          <div class="pain-bar"><div class="pain-bar-fill"></div></div>
+        <div class="desafio-card reveal-up ru-d2" onmousemove="dcMouseMove(event,this)">
+          <div class="dc-icon">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <polyline points="23 4 23 10 17 10"/>
+              <polyline points="1 20 1 14 7 14"/>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+            </svg>
+          </div>
+          <div class="dc-body">
+            <h3 class="dc-title">Processos ainda manuais</h3>
+            <p class="dc-text">Follow-up, atualização de status e organização do funil ainda dependem da equipe.</p>
+          </div>
+          <div class="dc-bar"><div class="dc-bar-fill" style="transition-delay:.1s"></div></div>
         </div>
+
         <!-- Card 3 -->
-        <div class="pain-card reveal-up ru-d3">
-          <div class="pain-icon">📁</div>
-          <h3 class="pain-label">CRM desatualizado</h3>
-          <p class="pain-text">A equipe esquece de registrar contatos, mover etapas ou preencher dados de qualificação manual.</p>
-          <div class="pain-bar"><div class="pain-bar-fill"></div></div>
+        <div class="desafio-card reveal-up ru-d3" onmousemove="dcMouseMove(event,this)">
+          <div class="dc-icon">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <line x1="18" y1="20" x2="18" y2="10"/>
+              <line x1="12" y1="20" x2="12" y2="4"/>
+              <line x1="6"  y1="20" x2="6"  y2="14"/>
+            </svg>
+          </div>
+          <div class="dc-body">
+            <h3 class="dc-title">Gestão sem visibilidade</h3>
+            <p class="dc-text">O gestor não enxerga gargalos, oportunidades travadas e desempenho real.</p>
+          </div>
+          <div class="dc-bar"><div class="dc-bar-fill" style="transition-delay:.2s"></div></div>
         </div>
-        <!-- Card 4 -->
-        <div class="pain-card reveal-up ru-d4">
-          <div class="pain-icon">⏳</div>
-          <h3 class="pain-label">Follow-up manual</h3>
-          <p class="pain-text">Vendedores perdendo tempo cobrando retorno de leads frios um por um pelo WhatsApp comercial.</p>
-          <div class="pain-bar"><div class="pain-bar-fill"></div></div>
-        </div>
-        <!-- Card 5 -->
-        <div class="pain-card reveal-up ru-d5">
-          <div class="pain-icon">👁️</div>
-          <h3 class="pain-label">Gestor sem visão</h3>
-          <p class="pain-text">Dificuldade para identificar gargalos de conversão, tempos de resposta e performance real do funil.</p>
-          <div class="pain-bar"><div class="pain-bar-fill"></div></div>
-        </div>
+
       </div>
     </div>
   </section>
@@ -2932,6 +3049,12 @@
       const r = el.getBoundingClientRect();
       el.style.setProperty('--fx', (e.clientX - r.left) + 'px');
       el.style.setProperty('--fy', (e.clientY - r.top) + 'px');
+    }
+    /* Desafio section flashlight cards */
+    function dcMouseMove(e, el) {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--mouse-x', (e.clientX - r.left) + 'px');
+      el.style.setProperty('--mouse-y', (e.clientY - r.top) + 'px');
     }
   </script>
 
