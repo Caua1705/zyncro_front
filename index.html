@@ -276,7 +276,7 @@
        HERO — FULLSCREEN CANVAS + OVERLAY
     ========================================= */
     .hero-scene {
-      height: 450vh;
+      height: 100vh;
       position: relative;
       z-index: 10;
     }
@@ -1261,6 +1261,18 @@
     .fc-plat:hover .fc-bar-fill { width: 100%; }
     @media (max-width:900px) { .fc-plat { height:auto; } }
     @media (max-width:700px) { #plataforma .section-inner > div:last-child { grid-template-columns:1fr; } }
+    /* ── Hero: sumir overlays quando animaçao inicia ── */
+    /* Bug 1: elementos somem rapido na primeira rolagem */
+    .hero-scene.anim-playing .reveal-up,
+    .hero-scene.anim-playing .scroll-cue {
+      opacity: 0 !important;
+      transform: translateY(-50px) !important;
+      filter: blur(12px) !important;
+      pointer-events: none !important;
+      transition: opacity 0.35s var(--ease-expo),
+                  transform 0.35s var(--ease-expo),
+                  filter 0.35s ease !important;
+    }
   </style>
 
 </head>
@@ -1729,13 +1741,9 @@
         { opacity: 1, scale: 1, duration: 1.5, ease: 'power3.out' }
       );
 
-      /* ── 3. SCROLL BLUR-OUT ── */
-      gsap.to('.hero-scene .reveal-up', {
-        y: -60, opacity: 0, filter: 'blur(15px)', stagger: 0.05,
-        scrollTrigger: {
-          trigger: '.hero-scene', start: 'top top', end: '15% top', scrub: true
-        }
-      });
+      /* ── 3. SCROLL BLUR-OUT: gerenciado pela classe .anim-playing (CSS) ── */
+      /* GSAP ScrollTrigger removido: dependia de scroll de pagina que e bloqueado
+         durante a animacao. O CSS .hero-scene.anim-playing .reveal-up cuida disso. */
 
       /* ── 4. Glow card mousemove ── */
       document.querySelectorAll('.glow-card').forEach(card => {
@@ -1746,8 +1754,18 @@
         });
       });
 
-      /* ── 5. Frame canvas scroll animation ── */
+      /* ═══════════════════════════════════════════════════════════════
+         5. HERO ANIMATION ENGINE — isPlaying + velocity + inertia
+         Modelo correto:
+           • Primeira rolagem → isPlaying = true → RAF inicia e roda sozinho
+           • Scroll ↓ acelera | Scroll ↑ reduz / rebobina
+           • Parar de rolar → desacelera suavemente por fricção
+           • Progress >= END_ZONE → libera scroll da página normalmente
+         O scroll NÃO mapeia posição da página para frame.
+      ═══════════════════════════════════════════════════════════════ */
       (function () {
+
+        /* ─── Configuração dos frames ─────────────────────────────── */
         const TOTAL = 150;
         const DIR   = 'references/image-frames/pc/frame_';
         const EXT   = '.webp';
@@ -1758,47 +1776,271 @@
         const mps     = document.querySelectorAll('.mp');
         const ctx     = canvas.getContext('2d');
 
+        /* ─── Canvas resize ─────────────────────────────────────────── */
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         resize();
-        window.addEventListener('resize', () => { resize(); draw(cur); }, { passive:true });
+        window.addEventListener('resize', () => { resize(); renderFrame(); }, { passive: true });
 
+        /* ─── Preload de frames ─────────────────────────────────────── */
         const imgs = [];
         for (let i = 0; i < TOTAL; i++) {
           const img = new Image();
           img.src = DIR + pad(i) + EXT;
           imgs.push(img);
         }
-        imgs[0].onload = () => draw(0);
 
-        let cur = 0, raf;
-        function draw(idx) {
-          const img = imgs[idx];
+        let curFrame = 0;
+        function renderFrame() {
+          const img = imgs[curFrame];
           if (!img || !img.complete || !img.naturalWidth) return;
           const s = Math.max(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
           const w = img.naturalWidth * s, h = img.naturalHeight * s;
           ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, (canvas.width-w)/2, (canvas.height-h)/2, w, h);
+          ctx.drawImage(img, (canvas.width - w) / 2, (canvas.height - h) / 2, w, h);
+        }
+        // Renderiza o frame 0 assim que ele carregar (ou imediatamente se ja cacheado)
+        if (imgs[0].complete && imgs[0].naturalWidth) renderFrame();
+        else imgs[0].onload = () => renderFrame();
+
+        /* ─── localStorage: visitas ─────────────────────────────────── */
+        const VISIT_KEY = 'zyncroHeroVisits';
+        const visits    = parseInt(localStorage.getItem(VISIT_KEY) || '0', 10) + 1;
+        localStorage.setItem(VISIT_KEY, visits);
+
+        /* ─── Acessibilidade / Mobile ───────────────────────────────── */
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isMobile      = window.innerWidth < 768;
+
+        /* ─── Velocidade por numero de visitas ─────────────────────── */
+        // Todas as visitas comecam sempre do frame 0.
+        // So a velocidade minima (MIN_VELOCITY) varia.
+        let MIN_VELOCITY;
+        if (visits >= 3)      MIN_VELOCITY = 0.007;
+        else if (visits === 2) MIN_VELOCITY = 0.005;
+        else                   MIN_VELOCITY = 0.003;
+
+        /* ─── Estado interno ─────────────────────────────────────────── */
+        let progress    = 0;
+        let velocity    = 0;
+        let isPlaying   = false;
+        let isRewinding = false;   // rebobinando de volta ao frame 0
+        let released    = false;
+        let rafId       = null;
+
+        if (reducedMotion || isMobile) {
+          curFrame = Math.round((TOTAL - 1) * 0.90);
+          renderFrame();
+          endCard.classList.add('visible');
+          return;
         }
 
-        window.addEventListener('scroll', () => {
-          const rect = scene.getBoundingClientRect();
-          const prog = Math.max(0, Math.min(1, -rect.top / (scene.offsetHeight - window.innerHeight)));
-          const frame = Math.min(TOTAL-1, Math.floor(prog * TOTAL));
-          if (frame !== cur) { cur = frame; cancelAnimationFrame(raf); raf = requestAnimationFrame(() => draw(cur)); }
+        /* ─── Constantes ────────────────────────────────────────────── */
+        const FRICTION     = 0.90;
+        const MAX_VELOCITY = 0.035;
+        const WHEEL_BOOST  = 0.008;
+        const END_ZONE     = 0.97;
+        const START_ZONE   = 0.02;
+        const MIN_REWIND   = MIN_VELOCITY * 1.8;  // velocidade minima de rebobinamento
 
+        /* ─── Overlays ───────────────────────────────────────────────── */
+        function updateOverlays() {
+          const p = progress;
           if (mps.length === 6) {
-            if (prog > 0.45 && prog <= 0.85) mps[0].classList.add('show'); else mps[0].classList.remove('show');
-            if (prog > 0.52 && prog <= 0.85) mps[3].classList.add('show'); else mps[3].classList.remove('show');
-            if (prog > 0.58 && prog <= 0.85) mps[1].classList.add('show'); else mps[1].classList.remove('show');
-            if (prog > 0.64 && prog <= 0.85) mps[5].classList.add('show'); else mps[5].classList.remove('show');
-            if (prog > 0.70 && prog <= 0.85) mps[2].classList.add('show'); else mps[2].classList.remove('show');
-            if (prog > 0.76 && prog <= 0.85) mps[4].classList.add('show'); else mps[4].classList.remove('show');
+            mps[0].classList.toggle('show', p > 0.45 && p <= 0.88);
+            mps[3].classList.toggle('show', p > 0.52 && p <= 0.88);
+            mps[1].classList.toggle('show', p > 0.58 && p <= 0.88);
+            mps[5].classList.toggle('show', p > 0.64 && p <= 0.88);
+            mps[2].classList.toggle('show', p > 0.70 && p <= 0.88);
+            mps[4].classList.toggle('show', p > 0.76 && p <= 0.88);
           }
-          endCard.classList.toggle('visible', prog > 0.88);
-        }, { passive:true });
-      })();
+          endCard.classList.toggle('visible', p > 0.90);
+        }
 
-      window.dispatchEvent(new Event('scroll'));
+        /* ─── Liberação da página ────────────────────────────────────── */
+        function release() {
+          if (released) return;
+          released    = true;
+          isPlaying   = false;
+          isRewinding = false;
+          cancelAnimationFrame(rafId);
+          // onWheel com released=true ja retorna sem preventDefault,
+          // o scroll nativo funciona automaticamente — nao precisamos de scrollBy
+        }
+
+        /* ─── Reset visual completo ──────────────────────────────────── */
+        function resetAnim() {
+          released    = false;
+          isPlaying   = false;
+          isRewinding = false;
+          progress    = 0;
+          velocity    = 0;
+          curFrame    = 0;
+          renderFrame();
+          scene.classList.remove('anim-playing');
+          endCard.classList.remove('visible');
+          mps.forEach(m => m.classList.remove('show'));
+        }
+
+        /* ─── Inicia o rebobinamento dos frames ──────────────────────── */
+        function startRewind() {
+          if (isRewinding) return;
+          released    = false;
+          isPlaying   = false;
+          isRewinding = true;
+          velocity    = -MIN_REWIND;
+          cancelAnimationFrame(rafId);
+          rafId = requestAnimationFrame(tick);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           RAF LOOP — forward E rewind
+        ═══════════════════════════════════════════════════════════ */
+        function tick() {
+          velocity *= FRICTION;
+
+          if (isRewinding) {
+            /* ── Modo rebobinar ── */
+            // Mantém velocidade negativa minima (auto-rebobina)
+            if (velocity > -MIN_REWIND) velocity = -MIN_REWIND;
+
+            progress += velocity;
+            progress  = Math.max(0, Math.min(1, progress));
+
+            const target = Math.round(progress * (TOTAL - 1));
+            if (target !== curFrame) { curFrame = target; renderFrame(); }
+            updateOverlays();
+
+            if (progress <= 0) {
+              // Chegou ao início: reset completo e restaura UI
+              velocity = 0;
+              resetAnim();
+              return;
+            }
+
+            rafId = requestAnimationFrame(tick);
+            return;
+          }
+
+          /* ── Modo avançar ── */
+          if (velocity < MIN_VELOCITY && progress < END_ZONE) {
+            velocity = MIN_VELOCITY;
+          }
+
+          progress += velocity;
+          progress  = Math.max(0, Math.min(1, progress));
+
+          const target = Math.round(progress * (TOTAL - 1));
+          if (target !== curFrame) { curFrame = target; renderFrame(); }
+          updateOverlays();
+
+          if (progress >= END_ZONE) { release(); return; }
+          if (progress <= 0 && velocity < 0) { velocity = 0; }
+
+          rafId = requestAnimationFrame(tick);
+        }
+
+        /* ─── Wheel handler ─────────────────────────────────────────── */
+        function onWheel(e) {
+          const heroRect     = scene.getBoundingClientRect();
+          const scrollingDown = e.deltaY > 0;
+          const scrollingUp   = e.deltaY < 0;
+
+          /* ── Rebobinando: controlar velocidade de rewind ── */
+          if (isRewinding) {
+            if (heroRect.top > 10) return;
+            e.preventDefault();
+            if (scrollingUp) {
+              // Mais scroll para cima = rebobina mais rápido
+              velocity = Math.max(velocity - WHEEL_BOOST, -MAX_VELOCITY);
+            } else if (scrollingDown) {
+              // Scroll para baixo = freia o rebobinamento
+              velocity = Math.min(velocity + WHEEL_BOOST * 0.8, -0.001);
+            }
+            return;
+          }
+
+          /* ── Animação concluída (released) ── */
+          if (released) {
+            // Dispara o rewind assim que o usuario estiver perto da hero
+            // (dentro de 1 viewport de distancia, nao precisa chegar ao topo)
+            if (scrollingUp && window.scrollY <= window.innerHeight) {
+              startRewind();
+              return;
+            }
+            return;
+          }
+
+          /* ── Animação em andamento ── */
+          if (heroRect.top > 10) return;
+          if (scrollingUp && progress <= START_ZONE && !isPlaying) return;
+
+          e.preventDefault();
+
+          if (!isPlaying && scrollingDown) {
+            isPlaying = true;
+            scene.classList.add('anim-playing');
+            velocity  = MIN_VELOCITY;
+            rafId     = requestAnimationFrame(tick);
+            return;
+          }
+
+          if (!isPlaying) return;
+
+          if (scrollingDown) {
+            velocity = Math.min(velocity + WHEEL_BOOST, MAX_VELOCITY);
+          } else {
+            velocity = Math.max(velocity - WHEEL_BOOST * 1.5, -MAX_VELOCITY * 0.4);
+          }
+        }
+
+        window.addEventListener('wheel', onWheel, { passive: false });
+
+        /* ─── Touch handler ─────────────────────────────────────────── */
+        let touchStartY = 0;
+        window.addEventListener('touchstart', e => {
+          touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        function onTouchMove(e) {
+          const heroRect = scene.getBoundingClientRect();
+          if (heroRect.top > 10) return;
+
+          const dy = touchStartY - e.touches[0].clientY;
+          touchStartY = e.touches[0].clientY;
+
+          if (isRewinding) {
+            if (dy < 0) velocity = Math.max(velocity - WHEEL_BOOST * 0.6, -MAX_VELOCITY);
+            return;
+          }
+
+          if (released) {
+            if (dy < -5) startRewind();
+            return;
+          }
+
+          if (!isPlaying && dy > 5) {
+            isPlaying = true;
+            scene.classList.add('anim-playing');
+            velocity  = MIN_VELOCITY;
+            rafId     = requestAnimationFrame(tick);
+            return;
+          }
+          if (!isPlaying) return;
+
+          if (dy > 0) {
+            velocity = Math.min(velocity + WHEEL_BOOST * 0.6, MAX_VELOCITY);
+            if (progress >= END_ZONE) release();
+          } else if (dy < 0) {
+            velocity = Math.max(velocity - WHEEL_BOOST, -MAX_VELOCITY * 0.3);
+          }
+        }
+
+        window.addEventListener('touchmove', onTouchMove, { passive: true });
+
+        // Rewind e controlado por onWheel (deltaY < 0 = subindo) e onTouchMove (dy < -5 = swipe pra cima)
+        // Sem fallback de scroll — ele nao tem nocao de direcao e causava rewind no scroll para baixo.
+
+      })();
 
       /* ── 6. Reveal-up + reveal-zoom for SECTIONS ── */
       gsap.utils.toArray('section:not(#hero) .reveal-up, section .reveal-zoom').forEach(elem => {
